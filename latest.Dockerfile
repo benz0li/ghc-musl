@@ -36,13 +36,14 @@ RUN cd /tmp \
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
   && echo 'BeConservative=YES' >> mk/build.mk \
+  && echo 'SplitSections=YES' >> mk/build.mk \
   && echo 'HADDOCK_DOCS=NO' >> mk/build.mk \
   && echo 'HSCOLOUR_SRCS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
   && autoreconf \
-  && ./configure --disable-ld-override \
+  && ./configure --disable-ld-override LD=ld.gold \
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
   && sed -i -e 's/unknown-linux-gnueabihf/alpine-linux/g' llvm-targets \
@@ -102,7 +103,7 @@ COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 RUN cd /tmp \
   && tar -xJf ghc-$GHC_VERSION-*-alpine-linux.tar.xz \
   && cd ghc-$GHC_VERSION \
-  && ./configure --prefix=/usr \
+  && ./configure --disable-ld-override --prefix=/usr \
   && make install \
   && cd / \
   && rm -rf /tmp/*
