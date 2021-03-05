@@ -1,0 +1,148 @@
+.before-script-build: &before-script-build
+  - |
+    if [[ ! -z "$CI_BUILD_PLATFORMS" ]]; then
+      export OS_ARCH=`echo $CI_BUILD_PLATFORMS | tr ' ' '\n' | \
+      sed 's|\/||2' | sed 's|\/|-|' | tr '\n' ' '`
+    fi
+  - |
+    export CI_APP_REPO=${CI_APP_REPO:-$CI_REGISTRY_IMAGE}
+    if [[ $CI_COMMIT_BRANCH == "master" ]]; then
+      export CI_APP_TAG=${CI_APP_TAG:-latest}
+    elif [[ $CI_COMMIT_BRANCH == "freeze-version" ]]; then
+      export CI_APP_TAG=${CI_APP_TAG:-8.10.4}
+    else
+      export CI_APP_TAG=${CI_APP_TAG:-$CI_COMMIT_SHA}
+    fi
+  - >
+    echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER
+    --password-stdin $CI_REGISTRY
+  - |
+    export VERSION_MAJ_MIN_PAT=`sed -n \
+    "s|.*GHC_VERSION_BUILD:-\([0-9]\.[0-9]\.[0-9]\).*|\1|p" latest.Dockerfile \
+    | head -1`
+    export VERSION_MAJ_MIN=`echo "${VERSION_MAJ_MIN_PAT:0:3}"`
+    export VERSION_MAJ=`echo "${VERSION_MAJ_MIN_PAT:0:1}"`
+
+.build:
+  image: registry.gitlab.b-data.ch/docker/docker-buildx:latest
+  stage: build
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - *before-script-build
+
+build:latest-linux-amd64:
+  extends: .build
+  tags:
+    - arch:amd64
+    - os:linux
+  script:
+    - >
+      docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN-linux-amd64
+      -t $CI_APP_REPO:$VERSION_MAJ-linux-amd64
+      -f $CI_APP_TAG.Dockerfile .
+    - docker push -a $CI_APP_REPO
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+      changes:
+        - latest.Dockerfile
+
+build:latest-linux-arm64v8:
+  extends: .build
+  tags:
+    - arch:arm64/v8
+    - os:linux
+  script:
+    - >
+      docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN-linux-arm64v8
+      -t $CI_APP_REPO:$VERSION_MAJ-linux-arm64v8
+      -f $CI_APP_TAG.Dockerfile .
+    - docker push -a $CI_APP_REPO
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+      changes:
+        - latest.Dockerfile
+
+build:version-linux-amd64:
+  extends: .build
+  tags:
+    - arch:amd64
+    - os:linux
+  script:
+    - >
+      docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
+      -f $CI_APP_TAG.Dockerfile .
+    - docker push -a $CI_APP_REPO
+  rules:
+    - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+      changes:
+        - 8.10.4.Dockerfile
+
+build:version-linux-arm64v8:
+  extends: .build
+  tags:
+    - arch:arm64/v8
+    - os:linux
+  script:
+    - >
+      docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      -f $CI_APP_TAG.Dockerfile .
+    - docker push -a $CI_APP_REPO
+  rules:
+    - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+      changes:
+        - 8.10.4.Dockerfile
+
+build-manifest:latest-linux-multiarch:
+  extends: .build
+  stage: deploy
+  script:
+    - |
+      for i in $OS_ARCH; do
+        export CI_MANIFEST_LIST="$CI_MANIFEST_LIST $CI_APP_REPO:$CI_APP_TAG-$i"
+      done
+    - >    
+      docker manifest create $CI_APP_REPO:$CI_APP_TAG $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$CI_APP_TAG
+
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN_PAT $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN_PAT
+
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
+
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$VERSION_MAJ
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      changes:
+        - latest.Dockerfile
+
+build-manifest:version-linux-multiarch:
+  extends: .build
+  stage: deploy
+  script:
+    - |
+      for i in $OS_ARCH; do
+        export CI_MANIFEST_LIST="$CI_MANIFEST_LIST $CI_APP_REPO:$CI_APP_TAG-$i"
+      done
+    - >    
+      docker manifest create $CI_APP_REPO:$CI_APP_TAG $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$CI_APP_TAG
+
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
+
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ $CI_MANIFEST_LIST
+      && docker manifest push $CI_APP_REPO:$VERSION_MAJ
+  rules:
+    - if: $CI_COMMIT_BRANCH == "freeze-version"
+      changes:
+        - 8.10.4.Dockerfile

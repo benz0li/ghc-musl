@@ -6,6 +6,7 @@ FROM alpine:3.12 as bootstrap
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
 COPY ghc-8.8.patch /tmp/
+COPY cabal-0001-force-ld.gold.patch /tmp/
 
 RUN apk add --update --no-cache \
     autoconf \
@@ -30,6 +31,7 @@ RUN cd /tmp/ \
   && tar zxf cabal-install-$CABAL_VERSION.tar.gz \
   && cd /tmp/cabal-install-$CABAL_VERSION/ \
   && patch < /tmp/ghc-8.8.patch \
+  && patch < /tmp/cabal-0001-force-ld.gold.patch \
   && EXTRA_CONFIGURE_OPTS="" ./bootstrap.sh --jobs --no-doc
 
 FROM alpine:3.12
