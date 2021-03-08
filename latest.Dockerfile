@@ -1,10 +1,10 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.4 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:bootstrap as bootstrap
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.8.4}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
 RUN apk add --update --no-cache \
     autoconf \
@@ -32,7 +32,7 @@ RUN cd /tmp \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
   # Set llvm version to 10
-  && sed -i -e 's/LlvmVersion=9/LlvmVersion=10/g' configure.ac \
+  && sed -i -e 's/LlvmVersion=7/LlvmVersion=10/g' configure.ac \
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
   && echo 'BeConservative=YES' >> mk/build.mk \
@@ -56,14 +56,14 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install cabal-install-$CABAL_VERSION
 
-FROM alpine:3.13 as builder
+FROM alpine:3.12 as builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.8.4}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
 RUN apk add --update --no-cache \
     bash \
