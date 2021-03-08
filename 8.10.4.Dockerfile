@@ -119,7 +119,7 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && mkdir cabal-test \
   && cd cabal-test \
   && cabal update \
-  && cabal init -n --is-executable -p tester -l BSD3 \
+  && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
 FROM builder as final
