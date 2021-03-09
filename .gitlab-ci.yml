@@ -16,12 +16,16 @@
   - >
     echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER
     --password-stdin $CI_REGISTRY
-  - |
-    export VERSION_MAJ_MIN_PAT=`sed -n \
-    "s|.*GHC_VERSION_BUILD:-\([0-9]\.[0-9]\.[0-9]\).*|\1|p" latest.Dockerfile \
-    | head -1`
-    export VERSION_MAJ_MIN=`echo "${VERSION_MAJ_MIN_PAT:0:3}"`
-    export VERSION_MAJ=`echo "${VERSION_MAJ_MIN_PAT:0:1}"`
+  - >
+    export VERSION_MAJ_MIN_PAT=`sed -n
+    "s|.*GHC_VERSION_BUILD:-\([[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"
+    latest.Dockerfile | head -1`
+    
+    export VERSION_MAJ_MIN=`echo $VERSION_MAJ_MIN_PAT |
+    sed -n "s|\([[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"`
+    
+    export VERSION_MAJ=`echo $VERSION_MAJ_MIN_PAT |
+    sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 
 .build:
   image: registry.gitlab.b-data.ch/docker/docker-buildx:latest
@@ -79,7 +83,7 @@ build:version-linux-amd64:
     - >
       docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -f $CI_APP_TAG.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
@@ -94,7 +98,7 @@ build:version-linux-arm64v8:
     - >
       docker build -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -f $CI_APP_TAG.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
