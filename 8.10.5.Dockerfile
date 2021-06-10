@@ -26,8 +26,8 @@ RUN apk add --update --no-cache \
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
-  && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
+  && gpg --keyserver hkps://pgp.mit.edu:443 \
+    --receive-keys 588764FBE22D19C4 \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
