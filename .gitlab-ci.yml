@@ -19,7 +19,7 @@
   - >
     export VERSION_MAJ_MIN_PAT=`sed -n
     "s|.*GHC_VERSION_BUILD:-\([[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"
-    latest.Dockerfile | head -1`
+    $CI_APP_TAG.Dockerfile | head -1`
     
     export VERSION_MAJ_MIN=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"`
