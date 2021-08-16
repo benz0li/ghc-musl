@@ -1,7 +1,7 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.4 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.5 as bootstrap
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
@@ -26,7 +26,7 @@ RUN apk add --update --no-cache \
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
-  && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
+  && gpg --keyserver hkps://pgp.mit.edu:443 \
     --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
