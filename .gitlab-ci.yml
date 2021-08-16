@@ -9,7 +9,7 @@
     if [[ $CI_COMMIT_BRANCH == "master" ]]; then
       export CI_APP_TAG=${CI_APP_TAG:-latest}
     elif [[ $CI_COMMIT_BRANCH == "freeze-version" ]]; then
-      export CI_APP_TAG=${CI_APP_TAG:-8.10.5}
+      export CI_APP_TAG=${CI_APP_TAG:-8.10.6}
     else
       export CI_APP_TAG=${CI_APP_TAG:-$CI_COMMIT_SHA}
     fi
@@ -87,7 +87,7 @@ build:version-linux-amd64:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - 8.10.5.Dockerfile
+        - 8.10.6.Dockerfile
 
 build:version-linux-arm64v8:
   extends: .build
@@ -102,7 +102,7 @@ build:version-linux-arm64v8:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - 8.10.5.Dockerfile
+        - 8.10.6.Dockerfile
 
 build-manifest:latest-linux-multiarch:
   extends: .build
@@ -177,4 +177,4 @@ build-manifest:version-linux-multiarch:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - 8.10.5.Dockerfile
+        - 8.10.6.Dockerfile
