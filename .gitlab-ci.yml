@@ -9,7 +9,7 @@
     if [[ $CI_COMMIT_BRANCH == "master" ]]; then
       export CI_APP_TAG=${CI_APP_TAG:-latest}
     elif [[ $CI_COMMIT_BRANCH == "freeze-version" ]]; then
-      export CI_APP_TAG=${CI_APP_TAG:-8.10.7}
+      export CI_APP_TAG=${CI_APP_TAG:-9.0.1}
     else
       export CI_APP_TAG=${CI_APP_TAG:-$CI_COMMIT_SHA}
     fi
@@ -87,7 +87,7 @@ build:version-linux-amd64:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - 8.10.7.Dockerfile
+        - 9.0.1.Dockerfile
 
 build:version-linux-arm64v8:
   extends: .build
@@ -102,7 +102,7 @@ build:version-linux-arm64v8:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - 8.10.7.Dockerfile
+        - 9.0.1.Dockerfile
 
 build-manifest:latest-linux-multiarch:
   extends: .build
@@ -160,21 +160,7 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
-    - |
-      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
-          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
-    - |
-      docker manifest create $CI_APP_REPO:$VERSION_MAJ $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ \
-          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO:$VERSION_MAJ
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - 8.10.7.Dockerfile
+        - 9.0.1.Dockerfile
