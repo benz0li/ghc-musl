@@ -1,7 +1,7 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.6 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.7 as bootstrap
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
