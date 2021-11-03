@@ -1,10 +1,10 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.10.7 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.1 as bootstrap
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
 
 RUN apk add --update --no-cache \
     autoconf \
@@ -26,13 +26,12 @@ RUN apk add --update --no-cache \
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
-  && gpg --keyserver hkps://pgp.mit.edu:443 \
+  && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
     --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
-  # Set llvm version to 10
-  && sed -i -e 's/LlvmVersion=9/LlvmVersion=10/g' configure.ac \
+  # Use the LLVM backend
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
   && echo 'BeConservative=YES' >> mk/build.mk \
@@ -54,7 +53,7 @@ RUN cd /tmp \
   && make binary-dist \
   && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer cabal-install-$CABAL_VERSION
 
 FROM alpine:3.13 as builder
 
@@ -62,8 +61,8 @@ LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
 
 RUN apk add --update --no-cache \
     bash \
