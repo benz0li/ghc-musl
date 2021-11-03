@@ -4,7 +4,7 @@ ARG CABAL_VERSION_BUILD
 FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.1 as bootstrap
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
 
 RUN apk add --update --no-cache \
     autoconf \
@@ -62,7 +62,7 @@ LABEL org.label-schema.license="MIT" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
 
 RUN apk add --update --no-cache \
     bash \
