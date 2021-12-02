@@ -26,7 +26,7 @@ RUN apk add --update --no-cache \
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
-  && gpg --keyserver hkps://pgp.mit.edu:443 \
+  && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
     --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
@@ -56,7 +56,7 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install cabal-install-$CABAL_VERSION
 
-FROM alpine:3.13 as builder
+FROM alpine:3.15 as builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
@@ -64,6 +64,7 @@ LABEL org.label-schema.license="MIT" \
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.0.1}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.4.0.0}
+ENV PATH=$PATH:/usr/lib/llvm10/bin
 
 RUN apk add --update --no-cache \
     bash \
