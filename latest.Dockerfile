@@ -19,6 +19,7 @@ RUN apk add --update --no-cache \
     gnupg \
     linux-headers \
     libffi-dev \
+    llvm12 \
     ncurses-dev \
     perl \
     python3 \
@@ -60,7 +61,7 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer cabal-install-$CABAL_VERSION
 
-FROM alpine:3.13 as builder
+FROM alpine:3.15 as builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
@@ -84,7 +85,7 @@ RUN apk add --update --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm10 \
+    llvm12 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
