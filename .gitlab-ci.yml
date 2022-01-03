@@ -160,13 +160,6 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
-    - |
-      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
-          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:

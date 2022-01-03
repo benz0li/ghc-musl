@@ -1,7 +1,7 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.1 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
 
 COPY patches/* /tmp/
 
