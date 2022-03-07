@@ -3,12 +3,11 @@ ARG CABAL_VERSION_BUILD
 
 FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
 
-COPY patches/* /tmp/
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.2}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
-
-RUN apk add --update --no-cache \
+RUN apk upgrade --no-cache \
+  && apk add --update --no-cache \
     autoconf \
     automake \
     binutils-gold \
@@ -34,9 +33,6 @@ RUN cd /tmp \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
-  # Apply patches
-  && mv /tmp/*.patch . \
-  && patch -p0 <ghc-9.2.1-RtsSymbols.patch \
   # Use the LLVM backend
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
@@ -67,10 +63,11 @@ LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.2}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
 
-RUN apk add --update --no-cache \
+RUN apk upgrade --no-cache \
+  && apk add --update --no-cache \
     bash \
     build-base \
     bzip2 \
