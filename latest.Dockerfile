@@ -1,10 +1,13 @@
-ARG GHC_VERSION_BUILD
-ARG CABAL_VERSION_BUILD
+ARG GHC_VERSION
+ARG CABAL_VERSION
 
 FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.2}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
+ARG GHC_VERSION
+ARG CABAL_VERSION
+
+ENV GHC_VERSION=${GHC_VERSION} \
+    CABAL_VERSION=${CABAL_VERSION}
 
 RUN apk upgrade --no-cache \
   && apk add --update --no-cache \
@@ -29,7 +32,7 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
+    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
@@ -43,7 +46,7 @@ RUN cd /tmp \
   && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
-  && autoreconf \
+  && ./boot \
   && ./configure --disable-ld-override LD=ld.gold \
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
@@ -57,14 +60,17 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer cabal-install-$CABAL_VERSION
 
-FROM alpine:3.15 as builder
+FROM alpine:3.16 as builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.2}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.2.0}
+ARG GHC_VERSION
+ARG CABAL_VERSION
+
+ENV GHC_VERSION=${GHC_VERSION} \
+    CABAL_VERSION=${CABAL_VERSION}
 
 RUN apk upgrade --no-cache \
   && apk add --update --no-cache \
