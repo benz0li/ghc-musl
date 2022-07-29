@@ -1,5 +1,5 @@
-ARG GHC_VERSION_BUILD
-ARG CABAL_VERSION_BUILD
+ARG GHC_VERSION_BUILD=9.2.3
+ARG CABAL_VERSION_BUILD=3.6.2.0
 
 FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
 

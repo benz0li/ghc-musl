@@ -9,7 +9,7 @@
     if [[ $CI_COMMIT_BRANCH == "master" ]]; then
       export CI_APP_TAG=${CI_APP_TAG:-latest}
     elif [[ $CI_COMMIT_BRANCH == "freeze-version" ]]; then
-      export CI_APP_TAG=${CI_APP_TAG:-$GHC_VERSION}
+      export CI_APP_TAG=${CI_APP_TAG:-$GHC_VERSION_BUILD}
     else
       export CI_APP_TAG=${CI_APP_TAG:-$CI_COMMIT_SHA}
     fi
@@ -17,7 +17,7 @@
     echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER
     --password-stdin $CI_REGISTRY
   - >
-    export VERSION_MAJ_MIN_PAT=$GHC_VERSION
+    export VERSION_MAJ_MIN_PAT=$GHC_VERSION_BUILD
     
     export VERSION_MAJ_MIN=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"`
@@ -33,8 +33,8 @@
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    GHC_VERSION: "9.2.3"
-    CABAL_VERSION: "3.6.2.0"
+    GHC_VERSION_BUILD: "9.2.3"
+    CABAL_VERSION_BUILD: "3.6.2.0"
   before_script:
     - *before-script-build
 
@@ -46,8 +46,8 @@ build:latest-linux-amd64:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION
-      --build-arg CABAL_VERSION
+      --build-arg GHC_VERSION_BUILD
+      --build-arg CABAL_VERSION_BUILD
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
       -f latest.Dockerfile .
@@ -65,8 +65,8 @@ build:latest-linux-arm64v8:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION
-      --build-arg CABAL_VERSION
+      --build-arg GHC_VERSION_BUILD
+      --build-arg CABAL_VERSION_BUILD
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
       -f latest.Dockerfile .
@@ -85,12 +85,12 @@ build:version-linux-amd64:
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
-      -f $GHC_VERSION.Dockerfile .
+      -f $GHC_VERSION_BUILD.Dockerfile .
     - docker push -a $CI_APP_REPO
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - $GHC_VERSION.Dockerfile
+        - $GHC_VERSION_BUILD.Dockerfile
 
 build:version-linux-arm64v8:
   extends: .build
@@ -101,12 +101,12 @@ build:version-linux-arm64v8:
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      -f $GHC_VERSION.Dockerfile .
+      -f $GHC_VERSION_BUILD.Dockerfile .
     - docker push -a $CI_APP_REPO
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - $GHC_VERSION.Dockerfile
+        - $GHC_VERSION_BUILD.Dockerfile
 
 build-manifest:latest-linux-multiarch:
   extends: .build
@@ -167,4 +167,4 @@ build-manifest:version-linux-multiarch:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - $GHC_VERSION.Dockerfile
+        - $GHC_VERSION_BUILD.Dockerfile
