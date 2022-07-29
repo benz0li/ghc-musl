@@ -33,7 +33,7 @@
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    GHC_VERSION_BUILD: "9.2.4"
+    GHC_VERSION_BUILD: "9.2.3"
     CABAL_VERSION_BUILD: "3.6.3.0"
   before_script:
     - *before-script-build
@@ -51,7 +51,9 @@ build:latest-linux-amd64:
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
       -f latest.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - |
+      docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
+      docker push $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
   rules:
     - if: $CI_COMMIT_BRANCH == "master" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
@@ -70,7 +72,9 @@ build:latest-linux-arm64v8:
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
       -f latest.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - |
+      docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      docker push $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
   rules:
     - if: $CI_COMMIT_BRANCH == "master" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
@@ -86,7 +90,7 @@ build:version-linux-amd64:
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -f $GHC_VERSION_BUILD.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
@@ -102,7 +106,7 @@ build:version-linux-arm64v8:
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -f $GHC_VERSION_BUILD.Dockerfile .
-    - docker push -a $CI_APP_REPO
+    - docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
