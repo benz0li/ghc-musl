@@ -33,7 +33,7 @@
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    GHC_VERSION_BUILD: "9.4.1"
+    GHC_VERSION_BUILD: "9.4.2"
     CABAL_VERSION_BUILD: "3.8.1.0"
   before_script:
     - *before-script-build
