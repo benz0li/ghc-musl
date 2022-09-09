@@ -82,4 +82,4 @@ This project follows the
 
 ## License
 
-[MIT](LICENSE) © 2021 b-data GmbH
+[MIT](LICENSE) © 2021 Olivier Benz
