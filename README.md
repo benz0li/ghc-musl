@@ -20,6 +20,7 @@ who laid the groundwork for [this](https://gitlab.b-data.ch/ghc/ghc4pandoc).
 *  [Prerequisites](#prerequisites)
 *  [Install](#install)
 *  [Usage](#usage)
+*  [Similar project](#similar-project)
 *  [Contributing](#contributing)
 *  [License](#license)
 
@@ -71,6 +72,10 @@ from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc4
 ```bash
 docker run --rm -ti registry.gitlab.b-data.ch/ghc/ghc4pandoc[:<major>[.<minor>[.<patch>]]]
 ```
+
+## Similar project
+
+* [utdemir/ghc-musl](https://github.com/utdemir/ghc-musl)
 
 ## Contributing
 
