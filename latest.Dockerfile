@@ -54,9 +54,10 @@ RUN cd /tmp \
 
 FROM alpine:3.16 as builder
 
-LABEL org.label-schema.license="MIT" \
-      org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
-      maintainer="Olivier Benz <olivier.benz@b-data.ch>"
+LABEL org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
+      org.opencontainers.image.vendor="Olivier Benz" \
+      org.opencontainers.image.authors="Olivier Benz <olivier.benz@b-data.ch>"
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
