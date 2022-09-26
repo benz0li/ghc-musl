@@ -3,7 +3,7 @@
 # GHC for pandoc
 
 The multi-arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
-amd64 and arm64 binary
+Linux amd64 and arm64 binary
 [releases of pandoc](https://github.com/jgm/pandoc/releases).
 
 Credits to
