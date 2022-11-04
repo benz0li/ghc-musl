@@ -26,7 +26,7 @@ RUN apk add --update --no-cache \
     zlib-dev
 
 RUN cd /tmp/ \
-  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/master/ghc-8.8.3-r0.apk \
+  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
   && apk add --allow-untrusted ghc-8.8.3-r0.apk \
   && curl -sSLO https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VERSION/cabal-install-$CABAL_VERSION.tar.gz \
   && tar zxf cabal-install-$CABAL_VERSION.tar.gz \
@@ -74,7 +74,7 @@ RUN apk add --update --no-cache \
     zlib-dev \
     #zlib-static \
   && cd /tmp/ \
-  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/master/ghc-8.8.3-r0.apk \
+  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
   && apk add --allow-untrusted ghc-8.8.3-r0.apk \
   && cd / \
   && rm -rf /tmp/*
