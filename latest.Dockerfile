@@ -107,10 +107,7 @@ RUN cd /tmp \
   && ./configure --disable-ld-override \
   && make install \
   && cd / \
-  && rm -rf /tmp/* \
-  ## Somehow /tmp/ghc-$GHC_VERSION-*-alpine-linux
-  ## ends up at /usr/local/share/doc/ghc-$GHC_VERSION
-  && rm -rf /usr/local/share/doc/ghc-$GHC_VERSION/*
+  && rm -rf /tmp/*
 
 FROM builder as tester
 
