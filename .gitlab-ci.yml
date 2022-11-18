@@ -114,7 +114,6 @@ build:version-linux-arm64v8:
 
 build-manifest:latest-linux-multiarch:
   extends: .build
-  stage: deploy
   needs: ["build:latest-linux-amd64", "build:latest-linux-arm64v8"]
   script:
     - |
@@ -156,7 +155,6 @@ build-manifest:latest-linux-multiarch:
 
 build-manifest:version-linux-multiarch:
   extends: .build
-  stage: deploy
   needs: ["build:version-linux-amd64", "build:version-linux-arm64v8"]
   script:
     - |
