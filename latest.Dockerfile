@@ -52,7 +52,7 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer cabal-install-$CABAL_VERSION
 
-FROM alpine:3.16 as builder
+FROM alpine:3.17 as builder
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
@@ -81,7 +81,7 @@ RUN apk upgrade --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm12 \
+    llvm14 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
