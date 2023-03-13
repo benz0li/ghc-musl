@@ -124,3 +124,5 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal run
 
 FROM builder as final
+
+CMD ["ghci"]
