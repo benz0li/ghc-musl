@@ -55,7 +55,7 @@ RUN cd /tmp \
   && make binary-dist \
   && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' cabal-install-$CABAL_VERSION
 
 FROM alpine:3.16 as builder
 
