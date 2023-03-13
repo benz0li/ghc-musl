@@ -26,15 +26,15 @@
     sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 
 .build:
-  image: registry.gitlab.b-data.ch/docker/docker-buildx:latest
+  image: glcr.b-data.ch/docker/docker-buildx:latest
   stage: build
   services:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    GHC_VERSION_BUILD: "9.4.4"
-    CABAL_VERSION_BUILD: "3.8.1.0"
+    GHC_VERSION_BUILD: "9.6.1"
+    CABAL_VERSION_BUILD: "3.10.1.0"
   before_script:
     - *before-script-build
 
@@ -44,6 +44,14 @@ build:latest-linux-amd64:
     - arch:amd64
     - os:linux
   script:
+    - >
+      docker build
+      --build-arg GHC_VERSION_BUILD
+      --build-arg CABAL_VERSION_BUILD
+      --target tester
+      -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
+      -f latest.Dockerfile .
     - >
       docker build
       --build-arg GHC_VERSION_BUILD
@@ -69,6 +77,14 @@ build:latest-linux-arm64v8:
       docker build
       --build-arg GHC_VERSION_BUILD
       --build-arg CABAL_VERSION_BUILD
+      --target tester
+      -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
+      -f latest.Dockerfile .
+    - >
+      docker build
+      --build-arg GHC_VERSION_BUILD
+      --build-arg CABAL_VERSION_BUILD
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
       -f latest.Dockerfile .
@@ -88,6 +104,11 @@ build:version-linux-amd64:
   script:
     - >
       docker build
+      --target tester
+      -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
+      -f $GHC_VERSION_BUILD.Dockerfile .
+    - >
+      docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -f $GHC_VERSION_BUILD.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
@@ -102,6 +123,11 @@ build:version-linux-arm64v8:
     - arch:arm64/v8
     - os:linux
   script:
+    - >
+      docker build
+      --target tester
+      -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      -f $GHC_VERSION_BUILD.Dockerfile .
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
@@ -168,13 +194,6 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
-    - |
-      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
-          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
