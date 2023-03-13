@@ -75,3 +75,5 @@ RUN apk add --update --no-cache \
     #zlib-static
 
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
+
+CMD ["ghci"]

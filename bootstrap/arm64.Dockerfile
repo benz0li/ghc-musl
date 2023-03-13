@@ -80,3 +80,5 @@ RUN apk add --update --no-cache \
   && rm -rf /tmp/*
 
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
+
+CMD ["ghci"]
