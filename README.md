@@ -13,7 +13,7 @@ Credits to
 *  [@neosimsim](https://github.com/neosimsim) for
    [docker-builder-images](https://gitlab.com/neosimsim/docker-builder-images)
 
-who laid the groundwork for [this](https://gitlab.b-data.ch/ghc/ghc-musl).
+who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 
 ## Table of Contents
 
