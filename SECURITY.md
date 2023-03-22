@@ -8,9 +8,9 @@ updates.
 To report a vulnerability in the latest docker image, email the maintainer
 olivier.benz@b-data.ch.
 
-## Vulnerabilities in Previous Versions
+## Vulnerabilities in Prior Versions
 
-Vulnerabilities in docker images with previous versions of GHC are not fixed.
+Vulnerabilities in docker images with prior versions of GHC are not fixed.
 
 Whenever a new version of GHC is released, the previous version's docker image
 is rebuilt once again and then frozen.
