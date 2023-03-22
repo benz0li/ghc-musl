@@ -54,7 +54,7 @@ docker build \
 ```bash
 docker build \
   -t ghc-musl:MAJOR.MINOR.PATCH \
-  -f MAJOR.MINOR.PATCH.Dockerfile .
+  -f prior/MAJOR.MINOR.PATCH.Dockerfile .
 ```
 
 For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.

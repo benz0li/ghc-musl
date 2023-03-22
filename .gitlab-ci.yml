@@ -106,16 +106,16 @@ build:version-linux-amd64:
       docker build
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
-      -f $GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
-      -f $GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - $GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION_BUILD.Dockerfile
 
 build:version-linux-arm64v8:
   extends: .build
@@ -127,16 +127,16 @@ build:version-linux-arm64v8:
       docker build
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      -f $GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      -f $GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - $GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION_BUILD.Dockerfile
 
 build-manifest:latest-linux-multiarch:
   extends: .build
@@ -197,4 +197,4 @@ build-manifest:version-linux-multiarch:
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - $GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION_BUILD.Dockerfile
