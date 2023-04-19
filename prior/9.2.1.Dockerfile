@@ -1,13 +1,12 @@
-ARG GHC_VERSION_BUILD=9.2.3
-ARG CABAL_VERSION_BUILD=3.6.2.0
-
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
-
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD} \
-    CABAL_VERSION=${CABAL_VERSION_BUILD}
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
+
+COPY patches/* /tmp/
+
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
 
 RUN apk upgrade --no-cache \
   && apk add --update --no-cache \
@@ -32,10 +31,13 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
+  # Apply patches
+  && mv /tmp/*.patch . \
+  && patch -p0 <ghc-9.2.1-RtsSymbols.patch \
   # Use the LLVM backend
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
@@ -46,7 +48,7 @@ RUN cd /tmp \
   && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
-  && ./boot \
+  && autoreconf \
   && ./configure --disable-ld-override LD=ld.gold \
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
@@ -58,19 +60,16 @@ RUN cd /tmp \
   && make binary-dist \
   && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' cabal-install-$CABAL_VERSION
 
-FROM alpine:3.16 as builder
+FROM alpine:3.15 as builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ARG GHC_VERSION_BUILD
-ARG CABAL_VERSION_BUILD
-
-ENV GHC_VERSION=${GHC_VERSION_BUILD} \
-    CABAL_VERSION=${CABAL_VERSION_BUILD}
+ENV GHC_VERSION=${GHC_VERSION_BUILD:-9.2.1}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.6.0.0}
 
 RUN apk upgrade --no-cache \
   && apk add --update --no-cache \

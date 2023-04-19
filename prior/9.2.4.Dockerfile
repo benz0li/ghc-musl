@@ -1,7 +1,7 @@
-ARG GHC_VERSION_BUILD=9.4.1
-ARG CABAL_VERSION_BUILD=3.8.1.0
+ARG GHC_VERSION_BUILD=9.2.4
+ARG CABAL_VERSION_BUILD=3.6.2.0
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.2.4 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -32,25 +32,33 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
+    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
-  && ./boot.source \
-  && ./configure --disable-ld-override LD=ld.gold \
   # Use the LLVM backend
+  && cp mk/build.mk.sample mk/build.mk \
+  && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
+  && echo 'BeConservative=YES' >> mk/build.mk \
+  && echo 'SplitSections=YES' >> mk/build.mk \
+  && echo 'HADDOCK_DOCS=NO' >> mk/build.mk \
+  && echo 'HSCOLOUR_SRCS=NO' >> mk/build.mk \
+  && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
+  && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
+  && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
+  && ./boot \
+  && ./configure --disable-ld-override LD=ld.gold \
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
   && sed -i -e 's/unknown-linux-gnueabihf/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnueabi/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
-  && cabal update \
   # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
-  && hadrian/build binary-dist -j$((`nproc`+1)) \
-    --flavour=perf+llvm+split_sections \
-    --docs=none \
+  && make -j$((`nproc`+1)) \
+  && make binary-dist \
+  && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' cabal-install-$CABAL_VERSION
 
 FROM alpine:3.16 as builder
 
@@ -97,19 +105,16 @@ RUN apk upgrade --no-cache \
     zlib-dev \
     zlib-static
 
-COPY --from=bootstrap /tmp/ghc-$GHC_VERSION/_build/bindist/ghc-$GHC_VERSION-*-alpine-linux.tar.xz /tmp/
+COPY --from=bootstrap /tmp/ghc-$GHC_VERSION/ghc-$GHC_VERSION-*-alpine-linux.tar.xz /tmp/
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 
 RUN cd /tmp \
   && tar -xJf ghc-$GHC_VERSION-*-alpine-linux.tar.xz \
-  && cd ghc-$GHC_VERSION-*-alpine-linux \
-  && ./configure --disable-ld-override \
+  && cd ghc-$GHC_VERSION \
+  && ./configure --disable-ld-override --prefix=/usr \
   && make install \
   && cd / \
-  && rm -rf /tmp/* \
-  ## Somehow /tmp/ghc-$GHC_VERSION-*-alpine-linux
-  ## ends up at /usr/local/share/doc/ghc-$GHC_VERSION
-  && rm -rf /usr/local/share/doc/ghc-$GHC_VERSION/*
+  && rm -rf /tmp/*
 
 FROM builder as tester
 

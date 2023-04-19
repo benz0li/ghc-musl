@@ -1,6 +1,6 @@
 [![minimal-readme compliant](https://img.shields.io/badge/readme%20style-minimal-brightgreen.svg)](https://github.com/RichardLitt/standard-readme/blob/master/example-readmes/minimal-readme.md) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) <a href="https://liberapay.com/benz0li/donate"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Donate using Liberapay" height="20"></a>
 
-# GHC for pandoc
+# GHC musl
 
 The multi-arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
 Linux amd64 and arm64 binary
@@ -13,7 +13,7 @@ Credits to
 *  [@neosimsim](https://github.com/neosimsim) for
    [docker-builder-images](https://gitlab.com/neosimsim/docker-builder-images)
 
-who laid the groundwork for [this](https://gitlab.b-data.ch/ghc/ghc4pandoc).
+who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 
 ## Table of Contents
 
@@ -39,38 +39,38 @@ To install docker, follow the instructions for your platform:
 
 ### Build image
 
-latest:
+*latest*:
 
 ```bash
 docker build \
-  --build-arg GHC_VERSION_BUILD=9.4.2 \
-  --build-arg CABAL_VERSION_BUILD=3.8.1.0 \
-  -t ghc4pandoc \
+  --build-arg GHC_VERSION_BUILD=9.6.1 \
+  --build-arg CABAL_VERSION_BUILD=3.10.1.0 \
+  -t ghc-musl \
   -f latest.Dockerfile .
 ```
 
-version:
+*version*:
 
 ```bash
 docker build \
-  -t ghc4pandoc:<major>.<minor>.<patch> \
-  -f <major>.<minor>.<patch>.Dockerfile .
+  -t ghc-musl:MAJOR.MINOR.PATCH \
+  -f prior/MAJOR.MINOR.PATCH.Dockerfile .
 ```
 
-For `<major>.<minor>.<patch>` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.
+For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.
 
 ### Run container
 
 self built:
 
 ```bash
-docker run --rm -ti ghc4pandoc[:<major>.<minor>.<patch>]
+docker run --rm -ti ghc-musl[:MAJOR.MINOR.PATCH]
 ```
 
-from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc4pandoc/container_registry):
+from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc-musl/container_registry):
 
 ```bash
-docker run --rm -ti registry.gitlab.b-data.ch/ghc/ghc4pandoc[:<major>[.<minor>[.<patch>]]]
+docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
 ## Similar project

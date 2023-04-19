@@ -1,4 +1,4 @@
-ARG GHC_VERSION_BUILD=9.4.2
+ARG GHC_VERSION_BUILD=9.4.1
 ARG CABAL_VERSION_BUILD=3.8.1.0
 
 FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.2.4 as bootstrap
@@ -50,14 +50,13 @@ RUN cd /tmp \
     --flavour=perf+llvm+split_sections \
     --docs=none \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.9' cabal-install-$CABAL_VERSION
 
 FROM alpine:3.16 as builder
 
-LABEL org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
-      org.opencontainers.image.vendor="Olivier Benz" \
-      org.opencontainers.image.authors="Olivier Benz <olivier.benz@b-data.ch>"
+LABEL org.label-schema.license="MIT" \
+      org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
+      maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD

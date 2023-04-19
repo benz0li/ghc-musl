@@ -1,7 +1,7 @@
-ARG GHC_VERSION_BUILD=9.4.3
+ARG GHC_VERSION_BUILD=9.4.4
 ARG CABAL_VERSION_BUILD=3.8.1.0
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.2.5 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.2.7 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -50,9 +50,9 @@ RUN cd /tmp \
     --flavour=perf+llvm+split_sections \
     --docs=none \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.9' cabal-install-$CABAL_VERSION
 
-FROM alpine:3.16 as builder
+FROM alpine:3.17 as builder
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
@@ -81,7 +81,7 @@ RUN apk upgrade --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm12 \
+    llvm14 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
