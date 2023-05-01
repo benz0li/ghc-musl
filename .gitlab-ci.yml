@@ -26,7 +26,7 @@
     sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 
 .build:
-  image: glcr.b-data.ch/docker/docker:latest
+  image: glcr.b-data.ch/docker/docker:dind
   stage: build
   services:
     - name: glcr.b-data.ch/docker/docker:dind
