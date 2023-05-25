@@ -1,7 +1,7 @@
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.4.4 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.4.5 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD

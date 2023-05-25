@@ -26,7 +26,7 @@
     sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 
 .build:
-  image: glcr.b-data.ch/docker/docker:latest
+  image: glcr.b-data.ch/docker/docker:dind
   stage: build
   services:
     - name: glcr.b-data.ch/docker/docker:dind
@@ -35,8 +35,8 @@
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
     BUILDX_NO_DEFAULT_ATTESTATIONS: "true"
-    GHC_VERSION_BUILD: "9.4.5"
-    CABAL_VERSION_BUILD: "3.8.1.0"
+    GHC_VERSION_BUILD: "9.6.1"
+    CABAL_VERSION_BUILD: "3.10.1.0"
   before_script:
     - *before-script-build
 
@@ -196,13 +196,6 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
-    - |
-      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
-          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:
