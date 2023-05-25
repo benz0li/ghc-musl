@@ -52,7 +52,7 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer --constraint 'Cabal-syntax<3.11' cabal-install-$CABAL_VERSION
 
-FROM alpine:3.17 as builder
+FROM alpine:3.18 as builder
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -81,7 +81,7 @@ RUN apk upgrade --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm14 \
+    llvm16 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
