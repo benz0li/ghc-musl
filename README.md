@@ -3,8 +3,8 @@
 # GHC musl
 
 The multi-arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
-Linux amd64 and arm64 binary
-[releases of pandoc](https://github.com/jgm/pandoc/releases).
+Linux amd64 and arm64
+[binary releases of pandoc](https://github.com/jgm/pandoc/releases).
 
 Credits to
 
@@ -26,7 +26,7 @@ who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 
 ## Prerequisites
 
-This projects requires an installation of docker.
+This project requires an installation of docker.
 
 ## Install
 
@@ -43,7 +43,7 @@ To install docker, follow the instructions for your platform:
 
 ```bash
 docker build \
-  --build-arg GHC_VERSION_BUILD=9.6.1 \
+  --build-arg GHC_VERSION_BUILD=9.6.2 \
   --build-arg CABAL_VERSION_BUILD=3.10.1.0 \
   -t ghc-musl \
   -f latest.Dockerfile .
