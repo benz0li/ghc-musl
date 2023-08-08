@@ -35,7 +35,7 @@
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
     BUILDX_NO_DEFAULT_ATTESTATIONS: "true"
-    GHC_VERSION_BUILD: "9.6.2"
+    GHC_VERSION_BUILD: "9.6.1"
     CABAL_VERSION_BUILD: "3.10.1.0"
   before_script:
     - *before-script-build
