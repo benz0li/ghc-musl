@@ -81,7 +81,7 @@ RUN apk upgrade --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm16 \
+    llvm14 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
