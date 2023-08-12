@@ -42,7 +42,6 @@ RUN cd /tmp \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
   && echo 'BeConservative=YES' >> mk/build.mk \
   && echo 'SplitSections=YES' >> mk/build.mk \
-  && echo 'HADDOCK_DOCS=NO' >> mk/build.mk \
   && echo 'HSCOLOUR_SRCS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
@@ -116,7 +115,8 @@ RUN cd /tmp \
   && ./configure --disable-ld-override --prefix=/usr \
   && make install \
   && cd / \
-  && rm -rf /tmp/*
+  && rm -rf /tmp/* \
+    "/usr/share/doc/ghc-$GHC_VERSION"/*
 
 FROM builder as tester
 
