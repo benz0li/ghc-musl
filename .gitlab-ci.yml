@@ -35,8 +35,9 @@
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
     BUILDX_NO_DEFAULT_ATTESTATIONS: "true"
-    GHC_VERSION_BUILD: "9.6.1"
-    CABAL_VERSION_BUILD: "3.10.1.0"
+    GHC_VERSION_BUILD: "9.2.8"
+    CABAL_VERSION_BUILD: "3.6.2.0"
+    STACK_VERSION: "2.11.1"
   before_script:
     - *before-script-build
 
@@ -50,6 +51,7 @@ build:latest-linux-amd64:
       docker build
       --build-arg GHC_VERSION_BUILD
       --build-arg CABAL_VERSION_BUILD
+      --build-arg STACK_VERSION
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
@@ -58,6 +60,7 @@ build:latest-linux-amd64:
       docker build
       --build-arg GHC_VERSION_BUILD
       --build-arg CABAL_VERSION_BUILD
+      --build-arg STACK_VERSION
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
       -f latest.Dockerfile .
@@ -79,6 +82,7 @@ build:latest-linux-arm64v8:
       docker build
       --build-arg GHC_VERSION_BUILD
       --build-arg CABAL_VERSION_BUILD
+      --build-arg STACK_VERSION
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
@@ -87,6 +91,7 @@ build:latest-linux-arm64v8:
       docker build
       --build-arg GHC_VERSION_BUILD
       --build-arg CABAL_VERSION_BUILD
+      --build-arg STACK_VERSION
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
       -f latest.Dockerfile .
@@ -196,6 +201,13 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
+    - |
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
+          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      fi
+      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version"
       changes:

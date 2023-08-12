@@ -1,5 +1,6 @@
 ARG GHC_VERSION_BUILD=9.2.8
 ARG CABAL_VERSION_BUILD=3.6.2.0
+ARG STACK_VERSION=2.11.1
 
 FROM glcr.b-data.ch/ghc/ghc-musl:9.0.2 as bootstrap
 
@@ -29,13 +30,13 @@ RUN apk upgrade --no-cache \
     zlib-dev
 
 RUN cd /tmp \
-  && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
-  && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
+  && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
+  && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
     --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
-  && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
-  && tar xf ghc-$GHC_VERSION-src.tar.xz \
-  && cd ghc-$GHC_VERSION \
+  && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
+  && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
+  && cd "ghc-$GHC_VERSION" \
   # Use the LLVM backend
   && cp mk/build.mk.sample mk/build.mk \
   && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
@@ -54,11 +55,11 @@ RUN cd /tmp \
   && sed -i -e 's/unknown-linux-gnueabi/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
   # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
-  && make -j$((`nproc`+1)) \
+  && make -j"$(($(nproc)+1))" \
   && make binary-dist \
   && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' cabal-install-$CABAL_VERSION
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' "cabal-install-$CABAL_VERSION"
 
 FROM alpine:3.16 as builder
 
@@ -106,18 +107,20 @@ RUN apk upgrade --no-cache \
     zlib-dev \
     zlib-static
 
-COPY --from=bootstrap /tmp/ghc-$GHC_VERSION/ghc-$GHC_VERSION-*-alpine-linux.tar.xz /tmp/
+COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 
 RUN cd /tmp \
-  && tar -xJf ghc-$GHC_VERSION-*-alpine-linux.tar.xz \
-  && cd ghc-$GHC_VERSION \
+  && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
+  && cd "ghc-$GHC_VERSION" \
   && ./configure --disable-ld-override --prefix=/usr \
   && make install \
   && cd / \
   && rm -rf /tmp/*
 
 FROM builder as tester
+
+WORKDIR /usr/local/src
 
 COPY Main.hs Main.hs
 
@@ -131,6 +134,14 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
+FROM glcr.b-data.ch/commercialhaskell/ssi:${STACK_VERSION} as ssi
+
 FROM builder as final
+
+ARG STACK_VERSION
+
+ENV STACK_VERSION=${STACK_VERSION}
+
+COPY --from=ssi /usr/local/bin/stack /usr/bin/stack
 
 CMD ["ghci"]
