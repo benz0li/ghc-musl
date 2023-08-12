@@ -1,5 +1,6 @@
 ARG GHC_VERSION_BUILD=9.4.6
 ARG CABAL_VERSION_BUILD=3.8.1.0
+ARG STACK_VERSION=2.11.1
 
 FROM glcr.b-data.ch/ghc/ghc-musl:9.2.8 as bootstrap
 
@@ -99,7 +100,7 @@ RUN apk upgrade --no-cache \
     zlib-static
 
 COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 RUN cd /tmp \
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
@@ -125,6 +126,14 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
+FROM glcr.b-data.ch/commercialhaskell/ssi:${STACK_VERSION} as ssi
+
 FROM builder as final
+
+ARG STACK_VERSION
+
+ENV STACK_VERSION=${STACK_VERSION}
+
+COPY --from=ssi /usr/local/bin/stack /usr/local/bin/stack
 
 CMD ["ghci"]

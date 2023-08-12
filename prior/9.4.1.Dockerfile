@@ -98,7 +98,7 @@ RUN apk upgrade --no-cache \
     zlib-static
 
 COPY --from=bootstrap /tmp/ghc-$GHC_VERSION/_build/bindist/ghc-$GHC_VERSION-*-alpine-linux.tar.xz /tmp/
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 RUN cd /tmp \
   && tar -xJf ghc-$GHC_VERSION-*-alpine-linux.tar.xz \
