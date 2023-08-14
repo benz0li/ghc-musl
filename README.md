@@ -60,6 +60,9 @@ docker build \
 
 For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.
 
+:point_right: See the [Version Matrix](VERSION_MATRIX.md) for detailed
+information.
+
 ### Run container
 
 self built:
