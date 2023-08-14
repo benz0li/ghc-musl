@@ -20,7 +20,7 @@ who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 *  [Prerequisites](#prerequisites)
 *  [Install](#install)
 *  [Usage](#usage)
-*  [Similar project](#similar-project)
+*  [Similar projects](#similar-projects)
 *  [Contributing](#contributing)
 *  [License](#license)
 
@@ -85,9 +85,17 @@ available!
 :exclamation: One must use the `--system-ghc --no-install-ghc` flags when using
 `stack` with the image for the `arm64/v8` architecture.
 
-## Similar project
+## Similar projects
 
 * [utdemir/ghc-musl](https://github.com/utdemir/ghc-musl)
+* [fpco/alpine-haskell-stack](https://github.com/fpco/alpine-haskell-stack)
+
+What makes this project different:
+
+1. Multi-arch: `linux/amd64`, `linux/arm64/v8`
+1. Built using Hadrian[^1], from source, without docs
+
+[^1]: GHC versions ≥ 9.2.8.
 
 ## Contributing
 
