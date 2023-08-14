@@ -94,6 +94,8 @@ What makes this project different:
 
 1. Multi-arch: `linux/amd64`, `linux/arm64/v8`
 1. Built using Hadrian[^1], from source, without docs
+1. Built using the LLVM backend
+    * flavour: `perf+llvm+split_sections`
 
 [^1]: GHC versions ≥ 9.2.8.
 
