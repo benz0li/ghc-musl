@@ -10,7 +10,7 @@ ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD}
 
 RUN apk upgrade --no-cache \
-  && apk add --update --no-cache \
+  && apk add --no-cache \
     autoconf \
     automake \
     binutils-gold \
@@ -65,8 +65,7 @@ ARG CABAL_VERSION_BUILD
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD}
 
-RUN apk upgrade --no-cache \
-  && apk add --update --no-cache \
+RUN apk add --no-cache \
     bash \
     build-base \
     bzip2 \
@@ -106,10 +105,11 @@ RUN cd /tmp \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
   && ./configure --disable-ld-override \
   && make install \
-  && cd / \
   && rm -rf /tmp/*
 
 FROM builder as tester
+
+WORKDIR /usr/local/src
 
 WORKDIR /usr/local/src
 

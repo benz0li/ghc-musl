@@ -82,7 +82,7 @@ include the Haskell Tool Stack (Stack).
 
 There is currently no GHC binary distribution for Alpine Linux (AArch64)
 available!  
-:exclamation: One must use the `--system-ghc --no-install-ghc` flags when using
+:exclamation: One must use the `--no-install-ghc --system-ghc` flags when using
 `stack` with the image for the `arm64/v8` architecture.
 
 ## Similar projects
