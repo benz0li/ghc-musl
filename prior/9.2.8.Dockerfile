@@ -98,6 +98,7 @@ RUN apk add --no-cache \
     pcre2 \
     pcre2-dev \
     perl \
+    shadow \
     wget \
     xz \
     xz-dev \
