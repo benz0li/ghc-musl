@@ -10,7 +10,7 @@ ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD}
 
 RUN apk upgrade --no-cache \
-  && apk add --update --no-cache \
+  && apk add --no-cache \
     autoconf \
     automake \
     binutils-gold \
@@ -46,7 +46,7 @@ RUN cd /tmp \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
   && cabal update \
   # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
-  && hadrian/build binary-dist -j$((`nproc`+1)) \
+  && hadrian/build binary-dist -j"$(($(nproc)+1))" \
     --flavour=perf+llvm+split_sections \
     --docs=none \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
@@ -65,8 +65,7 @@ ARG CABAL_VERSION_BUILD
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD}
 
-RUN apk upgrade --no-cache \
-  && apk add --update --no-cache \
+RUN apk add --no-cache \
     bash \
     build-base \
     bzip2 \
@@ -106,10 +105,11 @@ RUN cd /tmp \
   && cd ghc-$GHC_VERSION-*-alpine-linux \
   && ./configure --disable-ld-override \
   && make install \
-  && cd / \
   && rm -rf /tmp/*
 
 FROM builder as tester
+
+WORKDIR /usr/local/src
 
 COPY Main.hs Main.hs
 

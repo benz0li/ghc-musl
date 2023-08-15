@@ -20,7 +20,7 @@ who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 *  [Prerequisites](#prerequisites)
 *  [Install](#install)
 *  [Usage](#usage)
-*  [Similar project](#similar-project)
+*  [Similar projects](#similar-projects)
 *  [Contributing](#contributing)
 *  [License](#license)
 
@@ -45,6 +45,7 @@ To install docker, follow the instructions for your platform:
 docker build \
   --build-arg GHC_VERSION_BUILD=9.6.2 \
   --build-arg CABAL_VERSION_BUILD=3.10.1.0 \
+  --build-arg STACK_VERSION=2.11.1 \
   -t ghc-musl \
   -f latest.Dockerfile .
 ```
@@ -58,6 +59,9 @@ docker build \
 ```
 
 For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.
+
+:point_right: See the [Version Matrix](VERSION_MATRIX.md) for detailed
+information.
 
 ### Run container
 
@@ -73,9 +77,27 @@ from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc-
 docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
-## Similar project
+As of 2023-08-12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
+include the Haskell Tool Stack (Stack).
+
+There is currently no GHC binary distribution for Alpine Linux (AArch64)
+available!  
+:exclamation: One must use the `--no-install-ghc --system-ghc` flags when using
+`stack` with the image for the `arm64/v8` architecture.
+
+## Similar projects
 
 * [utdemir/ghc-musl](https://github.com/utdemir/ghc-musl)
+* [fpco/alpine-haskell-stack](https://github.com/fpco/alpine-haskell-stack)
+
+What makes this project different:
+
+1. Multi-arch: `linux/amd64`, `linux/arm64/v8`
+1. Built using Hadrian[^1], from source, without docs
+1. Built using the LLVM backend
+    * flavour: `perf+llvm+split_sections`
+
+[^1]: GHC versions ≥ 9.2.8.
 
 ## Contributing
 

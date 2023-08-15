@@ -8,7 +8,7 @@ ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 COPY ghc-8.8.patch /tmp/
 COPY cabal-0001-force-ld.gold.patch /tmp/
 
-RUN apk add --update --no-cache \
+RUN apk add --no-cache \
     autoconf \
     automake \
     binutils-gold \
@@ -26,8 +26,8 @@ RUN apk add --update --no-cache \
     zlib-dev
 
 RUN cd /tmp/ \
-  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
-  && apk add --allow-untrusted ghc-8.8.3-r0.apk \
+  && curl -sSLO https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
+  && apk add --allow-untrusted --no-cache ghc-8.8.3-r0.apk \
   && curl -sSLO https://downloads.haskell.org/~cabal/cabal-install-$CABAL_VERSION/cabal-install-$CABAL_VERSION.tar.gz \
   && tar zxf cabal-install-$CABAL_VERSION.tar.gz \
   && cd /tmp/cabal-install-$CABAL_VERSION/ \
@@ -44,7 +44,7 @@ LABEL org.label-schema.license="MIT" \
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.8.3}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
-RUN apk add --update --no-cache \
+RUN apk add --no-cache \
     bash \
     build-base \
     bzip2 \
@@ -74,9 +74,8 @@ RUN apk add --update --no-cache \
     zlib-dev \
     #zlib-static \
   && cd /tmp/ \
-  && wget https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
-  && apk add --allow-untrusted ghc-8.8.3-r0.apk \
-  && cd / \
+  && curl -sSLO https://gitlab.b-data.ch/ghc/ghc-bootstrap-aarch64/-/raw/main/ghc-8.8.3-r0.apk \
+  && apk add --allow-untrusted --no-cache ghc-8.8.3-r0.apk \
   && rm -rf /tmp/*
 
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal

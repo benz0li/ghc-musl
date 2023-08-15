@@ -6,7 +6,8 @@ FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:8.8.4 as bootstrap
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.10.6}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
-RUN apk add --update --no-cache \
+RUN apk upgrade --no-cache \
+  && apk add --no-cache \
     autoconf \
     automake \
     binutils-gold \
@@ -26,8 +27,8 @@ RUN apk add --update --no-cache \
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
-  && gpg --keyserver hkps://pgp.mit.edu:443 \
-    --receive-keys 588764FBE22D19C4 \
+  && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
+    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
@@ -50,11 +51,11 @@ RUN cd /tmp \
   && sed -i -e 's/unknown-linux-gnueabi/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
   # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
-  && make -j$((`nproc`+1)) \
+  && make -j"$(($(nproc)+1))" \
   && make binary-dist \
   && cabal update \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install cabal-install-$CABAL_VERSION
+  && cabal install --constraint 'Cabal-syntax<3.3' cabal-install-$CABAL_VERSION
 
 FROM alpine:3.13 as builder
 
@@ -65,7 +66,7 @@ LABEL org.label-schema.license="MIT" \
 ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.10.6}
 ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
 
-RUN apk add --update --no-cache \
+RUN apk add --no-cache \
     bash \
     build-base \
     bzip2 \
@@ -105,10 +106,11 @@ RUN cd /tmp \
   && cd ghc-$GHC_VERSION \
   && ./configure --disable-ld-override --prefix=/usr \
   && make install \
-  && cd / \
   && rm -rf /tmp/*
 
 FROM builder as tester
+
+WORKDIR /usr/local/src
 
 COPY Main.hs Main.hs
 
