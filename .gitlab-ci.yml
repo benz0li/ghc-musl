@@ -239,9 +239,11 @@ build-package-hls:latest-linux-amd64:
       --build-arg GHC_VERSION=$GHC_VERSION_BUILD
       --build-arg HLS_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
+      -t $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-amd64
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
+      docker push $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-amd64
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
@@ -259,9 +261,11 @@ build-package-hls:latest-linux-arm64v8:
       --build-arg GHC_VERSION=$GHC_VERSION_BUILD
       --build-arg HLS_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
+      -t $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-arm64v8
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
+      docker push $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-arm64v8
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
