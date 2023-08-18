@@ -1,10 +1,10 @@
 .env:
   variables:
-    GHC_VERSION_BUILD: "9.2.8"
-    CABAL_VERSION_BUILD: "3.6.2.0"
+    GHC_VERSION_BUILD: "9.6.2"
+    CABAL_VERSION_BUILD: "3.10.1.0"
     STACK_VERSION: "2.11.1"
     HLS_VERSION: "2.0.0.1"
-    BUILD_GHC: "true"
+    BUILD_GHC: "false"
     BUILD_HLS: "true"
 
 .before-script-build: &before-script-build
@@ -368,13 +368,6 @@ build-package-hls-manifest:version-linux-multiarch:
           $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION
-    - |
-      docker manifest create $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION \
-          $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
-      fi
-      docker manifest push $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
