@@ -297,7 +297,7 @@ build-package-hls:version-linux-arm64v8:
       docker build
       --build-arg GHC_VERSION=$GHC_VERSION_BUILD
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
-      -f packages/hls/HLS_VERSION.Dockerfile .
+      -f packages/hls/$HLS_VERSION.Dockerfile .
     - docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
   rules:
     - if: $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
