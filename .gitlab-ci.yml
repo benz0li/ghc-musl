@@ -84,7 +84,7 @@ build:latest-linux-amd64:
       docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       docker push $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
         - latest.Dockerfile
 
@@ -116,7 +116,7 @@ build:latest-linux-arm64v8:
       docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       docker push $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
         - latest.Dockerfile
 
@@ -138,7 +138,7 @@ build:version-linux-amd64:
       -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
         - prior/$GHC_VERSION_BUILD.Dockerfile
 
@@ -160,7 +160,7 @@ build:version-linux-arm64v8:
       -f prior/$GHC_VERSION_BUILD.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
         - prior/$GHC_VERSION_BUILD.Dockerfile
 
@@ -202,7 +202,7 @@ build-manifest:latest-linux-multiarch:
       fi
       docker manifest push $CI_APP_REPO:$VERSION_MAJ
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main"
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "main"
       changes:
         - latest.Dockerfile
 
@@ -223,7 +223,7 @@ build-manifest:version-linux-multiarch:
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
   rules:
-    - if: BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version"
+    - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
         - prior/$GHC_VERSION_BUILD.Dockerfile
 
@@ -243,7 +243,7 @@ build-package-hls:latest-linux-amd64:
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
@@ -263,7 +263,7 @@ build-package-hls:latest-linux-arm64v8:
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
@@ -281,7 +281,7 @@ build-package-hls:version-linux-amd64:
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
@@ -299,7 +299,7 @@ build-package-hls:version-linux-arm64v8:
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
@@ -348,7 +348,7 @@ build-package-hls-manifest:latest-linux-multiarch:
       fi
       docker manifest push $CI_APP_REPO/$VERSION_MAJ/hls:$HLS_VERSION
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main"
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main"
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
@@ -376,6 +376,6 @@ build-package-hls-manifest:version-linux-multiarch:
       fi
       docker manifest push $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION
   rules:
-    - if: BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version"
+    - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
