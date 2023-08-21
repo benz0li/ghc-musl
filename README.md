@@ -3,8 +3,8 @@
 # GHC musl
 
 The multi-arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
-Linux amd64 and arm64
-[binary releases of pandoc](https://github.com/jgm/pandoc/releases).
+*statically linked* Linux amd64 and arm64 binary
+[releases of Pandoc](https://github.com/jgm/pandoc/releases).
 
 Credits to
 
