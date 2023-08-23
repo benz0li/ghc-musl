@@ -1,7 +1,7 @@
 .env:
   variables:
-    GHC_VERSION_BUILD: "9.6.2"
-    CABAL_VERSION_BUILD: "3.10.1.0"
+    GHC_VERSION_BUILD: "9.4.7"
+    CABAL_VERSION_BUILD: "3.8.1.0"
     STACK_VERSION: "2.11.1"
     HLS_VERSION: "2.1.0.0"
     BUILD_GHC: "true"
@@ -223,6 +223,13 @@ build-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
+    - |
+      docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+        docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
+          $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+      fi
+      docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
   rules:
     - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
@@ -373,6 +380,13 @@ build-package-hls-manifest:version-linux-multiarch:
           $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION
+    - |
+      docker manifest create $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION $CI_MANIFEST_LIST
+      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+        docker manifest annotate --variant v8 $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION \
+          $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
+      fi
+      docker manifest push $CI_APP_REPO/$VERSION_MAJ_MIN/hls:$HLS_VERSION
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
