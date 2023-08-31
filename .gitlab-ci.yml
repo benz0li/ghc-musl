@@ -1,9 +1,9 @@
 .env:
   variables:
-    GHC_VERSION_BUILD: "9.4.5"
-    CABAL_VERSION_BUILD: "3.8.1.0"
+    GHC_VERSION_BUILD: "9.6.2"
+    CABAL_VERSION_BUILD: "3.10.1.0"
     STACK_VERSION: "2.11.1"
-    HLS_VERSION: "2.1.0.0"
+    HLS_VERSION: "2.2.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
 
@@ -27,10 +27,10 @@
     --password-stdin $CI_REGISTRY
   - >
     export VERSION_MAJ_MIN_PAT=$GHC_VERSION_BUILD
-    
+
     export VERSION_MAJ_MIN=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"`
-    
+
     export VERSION_MAJ=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 

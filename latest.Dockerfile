@@ -2,7 +2,7 @@ ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 ARG STACK_VERSION
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.4.6 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.4.7 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -90,8 +90,8 @@ RUN apk add --no-cache \
     pcre-dev \
     pcre2 \
     pcre2-dev \
-    shadow \
     perl \
+    shadow \
     wget \
     xz \
     xz-dev \
