@@ -29,6 +29,8 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
+    gpg --keyserver hkp://keyserver.ubuntu.com:80 \
     --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
