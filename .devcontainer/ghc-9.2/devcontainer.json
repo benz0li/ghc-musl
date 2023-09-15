@@ -30,6 +30,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
+        "alefragnani.project-manager",
+        "christian-kohler.path-intellisense",
         "eamodio.gitlens@11.7.0",
         "editorconfig.editorconfig",
         "exiasr.hadolint",
@@ -39,6 +41,7 @@
         "mhutchie.git-graph",
         "ms-vscode.makefile-tools",
         "mutantdino.resourcemonitor",
+        "piotrpalarz.vscode-gitignore-generator",
         "timonwong.shellcheck"
       ],
       "settings": {

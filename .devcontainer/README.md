@@ -27,17 +27,20 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 [VS Code](https://code.visualstudio.com) is used as IDE, with the following
 extensions pre‑installed:
 
-* [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)
+* [.gitignore Generator](https://marketplace.visualstudio.com/items?itemName=piotrpalarz.vscode-gitignore-generator)
+* [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 * [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
 * [GitLab Workflow](https://marketplace.visualstudio.com/items?itemName=GitLab.gitlab-workflow)
 * [GitLens — Git supercharged](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
     * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
 * [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
-* [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
 * [hadolint](https://marketplace.visualstudio.com/items?itemName=exiasr.hadolint)
+* [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)
 * [Makefile Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools)
-* [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+* [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
+* [Project Manager](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
 * [Resource Monitor](https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor)
+* [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
 
 ## Parent images
 
