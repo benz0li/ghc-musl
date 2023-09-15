@@ -107,6 +107,14 @@ This project follows the
 [Contributor Covenant](https://www.contributor-covenant.org)
 [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## Dev Containers
+
+The default Dev Container is meant to work on this repository.
+
+Any other configuration is a custom GHC container based on Alpine Linux.
+
+For further information, see [Dev Containers](.devcontainer/README.md).
+
 ## License
 
 [MIT](LICENSE) © 2021 Olivier Benz

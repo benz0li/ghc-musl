@@ -1,0 +1,116 @@
+# Dev Containers
+
+These Dev Containers provide the following tools:
+
+- The
+  [Haskell Toolchain](https://www.haskell.org/ghcup/install/#supported-tools)
+  ([GHC](https://www.haskell.org/ghc),
+  [Cabal](https://cabal.readthedocs.io),
+  [Stack](https://docs.haskellstack.org), and
+  [HLS](https://haskell-language-server.readthedocs.io))
+- [Git](https://git-scm.com)
+- [HLint](https://hackage.haskell.org/package/hlint)
+- [yamllint](https://yamllint.readthedocs.io)
+- [ShellCheck](https://www.shellcheck.net)
+- [hadolint](https://github.com/hadolint/hadolint)
+
+The tools in the Haskell Toolchain are installed at `/usr/local/bin`
+[^1]<sup>,</sup>[^2].
+
+[^1]: `PATH=$HOME/.cabal/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
+
+[^2]: Installed at `/usr/bin` for GHC versions 9.2.x.
+
+| :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+[VS Code](https://code.visualstudio.com) is used as IDE, with the following
+extensions pre‑installed:
+
+* [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)
+* [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
+* [GitLab Workflow](https://marketplace.visualstudio.com/items?itemName=GitLab.gitlab-workflow)
+* [GitLens — Git supercharged](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+    * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
+* [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
+* [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
+* [hadolint](https://marketplace.visualstudio.com/items?itemName=exiasr.hadolint)
+* [Makefile Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools)
+* [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+* [Resource Monitor](https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor)
+
+## Parent images
+
+These Dev Containers are derived from the same docker images used to build
+the *statically linked* Linux amd64 and arm64 binary releases of
+
+* [Pandoc](https://github.com/jgm/pandoc)
+* [Stack](https://github.com/commercialhaskell/stack)
+* [Juvix](https://github.com/anoma/juvix)
+
+The parent images are multi-arch (`linux/amd64`, `linux/arm64/v8`) *ghc‑musl*
+images. They are based on Alpine Linux (that is
+[musl libc](https://musl.libc.org) and [BusyBox](https://www.busybox.net)).
+
+They contain *unofficial* binary distributions of GHC (that is, ones not
+released by the GHC developers). That is because:
+
+1. the official GHC binary distributions for Alpine Linux/x86_64 have known
+   bugs; and
+2. there are no official binary distributions for Alpine Linux/AArch64.
+
+Stack's global configuration (`/etc/stack/config.yaml`) sets
+`system-ghc: true` and `install-ghc: false`. That ensures that only the GHC
+available in the Dev Containers is used.
+
+## Usage
+
+For local/remote usage with VS Code, please follow the instructions at
+[Developing inside a Container](https://code.visualstudio.com/docs/devcontainers/containers).
+
+For use with Github Codespaces, please follow the instruction at
+[Creating a codespace for a repository](https://docs.github.com/en/codespaces/developing-in-codespaces/creating-a-codespace-for-a-repository#creating-a-codespace-for-a-repository).
+
+### Uniqueness
+
+What makes these Dev Containers unique:
+
+1. Default mount:
+    * source: empty directory
+    * target: `/home/vscode`
+    * type: volume
+1. Codespace only mount:
+    * source: root of this repository
+    * target: `/workspaces`
+    * type: misc
+1. Default path: `/home/vscode`
+1. Default user: `vscode`
+    * uid: 1000 (auto-assigned)
+    * gid: 1000 (auto-assigned)
+1. Lifecycle scripts:
+    * [`onCreateCommand`](scripts/usr/local/bin/onCreateCommand.sh):
+      home directory setup
+    * [`postAttachCommand`](scripts/etc/skel/.local/bin/checkForUpdates.sh):
+      Codespace only: Check for Dev Container updates
+
+### Persistence
+
+Data in the following locations is persisted:
+
+1. The user's home directory (`/home/vscode`[^3])
+2. The Dev Container's workspace (`/workspaces`)
+
+[^3]: Alternatively for the root user (`/root`). Use with Docker/Podman in
+*rootless mode*.
+
+This is accomplished either via a *volume* or *bind mount* (or *loop device*
+on Codespaces) and is preconfigured.
+
+| :information_source: **Codespaces: A 'Full Rebuild Container' resets the home directory!**<br>This is never necessary unless you want exactly that. |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------|
+
+## Haskell Language Server (HLS)
+
+Choose <nobr>`Manually via PATH`</nobr> when asked the following question:
+
+<img width="520" alt="Manage HLS" src="assets/screenshots/manageHLS.png">
