@@ -57,13 +57,13 @@
 
   // Set 'remoteUser' to 'root' to connect as root instead.
   "remoteUser": "vscode",
-  "workspaceMount": "source=ghc-9.2-home-vscode,target=/home/vscode,type=volume",
-  // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-9.2-home-vscode,target=/home/vscode,type=bind",
+  "workspaceMount": "source=ghc-musl-ghc-9.2-home-vscode,target=/home/vscode,type=volume",
+  // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.2-home-vscode,target=/home/vscode,type=bind",
   "workspaceFolder": "/home/vscode",
 
   // "remoteUser": "root",
-  // "workspaceMount": "source=ghc-9.2-root,target=/root,type=volume",
-  // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-9.2-root,target=/root,type=bind",
+  // "workspaceMount": "source=ghc-musl-ghc-9.2-root,target=/root,type=volume",
+  // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.2-root,target=/root,type=bind",
   // "workspaceFolder": "/root",
 
   // Pip: Install packages to the user site
