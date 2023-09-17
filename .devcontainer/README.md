@@ -44,15 +44,8 @@ extensions pre‑installed:
 
 ## Parent images
 
-These Dev Containers are derived from the same docker images used to build
-the *statically linked* Linux amd64 and arm64 binary releases of
-
-* [Pandoc](https://github.com/jgm/pandoc)
-* [Stack](https://github.com/commercialhaskell/stack)
-* [Juvix](https://github.com/anoma/juvix)
-
-The parent images are multi-arch (`linux/amd64`, `linux/arm64/v8`) *ghc‑musl*
-images. They are based on Alpine Linux (that is
+The parent images are multi‑arch (`linux/amd64`, `linux/arm64/v8`)
+<nobr>*GHC musl*</nobr> images. They are based on Alpine Linux (that is
 [musl libc](https://musl.libc.org) and [BusyBox](https://www.busybox.net)).
 
 They contain *unofficial* binary distributions of GHC (that is, ones not
@@ -63,8 +56,8 @@ released by the GHC developers). That is because:
 2. there are no official binary distributions for Alpine Linux/AArch64.
 
 Stack's global configuration (`/etc/stack/config.yaml`) sets
-`system-ghc: true` and `install-ghc: false`. That ensures that only the GHC
-available in the Dev Containers is used.
+<nobr>`system-ghc: true`</nobr> and <nobr>`install-ghc: false`</nobr>. That
+ensures that only the GHC available in the Dev Containers is used.
 
 ## Usage
 
