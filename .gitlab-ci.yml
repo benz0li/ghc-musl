@@ -1,8 +1,8 @@
 .env:
   variables:
-    GHC_VERSION_BUILD: "9.4.7"
-    CABAL_VERSION_BUILD: "3.8.1.0"
-    STACK_VERSION: "2.11.1"
+    GHC_VERSION_BUILD: "9.2.8"
+    CABAL_VERSION_BUILD: "3.6.2.0"
+    STACK_VERSION: "2.13.1"
     HLS_VERSION: "2.2.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
