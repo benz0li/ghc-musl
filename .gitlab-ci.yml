@@ -3,7 +3,7 @@
     GHC_VERSION_BUILD: "9.2.8"
     CABAL_VERSION_BUILD: "3.6.2.0"
     STACK_VERSION: "2.13.1"
-    HLS_VERSION: "2.2.0.0"
+    HLS_VERSION: "2.3.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
 
