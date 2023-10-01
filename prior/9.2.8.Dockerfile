@@ -1,6 +1,6 @@
 ARG GHC_VERSION_BUILD=9.2.8
 ARG CABAL_VERSION_BUILD=3.6.2.0
-ARG STACK_VERSION=2.11.1
+ARG STACK_VERSION=2.13.1
 
 FROM glcr.b-data.ch/ghc/ghc-musl:9.0.2 as bootstrap
 
@@ -71,9 +71,11 @@ LABEL org.opencontainers.image.licenses="MIT" \
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
+ARG STACK_VERSION
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
-    CABAL_VERSION=${CABAL_VERSION_BUILD}
+    CABAL_VERSION=${CABAL_VERSION_BUILD} \
+    STACK_VERSION=${STACK_VERSION}
 
 RUN apk add --no-cache \
     bash \
@@ -100,6 +102,7 @@ RUN apk add --no-cache \
     pcre2 \
     pcre2-dev \
     perl \
+    ## Install shadow for `stack --docker`
     shadow \
     wget \
     xz \
@@ -109,15 +112,26 @@ RUN apk add --no-cache \
     zlib-static
 
 COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 
 RUN cd /tmp \
+  ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd "ghc-$GHC_VERSION" \
   && ./configure --disable-ld-override --prefix=/usr \
   && make install \
+  ## Install Stack
+  && cd /tmp \
+  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
+  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
+  && sha256sum -cs stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
+  && tar -xzf stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
+  && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/bin/stack \
+  ## Clean up
   && rm -rf /tmp/* \
     "/usr/share/doc/ghc-$GHC_VERSION"/*
+
+## Install Cabal
+COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 
 FROM builder as tester
 
@@ -135,14 +149,6 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
-FROM glcr.b-data.ch/commercialhaskell/ssi:${STACK_VERSION} as ssi
-
 FROM builder as final
-
-ARG STACK_VERSION
-
-ENV STACK_VERSION=${STACK_VERSION}
-
-COPY --from=ssi /usr/local/bin/stack /usr/bin/stack
 
 CMD ["ghci"]

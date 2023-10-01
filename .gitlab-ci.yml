@@ -5,7 +5,7 @@
     STACK_VERSION: "2.11.1"
     HLS_VERSION: "2.2.0.0"
     BUILD_GHC: "true"
-    BUILD_HLS: "true"
+    BUILD_HLS: "false"
 
 .before-script-build: &before-script-build
   - |

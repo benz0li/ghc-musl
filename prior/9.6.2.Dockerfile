@@ -1,7 +1,8 @@
-ARG GHC_VERSION_BUILD=9.6.1
+ARG GHC_VERSION_BUILD=9.6.2
 ARG CABAL_VERSION_BUILD=3.10.1.0
+ARG STACK_VERSION=2.11.1
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.4.5 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.4.7 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -92,6 +93,8 @@ RUN apk add --no-cache \
     pcre2 \
     pcre2-dev \
     perl \
+    ## Install shadow for `stack --docker`
+    shadow \
     wget \
     xz \
     xz-dev \
@@ -100,7 +103,6 @@ RUN apk add --no-cache \
     zlib-static
 
 COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 RUN cd /tmp \
   # Fix https://github.com/haskell/cabal/issues/8923
@@ -110,11 +112,16 @@ RUN cd /tmp \
     curl -sSLO http://dl-cdn.alpinelinux.org/alpine/v3.16/main/"$(uname -m)"/pkgconf-1.8.1-r0.apk; \
     apk add --no-cache pkgconf-1.8.1-r0.apk; \
   fi \
+  ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
   && ./configure --disable-ld-override \
   && make install \
+  ## Clean up
   && rm -rf /tmp/*
+
+## Install Cabal
+COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 FROM builder as tester
 
@@ -132,6 +139,14 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
+FROM glcr.b-data.ch/commercialhaskell/ssi:${STACK_VERSION} as ssi
+
 FROM builder as final
+
+ARG STACK_VERSION
+
+ENV STACK_VERSION=${STACK_VERSION}
+
+COPY --from=ssi /usr/local/bin/stack /usr/local/bin/stack
 
 CMD ["ghci"]
