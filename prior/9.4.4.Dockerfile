@@ -32,6 +32,8 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/$GHC_VERSION/ghc-$GHC_VERSION-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
+    gpg --keyserver hkp://keyserver.ubuntu.com:80 \
     --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify ghc-$GHC_VERSION-src.tar.xz.sig ghc-$GHC_VERSION-src.tar.xz \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
@@ -101,6 +103,13 @@ COPY --from=bootstrap /tmp/ghc-$GHC_VERSION/_build/bindist/ghc-$GHC_VERSION-*-al
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 RUN cd /tmp \
+  # Fix https://github.com/haskell/cabal/issues/8923
+  && PKG_CONFIG_VERSION="$(pkg-config --version)" \
+  && if [ "${PKG_CONFIG_VERSION%.*}" = "1.9" ]; then \
+    # Downgrade pkgconf from 1.9.x to 1.8.1
+    curl -sSLO http://dl-cdn.alpinelinux.org/alpine/v3.16/main/"$(uname -m)"/pkgconf-1.8.1-r0.apk; \
+    apk add --no-cache pkgconf-1.8.1-r0.apk; \
+  fi \
   && tar -xJf ghc-$GHC_VERSION-*-alpine-linux.tar.xz \
   && cd ghc-$GHC_VERSION-*-alpine-linux \
   && ./configure --disable-ld-override \

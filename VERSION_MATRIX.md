@@ -32,3 +32,8 @@ Topmost entry = Tag `latest`
 
 [^1]: unsupported build; *statically linked* binary  
 [^2]: w/o Haddock; due to `HADDOCK_DOCS=NO`
+
+## Bug fixes
+
+* Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
+  * Due to https://github.com/haskell/cabal/issues/8923

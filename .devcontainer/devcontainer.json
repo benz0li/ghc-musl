@@ -1,0 +1,73 @@
+{
+  "name": "Default",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USE_ZSH_FOR_ROOT": "unset-to-use-bash",
+      "SET_LANG": "en_US.UTF-8",
+      "SET_TZ": "Etc/UTC"
+    }
+  },
+
+  "onCreateCommand": "onCreateCommand.sh",
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true,
+      "upgradePackages": false,
+      "username": "vscode",
+      "userUid": "automatic",
+      "userGid": "automatic"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": false
+    },
+    // A comma separated list of packages to install
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": ""
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "eamodio.gitlens@11.7.0",
+        "editorconfig.editorconfig",
+        "exiasr.hadolint",
+        "GitHub.vscode-pull-request-github",
+        "GitLab.gitlab-workflow",
+        "mhutchie.git-graph",
+        "mutantdino.resourcemonitor",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "timonwong.shellcheck"
+      ],
+      "settings": {
+        "gitlab.aiAssistedCodeSuggestions.enabled": false,
+        "gitlens.showWelcomeOnInstall": false,
+        "gitlens.showWhatsNewAfterUpgrades": false,
+        "resmon.show.battery": false,
+        "resmon.show.cpufreq": false
+      }
+    }
+  },
+
+  // Set 'remoteUser' to 'root' to connect as root instead.
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=ghc-musl-default-home-vscode,target=/home/vscode,type=volume"
+    // "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-default-home-vscode,target=/home/vscode,type=bind"
+  ],
+
+  // "remoteUser": "root",
+  // "mounts": [
+  //   "source=ghc-musl-default-root,target=/root,type=volume"
+  //   // "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-default-root,target=/root,type=bind"
+  // ],
+
+  // Pip: Install packages to the user site
+  "remoteEnv": {
+    "PIP_USER": "1"
+  }
+}

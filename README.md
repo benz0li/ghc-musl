@@ -2,9 +2,12 @@
 
 # GHC musl
 
-The multi-arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
-*statically linked* Linux amd64 and arm64 binary
-[releases of Pandoc](https://github.com/jgm/pandoc/releases).
+The multi‑arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
+*statically linked* Linux amd64 and arm64 binary releases of
+
+* [Pandoc](https://github.com/jgm/pandoc)
+* [Stack](https://github.com/commercialhaskell/stack)
+* [Juvix](https://github.com/anoma/juvix)
 
 Credits to
 
@@ -77,13 +80,13 @@ from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc-
 docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
-As of 2023-08-12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
+As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
 include the Haskell Tool Stack (Stack).
 
 There is currently no GHC binary distribution for Alpine Linux (AArch64)
 available!  
-:exclamation: One must use the `--no-install-ghc --system-ghc` flags when using
-`stack` with the image for the `arm64/v8` architecture.
+:exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> to ensure
+that only the GHC available in the container is used.
 
 ## Similar projects
 
@@ -92,7 +95,7 @@ available!
 
 What makes this project different:
 
-1. Multi-arch: `linux/amd64`, `linux/arm64/v8`
+1. Multi‑arch: `linux/amd64`, `linux/arm64/v8`
 1. Built using Hadrian[^1], from source, without docs
 1. Built using the LLVM backend
     * flavour: `perf+llvm+split_sections`
@@ -106,6 +109,15 @@ PRs accepted.
 This project follows the
 [Contributor Covenant](https://www.contributor-covenant.org)
 [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Dev Containers
+
+The default Dev Container is meant to work on this repository.
+
+Any other configuration is a custom GHC container based on
+<nobr>*GHC musl*</nobr>.
+
+For further information, see [Dev Containers](.devcontainer/README.md).
 
 ## License
 
