@@ -5,7 +5,7 @@ These Dev Containers provide the following tools:
 - The
   [Haskell Toolchain](https://www.haskell.org/ghcup/install/#supported-tools)
   ([GHC](https://www.haskell.org/ghc),
-  [Cabal](https://cabal.readthedocs.io),
+  [Cabal (the tool)](https://cabal.readthedocs.io),
   [Stack](https://docs.haskellstack.org), and
   [HLS](https://haskell-language-server.readthedocs.io))
 - [Git](https://git-scm.com)
