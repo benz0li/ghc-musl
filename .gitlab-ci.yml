@@ -1,7 +1,7 @@
 .env:
   variables:
-    GHC_VERSION_BUILD: "9.6.3"
-    CABAL_VERSION_BUILD: "3.10.1.0"
+    GHC_VERSION: "9.6.3"
+    CABAL_VERSION: "3.10.1.0"
     STACK_VERSION: "2.13.1"
     HLS_VERSION: "2.3.0.0"
     BUILD_GHC: "true"
@@ -18,7 +18,7 @@
     if [[ $CI_COMMIT_BRANCH == "main" ]]; then
       export CI_APP_TAG=${CI_APP_TAG:-latest}
     elif [[ $CI_COMMIT_BRANCH == "freeze-version" ]]; then
-      export CI_APP_TAG=${CI_APP_TAG:-$GHC_VERSION_BUILD}
+      export CI_APP_TAG=${CI_APP_TAG:-$GHC_VERSION}
     else
       export CI_APP_TAG=${CI_APP_TAG:-$CI_COMMIT_SHA}
     fi
@@ -26,7 +26,7 @@
     echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER
     --password-stdin $CI_REGISTRY
   - >
-    export VERSION_MAJ_MIN_PAT=$GHC_VERSION_BUILD
+    export VERSION_MAJ_MIN_PAT=$GHC_VERSION
 
     export VERSION_MAJ_MIN=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\.[[:digit:]]\+\).*|\1|p"`
@@ -66,8 +66,8 @@ build:latest-linux-amd64:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION_BUILD
-      --build-arg CABAL_VERSION_BUILD
+      --build-arg GHC_VERSION
+      --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
@@ -75,8 +75,8 @@ build:latest-linux-amd64:
       -f latest.Dockerfile .
     - >
       docker build
-      --build-arg GHC_VERSION_BUILD
-      --build-arg CABAL_VERSION_BUILD
+      --build-arg GHC_VERSION
+      --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
@@ -98,8 +98,8 @@ build:latest-linux-arm64v8:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION_BUILD
-      --build-arg CABAL_VERSION_BUILD
+      --build-arg GHC_VERSION
+      --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
@@ -107,8 +107,8 @@ build:latest-linux-arm64v8:
       -f latest.Dockerfile .
     - >
       docker build
-      --build-arg GHC_VERSION_BUILD
-      --build-arg CABAL_VERSION_BUILD
+      --build-arg GHC_VERSION
+      --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
@@ -132,16 +132,16 @@ build:version-linux-amd64:
       docker build
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
-      -f prior/$GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION.Dockerfile .
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
-      -f prior/$GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-amd64
   rules:
     - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - prior/$GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 build:version-linux-arm64v8:
   extends: .build
@@ -154,16 +154,16 @@ build:version-linux-arm64v8:
       docker build
       --target tester
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      -f prior/$GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION.Dockerfile .
     - >
       docker build
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
-      -f prior/$GHC_VERSION_BUILD.Dockerfile .
+      -f prior/$GHC_VERSION.Dockerfile .
     - docker push $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
   rules:
     - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - prior/$GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 build-manifest:latest-linux-multiarch:
   extends: .build
@@ -226,7 +226,7 @@ build-manifest:version-linux-multiarch:
   rules:
     - if: $BUILD_GHC == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - prior/$GHC_VERSION_BUILD.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 build-package-hls:latest-linux-amd64:
   extends: .build
@@ -237,14 +237,14 @@ build-package-hls:latest-linux-amd64:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION=$GHC_VERSION_BUILD
+      --build-arg GHC_VERSION
       --build-arg HLS_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
-      -t $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-amd64
+      -t $CI_APP_REPO/$GHC_VERSION/hls:$HLS_VERSION-linux-amd64
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
-      docker push $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-amd64
+      docker push $CI_APP_REPO/$GHC_VERSION/hls:$HLS_VERSION-linux-amd64
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
@@ -259,14 +259,14 @@ build-package-hls:latest-linux-arm64v8:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION=$GHC_VERSION_BUILD
+      --build-arg GHC_VERSION
       --build-arg HLS_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
-      -t $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-arm64v8
+      -t $CI_APP_REPO/$GHC_VERSION/hls:$HLS_VERSION-linux-arm64v8
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - |
       docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
-      docker push $CI_APP_REPO/$GHC_VERSION_BUILD/hls:$HLS_VERSION-linux-arm64v8
+      docker push $CI_APP_REPO/$GHC_VERSION/hls:$HLS_VERSION-linux-arm64v8
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
@@ -281,7 +281,7 @@ build-package-hls:version-linux-amd64:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION=$GHC_VERSION_BUILD
+      --build-arg GHC_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-amd64
@@ -299,7 +299,7 @@ build-package-hls:version-linux-arm64v8:
   script:
     - >
       docker build
-      --build-arg GHC_VERSION=$GHC_VERSION_BUILD
+      --build-arg GHC_VERSION
       -t $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
       -f packages/hls/$HLS_VERSION.Dockerfile .
     - docker push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8

@@ -46,8 +46,8 @@ To install docker, follow the instructions for your platform:
 
 ```bash
 docker build \
-  --build-arg GHC_VERSION_BUILD=9.6.3 \
-  --build-arg CABAL_VERSION_BUILD=3.10.1.0 \
+  --build-arg GHC_VERSION=9.6.3 \
+  --build-arg CABAL_VERSION=3.10.1.0 \
   --build-arg STACK_VERSION=2.13.1 \
   -t ghc-musl \
   -f latest.Dockerfile .
@@ -85,8 +85,8 @@ include the Haskell Tool Stack (Stack).
 
 There is currently no GHC binary distribution for Alpine Linux (AArch64)
 available!  
-:exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> to ensure
-that only the GHC available in the container is used.
+:exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
+Stack to ensure that only the GHC available in the container is used.
 
 ## Similar projects
 

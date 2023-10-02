@@ -67,6 +67,10 @@ For local/remote usage with VS Code, please follow the instructions at
 For use with Github Codespaces, please follow the instruction at
 [Creating a codespace for a repository](https://docs.github.com/en/codespaces/developing-in-codespaces/creating-a-codespace-for-a-repository#creating-a-codespace-for-a-repository).
 
+### Versions
+
+See the [Version Matrix](VERSION_MATRIX.md) for detailed information.
+
 ### Uniqueness
 
 What makes these Dev Containers unique:
