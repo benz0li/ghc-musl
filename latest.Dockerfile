@@ -5,7 +5,7 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.4.7 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.6.3 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -36,9 +36,9 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys 33C3A599DB85EA9B8BAA1866B202264020068BFB || \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
     gpg --keyserver hkp://keyserver.ubuntu.com:80 \
-    --receive-keys 33C3A599DB85EA9B8BAA1866B202264020068BFB \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
@@ -133,7 +133,7 @@ RUN cd /tmp \
   && rm -rf /tmp/*
 
 ## Install Cabal
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
+COPY --from=bootstrap /root/.local/bin/cabal /usr/local/bin/cabal
 
 FROM builder as tester
 
