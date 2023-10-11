@@ -5,7 +5,7 @@ These Dev Containers provide the following tools:
 - The
   [Haskell Toolchain](https://www.haskell.org/ghcup/install/#supported-tools)
   ([GHC](https://www.haskell.org/ghc),
-  [Cabal](https://cabal.readthedocs.io),
+  [Cabal (the tool)](https://cabal.readthedocs.io),
   [Stack](https://docs.haskellstack.org), and
   [HLS](https://haskell-language-server.readthedocs.io))
 - [Git](https://git-scm.com)
@@ -66,6 +66,10 @@ For local/remote usage with VS Code, please follow the instructions at
 
 For use with Github Codespaces, please follow the instruction at
 [Creating a codespace for a repository](https://docs.github.com/en/codespaces/developing-in-codespaces/creating-a-codespace-for-a-repository#creating-a-codespace-for-a-repository).
+
+### Versions
+
+See the [Version Matrix](VERSION_MATRIX.md) for detailed information.
 
 ### Uniqueness
 

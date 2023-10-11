@@ -1,9 +1,14 @@
-ARG GHC_VERSION_BUILD
-ARG CABAL_VERSION_BUILD
+ARG GHC_VERSION=8.8.3
+ARG CABAL_VERSION=3.2.0.0
+
+ARG GHC_VERSION_BUILD=${GHC_VERSION}
+ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
 FROM alpine:3.12 as bootstrap
 
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
+ARG CABAL_VERSION_BUILD
+
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD}
 
 COPY ghc-8.8.patch /tmp/
 COPY cabal-0001-force-ld.gold.patch /tmp/
@@ -41,8 +46,11 @@ LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
       maintainer="Olivier Benz <olivier.benz@b-data.ch>"
 
-ENV GHC_VERSION=${GHC_VERSION_BUILD:-8.8.3}
-ENV CABAL_VERSION=${CABAL_VERSION_BUILD:-3.2.0.0}
+ARG GHC_VERSION_BUILD
+ARG CABAL_VERSION_BUILD
+
+ENV GHC_VERSION=${GHC_VERSION_BUILD}
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD}
 
 RUN apk add --no-cache \
     bash \
