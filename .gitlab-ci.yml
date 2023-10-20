@@ -69,7 +69,7 @@ build:latest-linux-amd64:
       --build-arg GHC_VERSION
       --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
-      --target tester
+      --target test
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-amd64
       -f latest.Dockerfile .
@@ -101,7 +101,7 @@ build:latest-linux-arm64v8:
       --build-arg GHC_VERSION
       --build-arg CABAL_VERSION
       --build-arg STACK_VERSION
-      --target tester
+      --target test
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -t $CI_APP_REPO:$VERSION_MAJ_MIN_PAT-linux-arm64v8
       -f latest.Dockerfile .
@@ -130,7 +130,7 @@ build:version-linux-amd64:
   script:
     - >
       docker build
-      --target tester
+      --target test
       -t $CI_APP_REPO:$CI_APP_TAG-linux-amd64
       -f prior/$GHC_VERSION.Dockerfile .
     - >
@@ -152,7 +152,7 @@ build:version-linux-arm64v8:
   script:
     - >
       docker build
-      --target tester
+      --target test
       -t $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       -f prior/$GHC_VERSION.Dockerfile .
     - >
