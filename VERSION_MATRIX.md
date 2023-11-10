@@ -38,4 +38,4 @@ Topmost entry = Tag `latest`
 ## Bug fixes
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
-  * Due to https://github.com/haskell/cabal/issues/8923
+  * Due to <https://github.com/haskell/cabal/issues/8923>

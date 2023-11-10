@@ -2,17 +2,17 @@
 
 These Dev Containers provide the following tools:
 
-- The
+* The
   [Haskell Toolchain](https://www.haskell.org/ghcup/install/#supported-tools)
   ([GHC](https://www.haskell.org/ghc),
   [Cabal (the tool)](https://cabal.readthedocs.io),
   [Stack](https://docs.haskellstack.org), and
   [HLS](https://haskell-language-server.readthedocs.io))
-- [Git](https://git-scm.com)
-- [HLint](https://hackage.haskell.org/package/hlint)
-- [yamllint](https://yamllint.readthedocs.io)
-- [ShellCheck](https://www.shellcheck.net)
-- [hadolint](https://github.com/hadolint/hadolint)
+* [Git](https://git-scm.com)
+* [HLint](https://hackage.haskell.org/package/hlint)
+* [yamllint](https://yamllint.readthedocs.io)
+* [ShellCheck](https://www.shellcheck.net)
+* [hadolint](https://github.com/hadolint/hadolint)
 
 The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 [^1]<sup>,</sup>[^2].
@@ -32,7 +32,7 @@ extensions pre‑installed:
 * [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
 * [GitLab Workflow](https://marketplace.visualstudio.com/items?itemName=GitLab.gitlab-workflow)
 * [GitLens — Git supercharged](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
-    * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
+  * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
 * [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
 * [hadolint](https://marketplace.visualstudio.com/items?itemName=exiasr.hadolint)
 * [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)

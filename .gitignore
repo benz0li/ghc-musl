@@ -20,6 +20,7 @@
 !/.gitignore
 !/.gitlab-ci.yml
 !/.hadolint.yaml
+!/.markdownlint.yml
 !/CODE_OF_CONDUCT.md
 !/latest.Dockerfile
 !/LICENSE
