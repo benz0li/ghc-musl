@@ -19,7 +19,7 @@
 !/.gitattributes
 !/.gitignore
 !/.gitlab-ci.yml
-!/.hadolint.yaml
+!/.hadolint.yml
 !/.markdownlint.yml
 !/CODE_OF_CONDUCT.md
 !/latest.Dockerfile
