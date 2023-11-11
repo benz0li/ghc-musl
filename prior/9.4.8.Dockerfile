@@ -1,11 +1,11 @@
-ARG GHC_VERSION=9.2.8
-ARG CABAL_VERSION=3.6.2.0
+ARG GHC_VERSION=9.4.8
+ARG CABAL_VERSION=3.8.1.0
 ARG STACK_VERSION=2.13.1
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.0.2 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.2.8 as bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -42,30 +42,23 @@ RUN cd /tmp \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
-  # Use the LLVM backend
-  && cp mk/build.mk.sample mk/build.mk \
-  && echo 'BuildFlavour=perf-llvm' >> mk/build.mk \
-  && echo 'BeConservative=YES' >> mk/build.mk \
-  && echo 'SplitSections=YES' >> mk/build.mk \
-  && echo 'HSCOLOUR_SRCS=NO' >> mk/build.mk \
-  && echo 'BUILD_SPHINX_HTML=NO' >> mk/build.mk \
-  && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
-  && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
-  && ./boot \
+  && ./boot.source \
   && ./configure --disable-ld-override LD=ld.gold \
+  # Use the LLVM backend
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
   && sed -i -e 's/unknown-linux-gnueabihf/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnueabi/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
-  # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
-  && make -j"$(($(nproc)+1))" \
-  && make binary-dist \
   && cabal update \
+  # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
+  && hadrian/build binary-dist -j"$(($(nproc)+1))" \
+    --flavour=perf+llvm+split_sections \
+    --docs=none \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' "cabal-install-$CABAL_VERSION"
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.9' "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.16 as builder
+FROM alpine:3.18 as builder
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -95,7 +88,7 @@ RUN apk add --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm12 \
+    llvm14 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
@@ -114,13 +107,20 @@ RUN apk add --no-cache \
     zlib-dev \
     zlib-static
 
-COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
+COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
 RUN cd /tmp \
+  # Fix https://github.com/haskell/cabal/issues/8923
+  && PKG_CONFIG_VERSION="$(pkg-config --version)" \
+  && if [ "${PKG_CONFIG_VERSION%.*}" = "1.9" ]; then \
+    # Downgrade pkgconf from 1.9.x to 1.8.1
+    curl -sSLO http://dl-cdn.alpinelinux.org/alpine/v3.16/main/"$(uname -m)"/pkgconf-1.8.1-r0.apk; \
+    apk add --no-cache pkgconf-1.8.1-r0.apk; \
+  fi \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
-  && cd "ghc-$GHC_VERSION" \
-  && ./configure --disable-ld-override --prefix=/usr \
+  && cd ghc-"$GHC_VERSION"-*-alpine-linux \
+  && ./configure --disable-ld-override \
   && make install \
   ## Install Stack
   && cd /tmp \
@@ -128,13 +128,12 @@ RUN cd /tmp \
   && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && sha256sum -cs stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && tar -xzf stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
-  && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/bin/stack \
+  && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/local/bin/stack \
   ## Clean up
-  && rm -rf /tmp/* \
-    "/usr/share/doc/ghc-$GHC_VERSION"/*
+  && rm -rf /tmp/*
 
 ## Install Cabal
-COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=bootstrap /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 FROM builder as test
 
