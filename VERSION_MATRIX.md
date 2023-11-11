@@ -4,6 +4,7 @@ Topmost entry = Tag `latest`
 
 | GHC        | Cabal    | Stack      | LLVM | Linux distro |
 |:-----------|:---------|:-----------|:---- |:-------------|
+| 9.8.1      | 3.10.2.1 | 2.13.1     | 14   | Alpine 3.18  |
 | 9.6.3      | 3.10.1.0 | 2.13.1     | 14   | Alpine 3.18  |
 | 9.6.2      | 3.10.1.0 | 2.11.1[^1] | 14   | Alpine 3.18  |
 | 9.6.1      | 3.10.1.0 | n/a        | 14   | Alpine 3.18  |
@@ -37,4 +38,4 @@ Topmost entry = Tag `latest`
 ## Bug fixes
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
-  * Due to https://github.com/haskell/cabal/issues/8923
+  * Due to <https://github.com/haskell/cabal/issues/8923>

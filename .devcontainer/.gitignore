@@ -23,6 +23,7 @@
 !/scripts/etc/skel/.local/bin/*.sh
 !/scripts/usr/local/bin/*.sh
 
+!/.gitignore
 !/devcontainer.json
 !/Dockerfile
 !/GHC-legacy.Dockerfile
@@ -31,5 +32,4 @@
 !/README.md
 !/VERSION_MATRIX.md
 
-!.gitignore
 !.keep

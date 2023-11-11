@@ -2,17 +2,17 @@
 
 These Dev Containers provide the following tools:
 
-- The
+* The
   [Haskell Toolchain](https://www.haskell.org/ghcup/install/#supported-tools)
   ([GHC](https://www.haskell.org/ghc),
   [Cabal (the tool)](https://cabal.readthedocs.io),
   [Stack](https://docs.haskellstack.org), and
   [HLS](https://haskell-language-server.readthedocs.io))
-- [Git](https://git-scm.com)
-- [HLint](https://hackage.haskell.org/package/hlint)
-- [yamllint](https://yamllint.readthedocs.io)
-- [ShellCheck](https://www.shellcheck.net)
-- [hadolint](https://github.com/hadolint/hadolint)
+* [Git](https://git-scm.com)
+* [HLint](https://hackage.haskell.org/package/hlint)
+* [yamllint](https://yamllint.readthedocs.io)
+* [ShellCheck](https://www.shellcheck.net)
+* [hadolint](https://github.com/hadolint/hadolint)
 
 The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 [^1]<sup>,</sup>[^2].
@@ -21,8 +21,10 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 
 [^2]: Installed at `/usr/bin` for GHC versions 9.2.x.
 
+<!-- markdownlint-disable line-length -->
 | :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+<!-- markdownlint-enable line-length -->
 
 [VS Code](https://code.visualstudio.com) is used as IDE, with the following
 extensions pre‑installed:
@@ -32,7 +34,7 @@ extensions pre‑installed:
 * [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
 * [GitLab Workflow](https://marketplace.visualstudio.com/items?itemName=GitLab.gitlab-workflow)
 * [GitLens — Git supercharged](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
-    * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
+  * Pinned to v11.7.0 due to unsolicited AI content in recent versions.
 * [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
 * [hadolint](https://marketplace.visualstudio.com/items?itemName=exiasr.hadolint)
 * [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)
@@ -106,8 +108,10 @@ Data in the following locations is persisted:
 This is accomplished either via a *volume* or *bind mount* (or *loop device*
 on Codespaces) and is preconfigured.
 
+<!-- markdownlint-disable line-length -->
 | :information_source: **Codespaces: A 'Full Rebuild Container' resets the home directory!**<br>This is never necessary unless you want exactly that. |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------|
+<!-- markdownlint-enable line-length -->
 
 ## Haskell Language Server (HLS)
 

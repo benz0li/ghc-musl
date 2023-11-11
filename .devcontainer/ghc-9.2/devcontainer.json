@@ -5,8 +5,8 @@
     "context": "..",
     "args": {
       "GHC_VERSION": "9.2",
-      "HLS_VERSION": "2.2.0.0",
-      "STACK_VERSION": "2.9.3.1",
+      "HLS_VERSION": "2.4.0.0",
+      "STACK_VERSION": "2.11.1",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "SET_LANG": "C.UTF-8",
       "SET_TZ": ""
@@ -32,6 +32,7 @@
       "extensions": [
         "alefragnani.project-manager",
         "christian-kohler.path-intellisense",
+        "DavidAnson.vscode-markdownlint",
         "eamodio.gitlens@11.7.0",
         "editorconfig.editorconfig",
         "exiasr.hadolint",

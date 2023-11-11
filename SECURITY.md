@@ -6,7 +6,7 @@ updates.
 ## Reporting a Vulnerability
 
 To report a vulnerability in the latest docker image, email the maintainer
-olivier.benz@b-data.ch.
+<olivier.benz@b-data.ch>.
 
 ## Vulnerabilities in Prior Versions
 
