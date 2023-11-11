@@ -114,7 +114,7 @@ RUN cd /tmp \
   ## ends up at /usr/local/share/doc/ghc-$GHC_VERSION
   && rm -rf /usr/local/share/doc/ghc-$GHC_VERSION/*
 
-FROM builder as tester
+FROM builder as test
 
 WORKDIR /usr/local/src
 

@@ -119,7 +119,7 @@ RUN cd /tmp \
   && make install \
   && rm -rf /tmp/*
 
-FROM builder as tester
+FROM builder as test
 
 WORKDIR /usr/local/src
 

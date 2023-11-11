@@ -136,7 +136,7 @@ RUN cd /tmp \
 ## Install Cabal
 COPY --from=bootstrap /root/.cabal/bin/cabal /usr/bin/cabal
 
-FROM builder as tester
+FROM builder as test
 
 WORKDIR /usr/local/src
 
