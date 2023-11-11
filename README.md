@@ -1,6 +1,8 @@
 # GHC musl
 
+<!-- markdownlint-disable line-length -->
 [![minimal-readme compliant](https://img.shields.io/badge/readme%20style-minimal-brightgreen.svg)](https://github.com/RichardLitt/standard-readme/blob/master/example-readmes/minimal-readme.md) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) <a href="https://liberapay.com/benz0li/donate"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Donate using Liberapay" height="20"></a> <a href='https://codespaces.new/benz0li/ghc-musl?hide_repo_select=true&ref=main'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' height="20" style='max-width: 100%;'></a>
+<!-- markdownlint-enable line-length -->
 
 The multi‑arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
 *statically linked* Linux amd64 and arm64 binary releases of
@@ -11,10 +13,13 @@ The multi‑arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build th
 
 Credits to
 
-* [@odidev](https://github.com/odidev) for [ghc-bootstrap-aarch64](https://gitlab.alpinelinux.org/odidev/ghc-bootstrap-aarch64)  
+<!-- markdownlint-disable line-length -->
+* [@odidev](https://github.com/odidev) for
+  [ghc-bootstrap-aarch64](https://gitlab.alpinelinux.org/odidev/ghc-bootstrap-aarch64)  
    and
 * [@neosimsim](https://github.com/neosimsim) for
   [docker-builder-images](https://gitlab.com/neosimsim/docker-builder-images)
+<!-- markdownlint-enable line-length -->
 
 who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
 
