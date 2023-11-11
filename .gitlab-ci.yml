@@ -550,5 +550,23 @@ update-manifest:version-linux-multiarch:
           $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
       fi
       docker manifest push $CI_APP_REPO:$CI_APP_TAG
+    - |
+      if [[ "$TAG_VERSION_MAJ_MIN" == "true" ]]; then
+        docker manifest create $CI_APP_REPO:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ_MIN \
+            $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $CI_APP_REPO:$VERSION_MAJ_MIN
+      fi
+    - |
+      if [[ "$TAG_VERSION_MAJ" == "true" ]]; then
+        docker manifest create $CI_APP_REPO:$VERSION_MAJ $CI_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $CI_APP_REPO:$VERSION_MAJ \
+            $CI_APP_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $CI_APP_REPO:$VERSION_MAJ
+      fi
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "freeze-version"
