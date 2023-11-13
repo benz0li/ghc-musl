@@ -21,10 +21,8 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 
 [^2]: Installed at `/usr/bin` for GHC versions 9.2.x.
 
-<!-- markdownlint-disable line-length -->
 | :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
 |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-<!-- markdownlint-enable line-length -->
 
 [VS Code](https://code.visualstudio.com) is used as IDE, with the following
 extensions pre‑installed:
@@ -108,10 +106,8 @@ Data in the following locations is persisted:
 This is accomplished either via a *volume* or *bind mount* (or *loop device*
 on Codespaces) and is preconfigured.
 
-<!-- markdownlint-disable line-length -->
 | :information_source: **Codespaces: A 'Full Rebuild Container' resets the home directory!**<br>This is never necessary unless you want exactly that. |
 |:----------------------------------------------------------------------------------------------------------------------------------------------------|
-<!-- markdownlint-enable line-length -->
 
 ## Haskell Language Server (HLS)
 
