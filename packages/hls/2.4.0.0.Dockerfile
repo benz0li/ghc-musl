@@ -7,10 +7,17 @@ ARG HLS_VERSION
 
 RUN apk add --no-cache patchelf findutils \
   && cd /tmp \
-  && curl -sSL "https://github.com/haskell/haskell-language-server/archive/refs/tags/$HLS_VERSION.tar.gz" \
-    -o "haskell-language-server-$HLS_VERSION.tar.gz" \
-  && tar -xzf "haskell-language-server-$HLS_VERSION.tar.gz" \
-  && cd "haskell-language-server-$HLS_VERSION" \
+  && if dpkg --compare-versions "${GHC_VERSION%.*}" gt "9.7"; then \
+    git clone https://github.com/haskell/haskell-language-server.git \
+      "haskell-language-server-$HLS_VERSION"; \
+    cd "haskell-language-server-$HLS_VERSION"; \
+    git checkout 1c884ea856cceeaa3254a2ef68c8ab3a3c353153; \
+  else \
+    curl -sSL "https://github.com/haskell/haskell-language-server/archive/refs/tags/$HLS_VERSION.tar.gz" \
+      -o "haskell-language-server-$HLS_VERSION.tar.gz"; \
+    tar -xzf "haskell-language-server-$HLS_VERSION.tar.gz"; \
+    cd "haskell-language-server-$HLS_VERSION"; \
+  fi \
   && . .github/scripts/env.sh \
   && . .github/scripts/common.sh \
   && sed -i.bak -e '/DELETE MARKER FOR CI/,/END DELETE/d' cabal.project \
