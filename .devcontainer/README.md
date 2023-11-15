@@ -24,6 +24,8 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 | :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin` or `$HOME/.local/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
+![GHC 9.8](assets/screenshots/ghc-9.8.png)
+
 [VS Code](https://code.visualstudio.com) is used as IDE, with the following
 extensions pre‑installed:
 
