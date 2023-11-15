@@ -21,8 +21,8 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 
 [^2]: Installed at `/usr/bin` for GHC versions 9.2.x.
 
-| :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
-|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin` or `$HOME/.local/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 [VS Code](https://code.visualstudio.com) is used as IDE, with the following
 extensions pre‑installed:
