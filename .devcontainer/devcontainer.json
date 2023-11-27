@@ -46,6 +46,7 @@
       ],
       "settings": {
         "gitlab.aiAssistedCodeSuggestions.enabled": false,
+        "gitlab.duoChat.enabled": false,
         "gitlens.showWelcomeOnInstall": false,
         "gitlens.showWhatsNewAfterUpgrades": false,
         "resmon.show.battery": false,

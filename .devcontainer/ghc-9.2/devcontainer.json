@@ -47,6 +47,7 @@
       ],
       "settings": {
         "gitlab.aiAssistedCodeSuggestions.enabled": false,
+        "gitlab.duoChat.enabled": false,
         "gitlens.showWelcomeOnInstall": false,
         "gitlens.showWhatsNewAfterUpgrades": false,
         "haskell.manageHLS": "PATH",
