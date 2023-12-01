@@ -308,7 +308,7 @@ build-package-hls:version-linux-amd64:
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
       changes:
-        - packages/hls/$HLS_VERSION.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 build-package-hls:version-linux-arm64v8:
   extends: .build
@@ -326,7 +326,7 @@ build-package-hls:version-linux-arm64v8:
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
       changes:
-        - packages/hls/$HLS_VERSION.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 build-package-hls-manifest:latest-linux-multiarch:
   extends: .build
@@ -414,7 +414,7 @@ build-package-hls-manifest:version-linux-multiarch:
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "freeze-version"
       changes:
-        - packages/hls/$HLS_VERSION.Dockerfile
+        - prior/$GHC_VERSION.Dockerfile
 
 update-stack:latest-linux-amd64:
   extends: .build
