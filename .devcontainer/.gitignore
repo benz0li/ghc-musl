@@ -18,6 +18,7 @@
 !/scripts/usr/local/bin/
 
 !/assets/screenshots/manageHLS.png
+!/assets/screenshots/ghc-9.8.png
 !/conf/etc/stack/config.yaml
 !/ghc-*/devcontainer.json
 !/scripts/etc/skel/.local/bin/*.sh

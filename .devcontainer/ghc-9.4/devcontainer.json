@@ -5,7 +5,7 @@
     "context": "..",
     "args": {
       "GHC_VERSION": "9.4",
-      "HLS_VERSION": "2.4.0.0",
+      "HLS_VERSION": "2.5.0.0",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "SET_LANG": "C.UTF-8",
       "SET_TZ": ""
@@ -46,6 +46,7 @@
       ],
       "settings": {
         "gitlab.aiAssistedCodeSuggestions.enabled": false,
+        "gitlab.duoChat.enabled": false,
         "gitlens.showWelcomeOnInstall": false,
         "gitlens.showWhatsNewAfterUpgrades": false,
         "haskell.manageHLS": "PATH",

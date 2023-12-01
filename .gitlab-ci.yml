@@ -1,9 +1,9 @@
 .env:
   variables:
-    GHC_VERSION: "9.4.8"
-    CABAL_VERSION: "3.8.1.0"
+    GHC_VERSION: "9.8.1"
+    CABAL_VERSION: "3.10.2.1"
     STACK_VERSION: "2.13.1"
-    HLS_VERSION: "2.4.0.0"
+    HLS_VERSION: "2.5.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
     TAG_VERSION_MAJ_MIN: "true"
@@ -416,7 +416,7 @@ build-package-hls-manifest:version-linux-multiarch:
       changes:
         - packages/hls/$HLS_VERSION.Dockerfile
 
-update:latest-linux-amd64:
+update-stack:latest-linux-amd64:
   extends: .build
   stage: update
   tags:
@@ -437,7 +437,7 @@ update:latest-linux-amd64:
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
 
-update:latest-linux-arm64v8:
+update-stack:latest-linux-arm64v8:
   extends: .build
   stage: update
   tags:
@@ -458,7 +458,7 @@ update:latest-linux-arm64v8:
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "main" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
 
-update:version-linux-amd64:
+update-stack:version-linux-amd64:
   extends: .build
   stage: update
   tags:
@@ -476,7 +476,7 @@ update:version-linux-amd64:
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/amd64)/
 
-update:version-linux-arm64v8:
+update-stack:version-linux-arm64v8:
   extends: .build
   stage: update
   tags:
@@ -494,10 +494,10 @@ update:version-linux-arm64v8:
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "freeze-version" && $CI_BUILD_PLATFORMS =~ /(linux\/arm64\/v8)/
 
-update-manifest:latest-linux-multiarch:
+update-stack-manifest:latest-linux-multiarch:
   extends: .build
   stage: update
-  needs: ["update:latest-linux-amd64", "update:latest-linux-arm64v8"]
+  needs: ["update-stack:latest-linux-amd64", "update-stack:latest-linux-arm64v8"]
   script:
     - |
       for i in $OS_ARCH; do
@@ -534,10 +534,10 @@ update-manifest:latest-linux-multiarch:
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "main"
 
-update-manifest:version-linux-multiarch:
+update-stack-manifest:version-linux-multiarch:
   extends: .build
   stage: update
-  needs: ["update:version-linux-amd64", "update:version-linux-arm64v8"]
+  needs: ["update-stack:version-linux-amd64", "update-stack:version-linux-arm64v8"]
   script:
     - |
       for i in $OS_ARCH; do
