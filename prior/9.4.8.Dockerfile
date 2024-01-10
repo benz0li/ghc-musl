@@ -155,7 +155,7 @@ FROM ghc-stage1 as test
 WORKDIR /usr/local/src
 
 ## Install Cabal (the tool) built with the GHC target version
-COPY --from=ghc-stage2 /root/.local/bin/cabal /usr/local/bin/cabal
+COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 COPY Main.hs Main.hs
 
