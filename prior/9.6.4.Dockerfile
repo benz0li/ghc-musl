@@ -1,11 +1,11 @@
-ARG GHC_VERSION=9.4.8
-ARG CABAL_VERSION=3.8.1.0
+ARG GHC_VERSION=9.6.4
+ARG CABAL_VERSION=3.10.1.0
 ARG STACK_VERSION=2.13.1
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.2.8 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.4.8 as bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -19,7 +19,7 @@ RUN apk upgrade --no-cache \
     gnupg \
     linux-headers \
     libffi-dev \
-    llvm12 \
+    llvm14 \
     ncurses-dev \
     perl \
     python3 \
@@ -148,7 +148,7 @@ FROM ghc-stage1 as test
 WORKDIR /usr/local/src
 
 ## Install Cabal (the tool) built with the GHC target version
-COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
+COPY --from=ghc-stage2 /root/.local/bin/cabal /usr/local/bin/cabal
 
 COPY Main.hs Main.hs
 
@@ -165,6 +165,6 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
 FROM ghc-stage1
 
 ## Install Cabal (the tool) built with the GHC target version
-COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
+COPY --from=ghc-stage2 /root/.local/bin/cabal /usr/local/bin/cabal
 
 CMD ["ghci"]

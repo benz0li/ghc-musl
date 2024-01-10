@@ -1,6 +1,6 @@
 .env:
   variables:
-    GHC_VERSION: "9.6.3"
+    GHC_VERSION: "9.6.4"
     CABAL_VERSION: "3.10.1.0"
     STACK_VERSION: "2.13.1"
     HLS_VERSION: "2.5.0.0"
