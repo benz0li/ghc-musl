@@ -38,15 +38,23 @@ else
 fi
 
 # Set PATH so it includes user's private bin if it exists
+if ! grep -q "user's private bin" "$HOME/.bashrc"; then
+  echo -e "\nPATH=\"\${PATH%:\$HOME/.local/bin}\"" >> "$HOME/.bashrc";
+  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/bin\"* ]] ; then\n    PATH=\"\$HOME/bin:\$PATH\"\nfi" >> "$HOME/.bashrc";
+  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/.local/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.local/bin\"* ]] ; then\n    PATH=\"\$HOME/.local/bin:\$PATH\"\nfi" >> "$HOME/.bashrc";
+fi
 if ! grep -q "user's private bin" "$HOME/.zshrc"; then
-  echo -e "\nPATH=\"\${PATH%:\$HOME/.local/bin}\"" | tee -a "$HOME/.bashrc" "$HOME/.zshrc" >/dev/null;
-  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/bin\"* ]] ; then\n    PATH=\"\$HOME/bin:\$PATH\"\nfi" | tee -a "$HOME/.bashrc" "$HOME/.zshrc" >/dev/null;
-  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/.local/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.local/bin\"* ]] ; then\n    PATH=\"\$HOME/.local/bin:\$PATH\"\nfi" | tee -a "$HOME/.bashrc" "$HOME/.zshrc" >/dev/null;
+  echo -e "\nPATH=\"\${PATH%:\$HOME/.local/bin}\"" >> "$HOME/.zshrc";
+  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/bin\"* ]] ; then\n    PATH=\"\$HOME/bin:\$PATH\"\nfi" >> "$HOME/.zshrc";
+  echo -e "\n# set PATH so it includes user's private bin if it exists\nif [ -d \"\$HOME/.local/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.local/bin\"* ]] ; then\n    PATH=\"\$HOME/.local/bin:\$PATH\"\nfi" >> "$HOME/.zshrc";
 fi
 
 # Set PATH so it includes cabal's bin if it exists
+if ! grep -q "cabal's bin" "$HOME/.bashrc"; then
+  echo -e "\n# set PATH so it includes cabal's bin if it exists\nif [ -d \"\$HOME/.cabal/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.cabal/bin\"* ]] ; then\n    PATH=\"\$HOME/.cabal/bin:\$PATH\"\nfi" >> "$HOME/.bashrc";
+fi
 if ! grep -q "cabal's bin" "$HOME/.zshrc"; then
-  echo -e "\n# set PATH so it includes cabal's bin if it exists\nif [ -d \"\$HOME/.cabal/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.cabal/bin\"* ]] ; then\n    PATH=\"\$HOME/.cabal/bin:\$PATH\"\nfi" | tee -a "$HOME/.bashrc" "$HOME/.zshrc" >/dev/null;
+  echo -e "\n# set PATH so it includes cabal's bin if it exists\nif [ -d \"\$HOME/.cabal/bin\" ] && [[ \"\$PATH\" != *\"\$HOME/.cabal/bin\"* ]] ; then\n    PATH=\"\$HOME/.cabal/bin:\$PATH\"\nfi" >> "$HOME/.zshrc";
 fi
 
 # Enable Oh My Zsh plugins
