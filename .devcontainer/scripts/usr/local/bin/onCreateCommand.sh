@@ -4,7 +4,7 @@
 
 set -e
 
-if dpkg --compare-versions "${CABAL_VERSION%.*.*}" le "3.8"; then
+if dpkg --compare-versions "${CABAL_VERSION%.*.*}" le-nl "3.8"; then
   mkdir -p "$HOME/.cabal/bin";
 fi
 mkdir -p "$HOME/.local/bin"
