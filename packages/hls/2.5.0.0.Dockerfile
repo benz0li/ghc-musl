@@ -24,7 +24,7 @@ RUN apk add --no-cache patchelf findutils \
   && strip "out/bindist/$ARTIFACT/haskell-language-server-$HLS_VERSION/lib/$GHC_VERSION"/*.so \
   && emake bindist-tar
 
-FROM alpine:3.18 as hls
+FROM alpine:3.19 as hls
 
 ARG HLS_VERSION
 
