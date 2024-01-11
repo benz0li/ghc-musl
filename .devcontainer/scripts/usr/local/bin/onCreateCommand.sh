@@ -4,7 +4,9 @@
 
 set -e
 
-mkdir -p "$HOME/.cabal/bin"
+if dpkg --compare-versions "${GHC_VERSION%.*}" le "9.4"; then
+  mkdir -p "$HOME/.cabal/bin";
+fi
 mkdir -p "$HOME/.local/bin"
 mkdir -p "$HOME/projects"
 mkdir -p "$HOME/workspaces"
