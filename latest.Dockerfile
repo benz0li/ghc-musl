@@ -5,13 +5,7 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.6.3 as bootstrap
-
-ARG GHC_VERSION_BUILD
-ARG CABAL_VERSION_BUILD
-
-ENV GHC_VERSION=${GHC_VERSION_BUILD} \
-    CABAL_VERSION=${CABAL_VERSION_BUILD}
+FROM glcr.b-data.ch/ghc/ghc-musl:9.6.4 as bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -31,6 +25,12 @@ RUN apk upgrade --no-cache \
     python3 \
     xz \
     zlib-dev
+
+FROM bootstrap as bootstrap-ghc
+
+ARG GHC_VERSION_BUILD
+
+ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
@@ -58,12 +58,16 @@ RUN cd /tmp \
 
 FROM bootstrap as bootstrap-cabal
 
+ARG CABAL_VERSION_BUILD
+
+ENV CABAL_VERSION=${CABAL_VERSION_BUILD}
+
 ## Build Cabal (the tool) with the GHC bootstrap version
 RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install --allow-newer --constraint 'Cabal-syntax<3.11' "cabal-install-$CABAL_VERSION"
+  && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.18 as ghc-stage1
+FROM alpine:3.19 as ghc-stage1
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -112,16 +116,9 @@ RUN apk add --no-cache \
     zlib-dev \
     zlib-static
 
-COPY --from=bootstrap /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
+COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
 RUN cd /tmp \
-  ## Fix https://github.com/haskell/cabal/issues/8923
-  && PKG_CONFIG_VERSION="$(pkg-config --version)" \
-  && if [ "${PKG_CONFIG_VERSION%.*}" = "1.9" ]; then \
-    ## Downgrade pkgconf from 1.9.x to 1.8.1
-    curl -sSLO http://dl-cdn.alpinelinux.org/alpine/v3.16/main/"$(uname -m)"/pkgconf-1.8.1-r0.apk; \
-    apk add --no-cache pkgconf-1.8.1-r0.apk; \
-  fi \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
@@ -144,7 +141,7 @@ COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
 RUN cabal update \
-  && cabal install --allow-newer --constraint 'Cabal-syntax<3.11' "cabal-install-$CABAL_VERSION"
+  && cabal install "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 as test
 
