@@ -67,7 +67,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.19 as ghc-stage1
+FROM alpine:3.19 as ghc-base
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -116,6 +116,8 @@ RUN apk add --no-cache \
     zlib-dev \
     zlib-static
 
+FROM ghc-base as ghc-stage1
+
 COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
 RUN cd /tmp \
@@ -162,7 +164,10 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
-FROM ghc-stage1
+FROM ghc-base
+
+## Install GHC and Stack
+COPY --from=ghc-stage1 /usr/local /usr/local
 
 ## Install Cabal (the tool) built with the GHC target version
 COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
