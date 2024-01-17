@@ -106,7 +106,7 @@ ARG STACK_VERSION_OVERRIDE=${STACK_VERSION}
 ENV HLS_VERSION=${HLS_VERSION} \
     STACK_VERSION=${STACK_VERSION_OVERRIDE:-$STACK_VERSION}
 
-RUN if dpkg --compare-versions "${GHC_VERSION%.*}" le "9.2"; then \
+RUN if dpkg --compare-versions "$GHC_VERSION" lt "9.2.8"; then \
     if [ -f /usr/local/bin/stack ]; then \
       mv -f /usr/local/bin/stack /usr/bin/; \
     fi \

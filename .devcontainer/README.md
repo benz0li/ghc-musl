@@ -19,7 +19,7 @@ The tools in the Haskell Toolchain are installed at `/usr/local/bin`
 
 [^1]: `PATH=$HOME/.cabal/bin:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`
 
-[^2]: Installed at `/usr/bin` for GHC versions 9.2.x.
+[^2]: Some of them installed at `/usr/bin` for GHC versions < 9.2.8.
 
 | :information_source: Executables installed with Cabal (at `$HOME/.cabal/bin` or `$HOME/.local/bin`) or Stack or Pip (at `$HOME/.local/bin`)<br>take precedence over the same executable installed at `/usr/local/sbin`, `/usr/local/bin`, etc.|
 |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

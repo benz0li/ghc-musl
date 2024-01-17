@@ -130,7 +130,7 @@ RUN cd /tmp \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd "ghc-$GHC_VERSION" \
-  && ./configure --disable-ld-override --prefix=/usr \
+  && ./configure --disable-ld-override --prefix=/usr/local \
   && make install \
   ## Install Stack
   && cd /tmp \
@@ -138,15 +138,15 @@ RUN cd /tmp \
   && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && sha256sum -cs stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && tar -xzf stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
-  && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/bin/stack \
+  && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/local/bin/stack \
   ## Clean up
   && rm -rf /tmp/* \
-    "/usr/share/doc/ghc-$GHC_VERSION"/*
+    "/usr/local/share/doc/ghc-$GHC_VERSION"/*
 
 FROM ghc-stage1 as ghc-stage2
 
 ## Install Cabal (the tool) built with the GHC bootstrap version
-COPY --from=bootstrap-cabal /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=bootstrap-cabal /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
 RUN cabal update \
@@ -157,7 +157,7 @@ FROM ghc-stage1 as test
 WORKDIR /usr/local/src
 
 ## Install Cabal (the tool) built with the GHC target version
-COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 COPY Main.hs Main.hs
 
@@ -174,9 +174,9 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
 FROM ghc-base
 
 ## Install GHC and Stack
-COPY --from=ghc-stage1 /usr /usr
+COPY --from=ghc-stage1 /usr/local /usr/local
 
 ## Install Cabal (the tool) built with the GHC target version
-COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/bin/cabal
+COPY --from=ghc-stage2 /root/.cabal/bin/cabal /usr/local/bin/cabal
 
 CMD ["ghci"]
