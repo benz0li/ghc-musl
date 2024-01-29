@@ -67,8 +67,8 @@
   // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.4-root,target=/root,type=bind",
   // "workspaceFolder": "/root",
 
-  // Pip: Install packages to the user site
   "remoteEnv": {
+    // Pip: Install packages to the user site
     "PIP_USER": "1"
   }
 }

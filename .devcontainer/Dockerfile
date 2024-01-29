@@ -5,6 +5,8 @@ FROM ${BUILD_ON_IMAGE}:${PYTHON_VERSION} as files
 
 RUN mkdir /files
 
+COPY conf/shell /files
+COPY conf/stack /files
 COPY scripts /files
 
 ## Ensure file modes are correct
