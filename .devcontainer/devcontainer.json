@@ -36,6 +36,7 @@
         "editorconfig.editorconfig",
         "exiasr.hadolint",
         "GitHub.vscode-pull-request-github",
+        "GitLab.gitlab-workflow",
         "mhutchie.git-graph",
         "ms-azuretools.vscode-docker",
         "mutantdino.resourcemonitor",
