@@ -36,12 +36,10 @@
         "editorconfig.editorconfig",
         "exiasr.hadolint",
         "GitHub.vscode-pull-request-github",
-        "GitLab.gitlab-workflow",
         "mhutchie.git-graph",
-        "mutantdino.resourcemonitor",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
+        "mutantdino.resourcemonitor",
+        "redhat.vscode-yaml",
         "timonwong.shellcheck"
       ],
       "settings": {

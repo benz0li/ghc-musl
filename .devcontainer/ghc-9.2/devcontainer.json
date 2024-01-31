@@ -40,9 +40,9 @@
         "GitLab.gitlab-workflow",
         "haskell.haskell",
         "mhutchie.git-graph",
-        "ms-vscode.makefile-tools",
         "mutantdino.resourcemonitor",
         "piotrpalarz.vscode-gitignore-generator",
+        "redhat.vscode-yaml",
         "timonwong.shellcheck"
       ],
       "settings": {
