@@ -14,13 +14,24 @@ RUN find /files -type d -exec chmod 755 {} \; \
   && find /files -type f -exec chmod 644 {} \; \
   && find /files/usr/local/bin -type f -exec chmod 755 {} \;
 
-FROM koalaman/shellcheck:stable as sci
+FROM docker.io/koalaman/shellcheck:stable as sci
 
 FROM ${BUILD_ON_IMAGE}:${PYTHON_VERSION}
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+ARG BUILD_ON_IMAGE
+
+ENV PARENT_IMAGE=${BUILD_ON_IMAGE}:${PYTHON_VERSION} \
+    PARENT_IMAGE_BUILD_DATE=${BUILD_DATE}
+
 RUN dpkgArch="$(dpkg --print-architecture)" \
+  ## Ensure that common CA certificates
+  ## and OpenSSL libraries are up to date
+  && apt-get update \
+  && apt-get -y install --only-upgrade \
+    ca-certificates \
+    openssl \
   ## Install hadolint
   && case "$dpkgArch" in \
     amd64) tarArch="x86_64" ;; \
@@ -34,7 +45,9 @@ RUN dpkgArch="$(dpkg --print-architecture)" \
   && echo "$downloadUrl" | xargs curl -sSLo /usr/local/bin/hadolint \
   && chmod 755 /usr/local/bin/hadolint \
   ## Create backup of root directory
-  && cp -a /root /var/backups
+  && cp -a /root /var/backups \
+  ## Clean up
+  && rm -rf /var/lib/apt/lists/*
 
 ## Update environment
 ARG USE_ZSH_FOR_ROOT
@@ -42,8 +55,7 @@ ARG SET_LANG
 ARG SET_TZ
 
 ENV LANG=${SET_LANG:-$LANG} \
-    TZ=${SET_TZ:-$TZ} \
-    PARENT_IMAGE_BUILD_DATE=${BUILD_DATE}
+    TZ=${SET_TZ:-$TZ}
 
   ## Change root's shell to ZSH
 RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
@@ -66,7 +78,7 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
 ## Unset environment variable BUILD_DATE
 ENV BUILD_DATE=
 
-## Copy binaries as late as possible to avoid cache busting
+## Copy files as late as possible to avoid cache busting
 COPY --from=files /files /
 
 ## Copy shellcheck as late as possible to avoid cache busting
