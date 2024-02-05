@@ -107,6 +107,15 @@ available!
 :exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
 Stack to ensure that only the GHC available in the container is used.
 
+### Dev Containers
+
+The default Dev Container is meant to work on this repository.
+
+Any other configuration is a custom GHC container based on
+<nobr>*GHC musl*</nobr>.
+
+For further information, see [Dev Containers](.devcontainer/README.md).
+
 ## Similar projects
 
 * [utdemir/ghc-musl](https://github.com/utdemir/ghc-musl)
@@ -129,15 +138,6 @@ PRs accepted. Please submit to the
 This project follows the
 [Contributor Covenant](https://www.contributor-covenant.org)
 [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## Dev Containers
-
-The default Dev Container is meant to work on this repository.
-
-Any other configuration is a custom GHC container based on
-<nobr>*GHC musl*</nobr>.
-
-For further information, see [Dev Containers](.devcontainer/README.md).
 
 ## License
 
