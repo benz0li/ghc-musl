@@ -36,6 +36,18 @@
     export VERSION_MAJ=`echo $VERSION_MAJ_MIN_PAT |
     sed -n "s|\([[:digit:]]\+\).*|\1|p"`
 
+.before-script-mirror: &before-script-mirror
+  - |
+    if [[ ! -z "$DOCKER_HUB_REPO" ]]; then
+      echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER \
+        --password-stdin docker.io
+    fi
+  - |
+    if [[ ! -z "$QUAY_REPO" ]]; then
+      echo $QUAY_PASSWORD | docker login -u $QUAY_USER \
+        --password-stdin quay.io
+    fi
+
 .build:
   image: glcr.b-data.ch/docker/docker:dind
   extends: .env
@@ -50,11 +62,18 @@
     - *before-script-build
   retry: 2
 
+.mirror:
+  extends: .env
+  before_script:
+    - *before-script-build
+    - *before-script-mirror
+
 stages:
   - .pre
   - build1
   - build2
   - update
+  - mirror
   - test
   - deploy
   - .post
@@ -570,3 +589,155 @@ update-stack-manifest:version-linux-multiarch:
       fi
   rules:
     - if: $UPDATE_STACK == "true" && $CI_COMMIT_BRANCH == "freeze-version"
+
+mirror:latest-linux-multiarch:
+  extends: .mirror
+  stage: mirror
+  script:
+    - |
+      if [[ ! -z "$DOCKER_HUB_REPO" ]]; then
+        for i in $OS_ARCH; do
+          docker pull $CI_APP_REPO:$CI_APP_TAG-$i
+          docker tag $CI_APP_REPO:$CI_APP_TAG-$i $DOCKER_HUB_REPO:$CI_APP_TAG-$i
+          docker push $DOCKER_HUB_REPO:$CI_APP_TAG-$i
+          export DOCKER_HUB_MANIFEST_LIST="$DOCKER_HUB_MANIFEST_LIST $DOCKER_HUB_REPO:$CI_APP_TAG-$i"
+        done
+
+        docker manifest create $DOCKER_HUB_REPO:$VERSION_MAJ_MIN_PAT $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$VERSION_MAJ_MIN_PAT \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$VERSION_MAJ_MIN_PAT
+
+        docker manifest create $DOCKER_HUB_REPO:$VERSION_MAJ_MIN $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$VERSION_MAJ_MIN \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$VERSION_MAJ_MIN
+
+        docker manifest create $DOCKER_HUB_REPO:$VERSION_MAJ $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$VERSION_MAJ \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$VERSION_MAJ
+
+        docker manifest create $DOCKER_HUB_REPO:$CI_APP_TAG $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$CI_APP_TAG \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$CI_APP_TAG
+      fi
+    - |
+      if [[ ! -z "$QUAY_REPO" ]]; then
+        for i in $OS_ARCH; do
+          docker pull $CI_APP_REPO:$CI_APP_TAG-$i
+          docker tag $CI_APP_REPO:$CI_APP_TAG-$i $QUAY_REPO:$CI_APP_TAG-$i
+          docker push $QUAY_REPO:$CI_APP_TAG-$i
+          export QUAY_MANIFEST_LIST="$QUAY_MANIFEST_LIST $QUAY_REPO:$CI_APP_TAG-$i"
+        done
+
+        docker manifest create $QUAY_REPO:$VERSION_MAJ_MIN_PAT $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$VERSION_MAJ_MIN_PAT \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$VERSION_MAJ_MIN_PAT
+
+        docker manifest create $QUAY_REPO:$VERSION_MAJ_MIN $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$VERSION_MAJ_MIN \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$VERSION_MAJ_MIN
+
+        docker manifest create $QUAY_REPO:$VERSION_MAJ $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$VERSION_MAJ \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$VERSION_MAJ
+
+        docker manifest create $QUAY_REPO:$CI_APP_TAG $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$CI_APP_TAG \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$CI_APP_TAG
+      fi
+  rules:
+    - if: ($BUILD_GHC == "true" || $UPDATE_STACK == "true") && $CI_COMMIT_BRANCH == "main"
+      changes:
+        - latest.Dockerfile
+
+mirror:version-linux-multiarch:
+  extends: .mirror
+  stage: mirror
+  script:
+    - |
+      if [[ ! -z "$DOCKER_HUB_REPO" ]]; then
+        for i in $OS_ARCH; do
+          docker pull $CI_APP_REPO:$CI_APP_TAG-$i
+          docker tag $CI_APP_REPO:$CI_APP_TAG-$i $DOCKER_HUB_REPO:$CI_APP_TAG-$i
+          docker push $DOCKER_HUB_REPO:$CI_APP_TAG-$i
+          export DOCKER_HUB_MANIFEST_LIST="$DOCKER_HUB_MANIFEST_LIST $DOCKER_HUB_REPO:$CI_APP_TAG-$i"
+        done
+
+        docker manifest create $DOCKER_HUB_REPO:$CI_APP_TAG $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$CI_APP_TAG \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$CI_APP_TAG
+
+        docker manifest create $DOCKER_HUB_REPO:$VERSION_MAJ_MIN $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$VERSION_MAJ_MIN \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$VERSION_MAJ_MIN
+
+        docker manifest create $DOCKER_HUB_REPO:$VERSION_MAJ $DOCKER_HUB_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $DOCKER_HUB_REPO:$VERSION_MAJ \
+            $DOCKER_HUB_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $DOCKER_HUB_REPO:$VERSION_MAJ
+      fi
+    - |
+      if [[ ! -z "$QUAY_REPO" ]]; then
+        for i in $OS_ARCH; do
+          docker pull $CI_APP_REPO:$CI_APP_TAG-$i
+          docker tag $CI_APP_REPO:$CI_APP_TAG-$i $QUAY_REPO:$CI_APP_TAG-$i
+          docker push $QUAY_REPO:$CI_APP_TAG-$i
+          export QUAY_MANIFEST_LIST="$QUAY_MANIFEST_LIST $QUAY_REPO:$CI_APP_TAG-$i"
+        done
+
+        docker manifest create $QUAY_REPO:$CI_APP_TAG $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$CI_APP_TAG \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$CI_APP_TAG
+
+        docker manifest create $QUAY_REPO:$VERSION_MAJ_MIN $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$VERSION_MAJ_MIN \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$VERSION_MAJ_MIN
+
+        docker manifest create $QUAY_REPO:$VERSION_MAJ $QUAY_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $QUAY_REPO:$VERSION_MAJ \
+            $QUAY_REPO:$CI_APP_TAG-linux-arm64v8
+        fi
+        docker manifest push $QUAY_REPO:$VERSION_MAJ
+      fi
+  rules:
+    - if: ($BUILD_GHC == "true" || $UPDATE_STACK == "true") && $CI_COMMIT_BRANCH == "freeze-version"
+      changes:
+        - prior/$GHC_VERSION.Dockerfile
