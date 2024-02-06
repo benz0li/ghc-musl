@@ -63,7 +63,7 @@
   retry: 2
 
 .mirror:
-  extends: .env
+  extends: .build
   before_script:
     - *before-script-build
     - *before-script-mirror
