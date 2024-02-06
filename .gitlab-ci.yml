@@ -637,6 +637,8 @@ mirror:latest-linux-multiarch:
       if [[ ! -z "$QUAY_REPO" ]]; then
         for i in $OS_ARCH; do
           docker pull $CI_APP_REPO:$CI_APP_TAG-$i
+          docker tag $CI_APP_REPO:$CI_APP_TAG-$i $QUAY_REPO:$VERSION_MAJ_MIN_PAT-$i
+          docker push $QUAY_REPO:$VERSION_MAJ_MIN_PAT-$i
           docker tag $CI_APP_REPO:$CI_APP_TAG-$i $QUAY_REPO:$CI_APP_TAG-$i
           docker push $QUAY_REPO:$CI_APP_TAG-$i
           export QUAY_MANIFEST_LIST="$QUAY_MANIFEST_LIST $QUAY_REPO:$CI_APP_TAG-$i"
