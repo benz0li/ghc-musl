@@ -38,11 +38,12 @@ extensions pre‑installed:
 * [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph)
 * [hadolint](https://marketplace.visualstudio.com/items?itemName=exiasr.hadolint)
 * [Haskell](https://marketplace.visualstudio.com/items?itemName=haskell.haskell)
-* [Makefile Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools)
+* [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 * [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
 * [Project Manager](https://marketplace.visualstudio.com/items?itemName=alefragnani.project-manager)
 * [Resource Monitor](https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor)
 * [ShellCheck](https://marketplace.visualstudio.com/items?itemName=timonwong.shellcheck)
+* [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
 
 ## Parent images
 

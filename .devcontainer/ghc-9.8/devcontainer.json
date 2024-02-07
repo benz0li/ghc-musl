@@ -39,9 +39,9 @@
         "GitLab.gitlab-workflow",
         "haskell.haskell",
         "mhutchie.git-graph",
-        "ms-vscode.makefile-tools",
         "mutantdino.resourcemonitor",
         "piotrpalarz.vscode-gitignore-generator",
+        "redhat.vscode-yaml",
         "timonwong.shellcheck"
       ],
       "settings": {
@@ -67,8 +67,8 @@
   // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.8-root,target=/root,type=bind",
   // "workspaceFolder": "/root",
 
-  // Pip: Install packages to the user site
   "remoteEnv": {
+    // Pip: Install packages to the user site
     "PIP_USER": "1"
   }
 }

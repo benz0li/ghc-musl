@@ -4,6 +4,8 @@
 [![minimal-readme compliant](https://img.shields.io/badge/readme%20style-minimal-brightgreen.svg)](https://github.com/RichardLitt/standard-readme/blob/master/example-readmes/minimal-readme.md) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) <a href="https://liberapay.com/benz0li/donate"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Donate using Liberapay" height="20"></a> <a href='https://codespaces.new/benz0li/ghc-musl?hide_repo_select=true&ref=main'><img src='https://github.com/codespaces/badge.svg' alt='Open in GitHub Codespaces' height="20" style='max-width: 100%;'></a>
 <!-- markdownlint-enable line-length -->
 
+Unofficial binary distributions of GHC on Alpine Linux.
+
 The multi‑arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build the
 *statically linked* Linux amd64 and arm64 binary releases of
 
@@ -85,6 +87,18 @@ from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc-
 docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
+from [Docker Hub](https://hub.docker.com/r/benz0li/ghc-musl):
+
+```bash
+docker run --rm -ti docker.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+```
+
+from [Quay](https://quay.io/repository/benz0li/ghc-musl):
+
+```bash
+docker run --rm -ti quay.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+```
+
 As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
 include the Haskell Tool Stack (Stack).
 
@@ -92,6 +106,15 @@ There is currently no GHC binary distribution for Alpine Linux (AArch64)
 available!  
 :exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
 Stack to ensure that only the GHC available in the container is used.
+
+### Dev Containers
+
+The default Dev Container is meant to work on this repository.
+
+Any other configuration is a custom GHC container based on
+<nobr>*GHC musl*</nobr>.
+
+For further information, see [Dev Containers](.devcontainer/README.md).
 
 ## Similar projects
 
@@ -109,20 +132,12 @@ What makes this project different:
 
 ## Contributing
 
-PRs accepted.
+PRs accepted. Please submit to the
+[GitLab repository](https://gitlab.com/benz0li/ghc-musl).
 
 This project follows the
 [Contributor Covenant](https://www.contributor-covenant.org)
 [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## Dev Containers
-
-The default Dev Container is meant to work on this repository.
-
-Any other configuration is a custom GHC container based on
-<nobr>*GHC musl*</nobr>.
-
-For further information, see [Dev Containers](.devcontainer/README.md).
 
 ## License
 
