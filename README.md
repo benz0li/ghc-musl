@@ -81,10 +81,10 @@ self built:
 docker run --rm -ti ghc-musl[:MAJOR.MINOR.PATCH]
 ```
 
-from [the project's GitLab Container Registry](https://gitlab.b-data.ch/ghc/ghc-musl/container_registry):
+from [Quay](https://quay.io/repository/benz0li/ghc-musl):
 
 ```bash
-docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti quay.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
 from [Docker Hub](https://hub.docker.com/r/benz0li/ghc-musl):
@@ -93,10 +93,10 @@ from [Docker Hub](https://hub.docker.com/r/benz0li/ghc-musl):
 docker run --rm -ti docker.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
-from [Quay](https://quay.io/repository/benz0li/ghc-musl):
+from [GitLab (b-data GmbH)](https://gitlab.b-data.ch/ghc/ghc-musl/container_registry/381):
 
 ```bash
-docker run --rm -ti quay.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 ```
 
 As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
