@@ -11,6 +11,10 @@ RUN apk add --no-cache patchelf findutils \
     -o "haskell-language-server-$HLS_VERSION.tar.gz" \
   && tar -xzf "haskell-language-server-$HLS_VERSION.tar.gz" \
   && cd "haskell-language-server-$HLS_VERSION" \
+  && if dpkg --compare-versions "$GHC_VERSION" gt "9.8.1"; then \
+    sed -i 's/!MIN_VERSION_ghc(9,8,1)/!MIN_VERSION_ghc(9,8,1) || MIN_VERSION_ghc(9,8,2)/g' \
+      ghcide/src/Development/IDE/Import/FindImports.hs; \
+  fi \
   && . .github/scripts/env.sh \
   && . .github/scripts/common.sh \
   && sed -i.bak -e '/DELETE MARKER FOR CI/,/END DELETE/d' cabal.project \
