@@ -55,7 +55,7 @@ To install docker, follow the instructions for your platform:
 docker build \
   --build-arg GHC_VERSION=9.8.2 \
   --build-arg CABAL_VERSION=3.10.2.1 \
-  --build-arg STACK_VERSION=2.15.1 \
+  --build-arg STACK_VERSION=2.15.3 \
   -t ghc-musl \
   -f latest.Dockerfile .
 ```
