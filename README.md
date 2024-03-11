@@ -102,10 +102,11 @@ docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
 As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
 include the Haskell Tool Stack (Stack).
 
-There is currently no GHC binary distribution for Alpine Linux (AArch64)
-available!  
+On 2024‑02‑23, the binary distribution of GHC version 9.8.2 was released for
+Alpine Linux (AArch64).  
 :exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
-Stack to ensure that only the GHC available in the container is used.
+Stack (GHC versions < 9.8.2) to ensure that only the GHC available in the
+container is used.
 
 ### Dev Containers
 
@@ -114,7 +115,7 @@ The default Dev Container is meant to work on this repository.
 Any other configuration is a custom GHC container based on
 <nobr>*GHC musl*</nobr>.
 
-For further information, see [Dev Containers](.devcontainer/README.md).
+For further information, see [Dev Containers](.devcontainer).
 
 ## Similar projects
 
