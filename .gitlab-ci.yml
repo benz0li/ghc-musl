@@ -6,7 +6,7 @@
     HLS_VERSION: "2.8.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
-    TAG_VERSION_MAJ_MIN: "false"
+    TAG_VERSION_MAJ_MIN: "true"
     TAG_VERSION_MAJ: "false"
 
 .before-script-build: &before-script-build
