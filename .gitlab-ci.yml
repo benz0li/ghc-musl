@@ -2,7 +2,7 @@
   variables:
     GHC_VERSION: "9.8.2"
     CABAL_VERSION: "3.10.3.0"
-    STACK_VERSION: "2.15.5"
+    STACK_VERSION: "2.15.7"
     HLS_VERSION: "2.8.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "true"
