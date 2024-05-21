@@ -142,4 +142,6 @@ This project follows the
 
 ## License
 
-[MIT](LICENSE) © 2021 Olivier Benz
+Copyright © 2021 Olivier Benz
+
+Distributed under the terms of the [MIT License](LICENSE).
