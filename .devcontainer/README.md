@@ -117,3 +117,9 @@ on Codespaces) and is preconfigured.
 Choose <nobr>`Manually via PATH`</nobr> when asked the following question:
 
 <img width="520" alt="Manage HLS" src="assets/screenshots/manageHLS.png">
+
+## License
+
+The code in this directory is not part of ghc-musl (the software) and, with the
+exceptions noted in [LICENSE](LICENSE), is distributed under the terms of the
+MIT License.
