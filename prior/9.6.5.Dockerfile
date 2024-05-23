@@ -19,7 +19,7 @@ RUN apk upgrade --no-cache \
     gnupg \
     linux-headers \
     libffi-dev \
-    llvm14 \
+    llvm16 \
     ncurses-dev \
     perl \
     python3 \
@@ -32,6 +32,8 @@ ARG GHC_VERSION_BUILD
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
+COPY patches/${GHC_VERSION}.patch /tmp/
+
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
@@ -42,6 +44,9 @@ RUN cd /tmp \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
+  # Apply patches
+  && mv "/tmp/$GHC_VERSION.patch" . \
+  && patch -p0 <"$GHC_VERSION.patch" \
   && ./boot.source \
   && ./configure --disable-ld-override LD=ld.gold \
   ## Use the LLVM backend
@@ -67,7 +72,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.19 as ghc-base
+FROM alpine:3.20 as ghc-base
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -97,7 +102,7 @@ RUN apk add --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm14 \
+    llvm16 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
