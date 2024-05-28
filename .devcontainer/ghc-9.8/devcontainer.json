@@ -1,5 +1,5 @@
 {
-  "name": "GHC 9.8 (latest)",
+  "name": "GHC 9.8",
   "build": {
     "dockerfile": "../GHC.Dockerfile",
     "context": "..",

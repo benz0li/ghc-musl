@@ -1,11 +1,10 @@
 {
-  "name": "GHC 9.4",
+  "name": "GHC 9.10 (latest)",
   "build": {
     "dockerfile": "../GHC.Dockerfile",
     "context": "..",
     "args": {
-      "GHC_VERSION": "9.4",
-      "HLS_VERSION": "2.8.0.0",
+      "GHC_VERSION": "9.10",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "SET_LANG": "C.UTF-8",
       "SET_TZ": ""
@@ -58,13 +57,13 @@
 
   // Set 'remoteUser' to 'root' to connect as root instead.
   "remoteUser": "vscode",
-  "workspaceMount": "source=ghc-musl-ghc-9.4-home-vscode,target=/home/vscode,type=volume",
-  // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.4-home-vscode,target=/home/vscode,type=bind",
+  "workspaceMount": "source=ghc-musl-ghc-9.10-home-vscode,target=/home/vscode,type=volume",
+  // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.10-home-vscode,target=/home/vscode,type=bind",
   "workspaceFolder": "/home/vscode",
 
   // "remoteUser": "root",
-  // "workspaceMount": "source=ghc-musl-ghc-9.4-root,target=/root,type=volume",
-  // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.4-root,target=/root,type=bind",
+  // "workspaceMount": "source=ghc-musl-ghc-9.10-root,target=/root,type=volume",
+  // // "workspaceMount": "source=${localWorkspaceFolder}/.devcontainer/bind-mounts/ghc-musl-ghc-9.10-root,target=/root,type=bind",
   // "workspaceFolder": "/root",
 
   "remoteEnv": {
