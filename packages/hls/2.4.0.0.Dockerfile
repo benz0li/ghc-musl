@@ -7,7 +7,7 @@ ARG HLS_VERSION
 
 RUN apk add --no-cache patchelf findutils \
   && cd /tmp \
-  && if dpkg --compare-versions "${GHC_VERSION%.*}" gt "9.7"; then \
+  && if dpkg --compare-versions "${GHC_VERSION%.*}" ge "9.7"; then \
     git clone https://github.com/haskell/haskell-language-server.git \
       "haskell-language-server-$HLS_VERSION"; \
     cd "haskell-language-server-$HLS_VERSION"; \
