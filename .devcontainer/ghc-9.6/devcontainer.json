@@ -1,11 +1,12 @@
 {
-  "name": "GHC 9.6",
+  "name": "GHC 9.6 (recommended)",
   "build": {
     "dockerfile": "../GHC.Dockerfile",
     "context": "..",
     "args": {
       "GHC_VERSION": "9.6",
-      "HLS_VERSION": "2.8.0.0",
+      "HLS_VERSION": "2.7.0.0",
+      "STACK_VERSION": "2.15.5",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "SET_LANG": "C.UTF-8",
       "SET_TZ": ""

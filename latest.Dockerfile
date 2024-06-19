@@ -5,7 +5,7 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.6.5 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2 as bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -13,13 +13,14 @@ RUN apk upgrade --no-cache \
     automake \
     binutils-gold \
     build-base \
+    clang18 \
     coreutils \
     cpio \
     curl \
     gnupg \
     linux-headers \
     libffi-dev \
-    llvm14 \
+    llvm18 \
     ncurses-dev \
     perl \
     python3 \
@@ -32,18 +33,23 @@ ARG GHC_VERSION_BUILD
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
+COPY patches/${GHC_VERSION}.patch /tmp/
+
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 || \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
     gpg --keyserver hkp://keyserver.ubuntu.com:80 \
-    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
+  # Apply patches
+  && mv "/tmp/$GHC_VERSION.patch" . \
+  && patch -p0 <"$GHC_VERSION.patch" \
   && ./boot.source \
-  && ./configure --disable-ld-override LD=ld.gold \
+  && ./configure \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   ## so we can match the llvm vendor string alpine uses
@@ -51,6 +57,8 @@ RUN cd /tmp \
   && sed -i -e 's/unknown-linux-gnueabi/alpine-linux/g' llvm-targets \
   && sed -i -e 's/unknown-linux-gnu/alpine-linux/g' llvm-targets \
   && cabal update \
+  && cabal install alex \
+  && export PATH=/root/.local/bin:$PATH \
   ## See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
     --flavour=perf+llvm+split_sections \
@@ -65,9 +73,9 @@ ENV CABAL_VERSION=${CABAL_VERSION_BUILD}
 ## Build Cabal (the tool) with the GHC bootstrap version
 RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install "cabal-install-$CABAL_VERSION"
+  && cabal install cabal-install-3.10.3.0
 
-FROM alpine:3.19 as ghc-base
+FROM alpine:3.20 as ghc-base
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
@@ -88,6 +96,7 @@ RUN apk add --no-cache \
     bzip2 \
     bzip2-dev \
     bzip2-static \
+    clang18 \
     curl \
     curl-static \
     dpkg \
@@ -97,7 +106,7 @@ RUN apk add --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm14 \
+    llvm18 \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
@@ -124,7 +133,7 @@ RUN cd /tmp \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
-  && ./configure --disable-ld-override \
+  && ./configure \
   && make install \
   ## Install Stack
   && cd /tmp \
@@ -142,8 +151,14 @@ FROM ghc-stage1 as ghc-stage2
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
-RUN cabal update \
-  && cabal install "cabal-install-$CABAL_VERSION"
+RUN cd /tmp \
+  && curl -sSLO https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v"$CABAL_VERSION".tar.gz \
+  && tar -xzf cabal-install-v"$CABAL_VERSION".tar.gz \
+  && cd cabal-cabal-install-v"$CABAL_VERSION" \
+  && sed -i 's/2024-03-20T08:02:24Z/2024-04-02T17:52:00Z/g' cabal.project.release \
+  && sed -i 's/hashable   >= 1.0      /hashable   >= 1.4.4.0  /g' cabal-install/cabal-install.cabal \
+  && cabal update \
+  && cabal install --project-file=cabal.project.release --allow-newer cabal-install
 
 FROM ghc-stage1 as test
 

@@ -23,7 +23,7 @@
 !/scripts/usr/local/bin/
 
 !/assets/screenshots/manageHLS.png
-!/assets/screenshots/ghc-9.8.png
+!/assets/screenshots/ghc.png
 !/conf/shell/var/tmp/snippets/*.sh
 !/conf/stack/etc/stack/config.yaml
 !/ghc-*/devcontainer.json
