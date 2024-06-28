@@ -73,7 +73,7 @@ ENV CABAL_VERSION=${CABAL_VERSION_BUILD}
 ## Build Cabal (the tool) with the GHC bootstrap version
 RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
-  && cabal install cabal-install-3.10.3.0
+  && cabal install "cabal-install-$CABAL_VERSION"
 
 FROM alpine:3.20 as ghc-base
 
@@ -151,14 +151,8 @@ FROM ghc-stage1 as ghc-stage2
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
-RUN cd /tmp \
-  && curl -sSLO https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v"$CABAL_VERSION".tar.gz \
-  && tar -xzf cabal-install-v"$CABAL_VERSION".tar.gz \
-  && cd cabal-cabal-install-v"$CABAL_VERSION" \
-  && sed -i 's/2024-03-20T08:02:24Z/2024-04-02T17:52:00Z/g' cabal.project.release \
-  && sed -i 's/hashable   >= 1.0      /hashable   >= 1.4.4.0  /g' cabal-install/cabal-install.cabal \
-  && cabal update \
-  && cabal install --project-file=cabal.project.release --allow-newer cabal-install
+RUN cabal update \
+  && cabal install "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 as test
 

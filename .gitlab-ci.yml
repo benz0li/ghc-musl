@@ -1,10 +1,10 @@
 .env:
   variables:
     GHC_VERSION: "9.10.1"
-    CABAL_VERSION: "3.12.0.0-prerelease"
+    CABAL_VERSION: "3.12.1.0"
     STACK_VERSION: "2.15.7"
     HLS_VERSION: "2.9.0.0"
-    BUILD_GHC: "false"
+    BUILD_GHC: "true"
     BUILD_HLS: "true"
     TAG_VERSION_MAJ_MIN: "false"
     TAG_VERSION_MAJ: "false"
