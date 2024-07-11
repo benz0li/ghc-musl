@@ -5,7 +5,7 @@ ARG STACK_VERSION=2.15.7
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.6.5 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.6.6 as bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
