@@ -55,8 +55,8 @@ They contain *unofficial* binary distributions of GHC (that is, ones not
 released by the GHC developers). That is because:
 
 1. the official GHC binary distributions for Alpine Linux/x86_64 have known
-   bugs; and
-1. there are no official binary distributions for Alpine Linux/AArch64.
+   bugs ~~; and~~
+1. ~~there are no official binary distributions for Alpine Linux/AArch64.~~
 
 Stack's global configuration (`/etc/stack/config.yaml`) sets
 <nobr>`system-ghc: true`</nobr> and <nobr>`install-ghc: false`</nobr>. That
