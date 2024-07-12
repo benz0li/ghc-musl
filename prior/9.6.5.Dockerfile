@@ -44,9 +44,11 @@ RUN cd /tmp \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
-  # Apply patches
+  ## Apply patch: Bump max LLVM version to 19 (not inclusive)
+  ## https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12726
   && mv "/tmp/$GHC_VERSION.patch" . \
   && patch -p0 <"$GHC_VERSION.patch" \
+  ## Configure and build
   && ./boot.source \
   && ./configure --disable-ld-override LD=ld.gold \
   ## Use the LLVM backend
