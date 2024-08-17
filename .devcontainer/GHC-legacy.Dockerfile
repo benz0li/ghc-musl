@@ -71,13 +71,13 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
     fix-chsh.sh; \
     chsh -s /bin/zsh; \
   fi \
-  ## Update timezone if needed
+  ## Update timezone if requested
   && if [ "$TZ" != "" ]; then \
     apk add --no-cache tzdata; \
   fi \
   ## Info about timezone
   && echo "TZ is set to $TZ" \
-  ## Add/Update locale if needed
+  ## Add/Update locale if requested
   && if [ "$LANG" != "C.UTF-8" ]; then \
     if [ -n "$LANG" ]; then \
       apk add --no-cache musl-locales musl-locales-lang; \
