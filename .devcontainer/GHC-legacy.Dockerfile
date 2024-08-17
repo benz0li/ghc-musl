@@ -74,10 +74,9 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
   ## Update timezone if needed
   && if [ "$TZ" != "" ]; then \
     apk add --no-cache tzdata; \
-    echo "Setting TZ to $TZ"; \
-    ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime \
-      && echo "$TZ" > /etc/timezone; \
   fi \
+  ## Info about timezone
+  && echo "TZ is set to $TZ" \
   ## Add/Update locale if needed
   && if [ "$LANG" != "C.UTF-8" ]; then \
     if [ -n "$LANG" ]; then \
@@ -87,7 +86,9 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
     sed -i "s/LANG:-C.UTF-8/LANG:-$LANG/" /etc/profile.d/*locale.sh; \
     sed -i "s/LC_COLLATE=C/LC_COLLATE=$LANG/" /etc/profile.d/*locale.sh; \
     sed -i "s/LC_COLLATE:-C/LC_COLLATE:-$LANG/" /etc/profile.d/*locale.sh; \
-  fi
+  fi \
+  ## Info about locale
+  && echo "LANG is set to $LANG"
 
 ## Copy binaries as late as possible to avoid cache busting
 ## Install Stack
