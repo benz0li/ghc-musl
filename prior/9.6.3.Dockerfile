@@ -122,7 +122,11 @@ RUN cd /tmp \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
-  && ./configure --disable-ld-override \
+  && ./configure \
+    --build=$(uname -m)-alpine-linux \
+    --host=$(uname -m)-alpine-linux \
+    --target=$(uname -m)-alpine-linux \
+    --disable-ld-override \
   && make install \
   ## Install Stack
   && cd /tmp \

@@ -57,7 +57,11 @@ RUN cd /tmp \
   && echo 'BUILD_SPHINX_PS=NO' >> mk/build.mk \
   && echo 'BUILD_SPHINX_PDF=NO' >> mk/build.mk \
   && autoreconf \
-  && ./configure --disable-ld-override LD=ld.gold \
+  && ./configure \
+    --build=$(uname -m)-alpine-linux \
+    --host=$(uname -m)-alpine-linux \
+    --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.gold \
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
   && sed -i -e 's/unknown-linux-gnueabihf/alpine-linux/g' llvm-targets \

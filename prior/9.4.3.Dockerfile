@@ -42,7 +42,11 @@ RUN cd /tmp \
   && tar xf ghc-$GHC_VERSION-src.tar.xz \
   && cd ghc-$GHC_VERSION \
   && ./boot.source \
-  && ./configure --disable-ld-override LD=ld.gold \
+  && ./configure \
+    --build=$(uname -m)-alpine-linux \
+    --host=$(uname -m)-alpine-linux \
+    --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.gold \
   # Use the LLVM backend
   # Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   # so we can match the llvm vendor string alpine uses
