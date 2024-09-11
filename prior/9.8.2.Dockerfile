@@ -50,7 +50,11 @@ RUN cd /tmp \
   && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
   && ./boot.source \
-  && ./configure --disable-ld-override LD=ld.gold \
+  && ./configure \
+    --build=$(uname -m)-alpine-linux \
+    --host=$(uname -m)-alpine-linux \
+    --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.gold \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   ## so we can match the llvm vendor string alpine uses
