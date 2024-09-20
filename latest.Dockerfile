@@ -82,10 +82,15 @@ RUN cabal update \
 
 FROM alpine:3.20 as ghc-base
 
-LABEL org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
-      org.opencontainers.image.vendor="Olivier Benz" \
-      org.opencontainers.image.authors="Olivier Benz <olivier.benz@b-data.ch>"
+ARG IMAGE_LICENSE="MIT"
+ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
+ARG IMAGE_VENDOR="Olivier Benz"
+ARG IMAGE_AUTHORS="Olivier Benz <olivier.benz@b-data.ch>"
+
+LABEL org.opencontainers.image.licenses="$IMAGE_LICENSE" \
+      org.opencontainers.image.source="$IMAGE_SOURCE" \
+      org.opencontainers.image.vendor="$IMAGE_VENDOR" \
+      org.opencontainers.image.authors="$IMAGE_AUTHORS"
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD

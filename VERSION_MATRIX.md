@@ -45,3 +45,10 @@ Topmost entry = Tag `latest`
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
   * Due to <https://github.com/haskell/cabal/issues/8923>
+
+## Experimental
+
+`linux/riscv64` images for GHC versions ≥ 9.10.1, e.g.
+`quay.io/benz0li/ghc-musl:{latest,GHC_VERSION}-linux-riscv64`.  
+:information_source: Whenever a new version of GHC is released, the previous
+`linux/riscv64` image is added to the manifest.
