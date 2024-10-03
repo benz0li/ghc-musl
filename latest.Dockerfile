@@ -5,7 +5,11 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2 AS bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
+
+FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -147,8 +151,13 @@ RUN cd /tmp \
   && make install \
   ## Install Stack
   && cd /tmp \
-  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
-  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    curl -sSLO https://gitlab.b-data.ch/commercialhaskell/stack/-/releases/v"$STACK_VERSION"/downloads/builds/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz; \
+    curl -sSLO https://gitlab.b-data.ch/commercialhaskell/stack/-/releases/v"$STACK_VERSION"/downloads/builds/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256; \
+  else \
+    curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz; \
+    curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256; \
+  fi \
   && sha256sum -cs stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && tar -xzf stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
   && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/local/bin/stack \
