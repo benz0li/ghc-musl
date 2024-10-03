@@ -1,7 +1,7 @@
 ARG GHC_VERSION
 ARG HLS_VERSION=2.3.0.0
 
-FROM glcr.b-data.ch/ghc/ghc-musl:${GHC_VERSION} as builder
+FROM glcr.b-data.ch/ghc/ghc-musl:${GHC_VERSION} AS builder
 
 ARG HLS_VERSION
 
@@ -24,7 +24,7 @@ RUN apk add --no-cache patchelf findutils \
   && strip "out/bindist/$ARTIFACT/haskell-language-server-$HLS_VERSION/lib/$GHC_VERSION"/*.so \
   && emake bindist-tar
 
-FROM alpine:3.18 as hls
+FROM alpine:3.18 AS hls
 
 ARG HLS_VERSION
 

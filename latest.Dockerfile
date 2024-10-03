@@ -5,7 +5,7 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2 AS bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -27,7 +27,7 @@ RUN apk upgrade --no-cache \
     xz \
     zlib-dev
 
-FROM bootstrap as bootstrap-ghc
+FROM bootstrap AS bootstrap-ghc
 
 ARG GHC_VERSION_BUILD
 
@@ -69,7 +69,7 @@ RUN cd /tmp \
     --flavour=perf+llvm+split_sections \
     --docs=none
 
-FROM bootstrap as bootstrap-cabal
+FROM bootstrap AS bootstrap-cabal
 
 ARG CABAL_VERSION_BUILD
 
@@ -80,7 +80,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.20 as ghc-base
+FROM alpine:3.20 AS ghc-base
 
 ARG IMAGE_LICENSE="MIT"
 ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
@@ -135,7 +135,7 @@ RUN apk add --no-cache \
     zlib-dev \
     zlib-static
 
-FROM ghc-base as ghc-stage1
+FROM ghc-base AS ghc-stage1
 
 COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
@@ -155,7 +155,7 @@ RUN cd /tmp \
   ## Clean up
   && rm -rf /tmp/*
 
-FROM ghc-stage1 as ghc-stage2
+FROM ghc-stage1 AS ghc-stage2
 
 ## Install Cabal (the tool) built with the GHC bootstrap version
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
@@ -164,7 +164,7 @@ COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 RUN cabal update \
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM ghc-stage1 as test
+FROM ghc-stage1 AS test
 
 WORKDIR /usr/local/src
 
