@@ -1,7 +1,7 @@
 ARG BUILD_ON_IMAGE=glcr.b-data.ch/python/base
 ARG PYTHON_VERSION=latest
 
-FROM ${BUILD_ON_IMAGE}:${PYTHON_VERSION} as files
+FROM ${BUILD_ON_IMAGE}:${PYTHON_VERSION} AS files
 
 RUN mkdir /files
 
@@ -14,7 +14,7 @@ RUN find /files -type d -exec chmod 755 {} \; \
   && find /files -type f -exec chmod 644 {} \; \
   && find /files/usr/local/bin -type f -exec chmod 755 {} \;
 
-FROM docker.io/koalaman/shellcheck:stable as sci
+FROM docker.io/koalaman/shellcheck:stable AS sci
 
 FROM ${BUILD_ON_IMAGE}:${PYTHON_VERSION}
 

@@ -13,17 +13,25 @@ The multi‑arch (`linux/amd64`, `linux/arm64/v8`) docker image used to build th
 * [Stack](https://github.com/commercialhaskell/stack)
 * [Juvix](https://github.com/anoma/juvix)
 
-Credits to
+Credit to
 
-<!-- markdownlint-disable line-length -->
 * [@odidev](https://github.com/odidev) for
-  [ghc-bootstrap-aarch64](https://gitlab.alpinelinux.org/odidev/ghc-bootstrap-aarch64)  
-   and
+  [ghc-bootstrap-aarch64](https://gitlab.alpinelinux.org/odidev/ghc-bootstrap-aarch64)[^1]  
+  and
 * [@neosimsim](https://github.com/neosimsim) for
-  [docker-builder-images](https://gitlab.com/neosimsim/docker-builder-images)
-<!-- markdownlint-enable line-length -->
+  [neosimsim—Docker build images](https://gitlab.com/neosimsim/docker-builder-images)
+
+[^1]: Porting GHC to Linux/AArch64
 
 who laid the groundwork for [this](https://gitlab.com/benz0li/ghc-musl).
+
+Credit to
+
+* Celeste of Alpine for [GHC bootstrap riscv64](https://gitlab.b-data.ch/ghc/ghc-bootstrap-riscv64)[^2]
+
+who made it possible to add `linux/riscv64` images (GHC versions ≥ 9.10.1).
+
+[^2]: Porting GHC to Linux/riscv64
 
 ## Table of Contents
 
@@ -125,11 +133,11 @@ For further information, see [Dev Containers](.devcontainer).
 What makes this project different:
 
 1. Multi‑arch: `linux/amd64`, `linux/arm64/v8`
-1. Built using Hadrian[^1], from source, without docs
+1. Built using Hadrian[^3], from source, without docs
 1. Built using the LLVM backend
     * flavour: `perf+llvm+split_sections`
 
-[^1]: GHC versions ≥ 9.2.8.
+[^3]: GHC versions ≥ 9.2.8.
 
 ## Contributing
 

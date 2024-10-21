@@ -4,7 +4,7 @@ ARG CABAL_VERSION=3.6.2.0
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 as bootstrap
+FROM registry.gitlab.b-data.ch/ghc/ghc4pandoc:9.0.2 AS bootstrap
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -69,7 +69,7 @@ RUN cd /tmp \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer --constraint 'Cabal-syntax<3.7' cabal-install-$CABAL_VERSION
 
-FROM alpine:3.16 as builder
+FROM alpine:3.16 AS builder
 
 LABEL org.label-schema.license="MIT" \
       org.label-schema.vcs-url="https://gitlab.b-data.ch/ghc/ghc4pandoc" \
@@ -123,7 +123,7 @@ RUN cd /tmp \
   && make install \
   && rm -rf /tmp/*
 
-FROM builder as test
+FROM builder AS test
 
 WORKDIR /usr/local/src
 
@@ -139,6 +139,6 @@ RUN ghc -static -optl-pthread -optl-static Main.hs \
   && cabal init -n --is-executable -p tester -l MIT \
   && cabal run
 
-FROM builder as final
+FROM builder AS final
 
 CMD ["ghci"]

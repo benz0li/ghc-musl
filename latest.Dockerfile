@@ -5,7 +5,11 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2 as bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
+
+FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
 
 RUN apk upgrade --no-cache \
   && apk add --no-cache \
@@ -27,7 +31,7 @@ RUN apk upgrade --no-cache \
     xz \
     zlib-dev
 
-FROM bootstrap as bootstrap-ghc
+FROM bootstrap AS bootstrap-ghc
 
 ARG GHC_VERSION_BUILD
 
@@ -69,7 +73,7 @@ RUN cd /tmp \
     --flavour=perf+llvm+split_sections \
     --docs=none
 
-FROM bootstrap as bootstrap-cabal
+FROM bootstrap AS bootstrap-cabal
 
 ARG CABAL_VERSION_BUILD
 
@@ -80,12 +84,17 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.20 as ghc-base
+FROM alpine:3.20 AS ghc-base
 
-LABEL org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
-      org.opencontainers.image.vendor="Olivier Benz" \
-      org.opencontainers.image.authors="Olivier Benz <olivier.benz@b-data.ch>"
+ARG IMAGE_LICENSE="MIT"
+ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
+ARG IMAGE_VENDOR="Olivier Benz"
+ARG IMAGE_AUTHORS="Olivier Benz <olivier.benz@b-data.ch>"
+
+LABEL org.opencontainers.image.licenses="$IMAGE_LICENSE" \
+      org.opencontainers.image.source="$IMAGE_SOURCE" \
+      org.opencontainers.image.vendor="$IMAGE_VENDOR" \
+      org.opencontainers.image.authors="$IMAGE_AUTHORS"
 
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
@@ -130,7 +139,7 @@ RUN apk add --no-cache \
     zlib-dev \
     zlib-static
 
-FROM ghc-base as ghc-stage1
+FROM ghc-base AS ghc-stage1
 
 COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
@@ -142,15 +151,20 @@ RUN cd /tmp \
   && make install \
   ## Install Stack
   && cd /tmp \
-  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
-  && curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    curl -sSLO https://gitlab.b-data.ch/commercialhaskell/stack/-/releases/v"$STACK_VERSION"/downloads/builds/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz; \
+    curl -sSLO https://gitlab.b-data.ch/commercialhaskell/stack/-/releases/v"$STACK_VERSION"/downloads/builds/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256; \
+  else \
+    curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz; \
+    curl -sSLO https://github.com/commercialhaskell/stack/releases/download/v"$STACK_VERSION"/stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256; \
+  fi \
   && sha256sum -cs stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz.sha256 \
   && tar -xzf stack-"$STACK_VERSION"-linux-"$(uname -m)".tar.gz \
   && mv stack-"$STACK_VERSION"-linux-"$(uname -m)"/stack /usr/local/bin/stack \
   ## Clean up
   && rm -rf /tmp/*
 
-FROM ghc-stage1 as ghc-stage2
+FROM ghc-stage1 AS ghc-stage2
 
 ## Install Cabal (the tool) built with the GHC bootstrap version
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
@@ -159,7 +173,7 @@ COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 RUN cabal update \
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM ghc-stage1 as test
+FROM ghc-stage1 AS test
 
 WORKDIR /usr/local/src
 

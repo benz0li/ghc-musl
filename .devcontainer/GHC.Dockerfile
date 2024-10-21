@@ -8,7 +8,7 @@ ARG HLS_SFX=/${HLS_GHC_VERSION:-all}/hls:${HLS_VERSION:-none}
 
 ARG STACK_VERSION_OVERRIDE=${STACK_VERSION}
 
-FROM ${BUILD_ON_IMAGE}:${GHC_VERSION} as files
+FROM ${BUILD_ON_IMAGE}:${GHC_VERSION} AS files
 
 RUN mkdir /files
 
@@ -22,11 +22,11 @@ RUN find /files -type d -exec chmod 755 {} \; \
   && find /files/etc/skel/.local/bin -type f -exec chmod 755 {} \; \
   && find /files/usr/local/bin -type f -exec chmod 755 {} \;
 
-FROM ${BUILD_ON_IMAGE}${HLS_SFX} as hls
+FROM ${BUILD_ON_IMAGE}${HLS_SFX} AS hls
 
-FROM glcr.b-data.ch/ndmitchell/hlsi:latest as hlsi
+FROM glcr.b-data.ch/ndmitchell/hlsi:latest AS hlsi
 
-FROM docker.io/koalaman/shellcheck:stable as sci
+FROM docker.io/koalaman/shellcheck:stable AS sci
 
 FROM ${BUILD_ON_IMAGE}:${GHC_VERSION}
 

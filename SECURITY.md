@@ -1,11 +1,14 @@
 ## Supported Versions
 
-Only the docker image with the latest version of GHC is supported with security
-updates.
+Only the docker images with the latest version of GHC are supported with
+security updates.
+
+`linux/riscv64` docker images are currently built only once. Therefore,
+vulnerabilities for this `os/arch` will not be fixed.
 
 ## Reporting a Vulnerability
 
-To report a vulnerability in the latest docker image, email the maintainer
+To report a vulnerability in a latest docker image, email the maintainer
 <olivier.benz@b-data.ch>.
 
 ## Vulnerabilities in Prior Versions
