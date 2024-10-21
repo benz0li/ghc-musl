@@ -5,8 +5,8 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.3-linux-amd64 AS bootstrap-amd64
+FROM glcr.b-data.ch/ghc/ghc-musl:9.8.3-linux-arm64v8 AS bootstrap-arm64
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
 
 FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
