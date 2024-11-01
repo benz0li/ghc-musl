@@ -42,6 +42,11 @@ Topmost entry = Tag `latest`
 [^1]: unsupported build; *statically linked* binary  
 [^2]: w/o Haddock; due to `HADDOCK_DOCS=NO`
 
+## Bugs
+
+* Tags `latest`, `9[.10[.1]]`, `9.8[.3]`, `9.8.2` and `9.6[.6]`
+  * Affected by <https://gitlab.alpinelinux.org/alpine/aports/-/issues/16577>
+
 ## Bug fixes
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
