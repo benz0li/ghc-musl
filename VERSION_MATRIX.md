@@ -44,10 +44,7 @@ Topmost entry = Tag `latest`
 
 ## Bugs
 
-* Tags `latest`, `9[.10[.1]]`, `9.8[.3]`, `9.8.2` and `9.6[.6]`
-  * Affected by <https://gitlab.alpinelinux.org/alpine/aports/-/issues/16577>
-    * See also issue <https://github.com/benz0li/ghc-musl/issues/10>
-    * Workaround: `ln -sf libncursesw.so /usr/lib/libncurses.so`
+\-
 
 ## Bug fixes
 
