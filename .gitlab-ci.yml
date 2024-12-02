@@ -5,7 +5,7 @@
     STACK_VERSION: "3.1.1"
     HLS_VERSION: "2.10.0.0"
     BUILD_GHC: "true"
-    BUILD_HLS: "true"
+    BUILD_HLS: "false"
     TAG_VERSION_MAJ_MIN: "true"
     TAG_VERSION_MAJ: "false"
 
