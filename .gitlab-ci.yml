@@ -1,12 +1,12 @@
 .env:
   variables:
-    GHC_VERSION: "9.10.1"
-    CABAL_VERSION: "3.12.1.0"
+    GHC_VERSION: "9.8.4"
+    CABAL_VERSION: "3.10.3.0"
     STACK_VERSION: "3.1.1"
     HLS_VERSION: "2.10.0.0"
     BUILD_GHC: "true"
     BUILD_HLS: "false"
-    TAG_VERSION_MAJ_MIN: "false"
+    TAG_VERSION_MAJ_MIN: "true"
     TAG_VERSION_MAJ: "false"
 
 .before-script-build: &before-script-build
