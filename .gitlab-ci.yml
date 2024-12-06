@@ -8,6 +8,7 @@
     BUILD_HLS: "false"
     TAG_VERSION_MAJ_MIN: "false"
     TAG_VERSION_MAJ: "false"
+    TAG_HLS_LATEST: "true"
 
 .before-script-build: &before-script-build
   - |
@@ -385,12 +386,14 @@ build-package-hls-manifest:latest-linux-multiarch:
       fi
       docker manifest push $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION
     - |
-      docker manifest create $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG $CI_MANIFEST_LIST
-      if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-        docker manifest annotate --variant v8 $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG \
-          $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
+      if [[ "$TAG_HLS_LATEST" == "true" ]]; then
+        docker manifest create $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG $CI_MANIFEST_LIST
+        if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
+          docker manifest annotate --variant v8 $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG \
+            $CI_APP_REPO/$CI_APP_TAG/hls:$HLS_VERSION-linux-arm64v8
+        fi
+        docker manifest push $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG
       fi
-      docker manifest push $CI_APP_REPO/$CI_APP_TAG/hls:$CI_APP_TAG
   rules:
     - if: $BUILD_HLS == "true" && $CI_COMMIT_BRANCH == "main"
       changes:
