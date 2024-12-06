@@ -78,7 +78,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.20 AS ghc-base
+FROM alpine:3.21 AS ghc-base
 
 LABEL org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://gitlab.b-data.ch/ghc/ghc-musl" \
