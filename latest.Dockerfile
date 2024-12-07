@@ -8,14 +8,19 @@ ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
+## linux/riscv64 bootstrap image: binutils-gold n/a; numactl-dev pre-installed
 
 FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
 
-RUN apk upgrade --no-cache \
+RUN case "$(uname -m)" in \
+    x86_64) linker="gold" ;; \
+    aarch64) linker="gold" ;; \
+  esac \
+  && apk upgrade --no-cache \
   && apk add --no-cache \
     autoconf \
     automake \
-    binutils-gold \
+    binutils${linker:+-}${linker} \
     build-base \
     clang18 \
     coreutils \
@@ -54,11 +59,15 @@ RUN cd /tmp \
   && mv "/tmp/$GHC_VERSION.patch" . \
   && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
+  && case "$(uname -m)" in \
+    riscv64) numa="no" ;; \
+  esac \
   && ./boot.source \
   && ./configure \
     --build=$(uname -m)-alpine-linux \
     --host=$(uname -m)-alpine-linux \
     --target=$(uname -m)-alpine-linux \
+    --enable-numa=${numa:-auto} \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   ## so we can match the llvm vendor string alpine uses
@@ -170,7 +179,10 @@ FROM ghc-stage1 AS ghc-stage2
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
-RUN cabal update \
+RUN if [ "$(uname -m)" = "riscv64" ]; then \
+    apk add --no-cache numactl-dev; \
+  fi \
+  && cabal update \
   && cabal install "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 AS test
