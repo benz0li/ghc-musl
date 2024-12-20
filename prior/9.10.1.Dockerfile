@@ -59,9 +59,9 @@ RUN cd /tmp \
   && mv "/tmp/$GHC_VERSION.patch" . \
   && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
-  && case "$(uname -m)" in \
-    riscv64) numa="no" ;; \
-  esac \
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    numa="no"; \
+  fi \
   && ./boot.source \
   && ./configure \
     --build=$(uname -m)-alpine-linux \

@@ -48,6 +48,9 @@ RUN cd /tmp \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
   ## Configure and build
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    flavour="quick+llvm"; \
+  fi \
   && ./boot.source \
   && ./configure \
     --build=$(uname -m)-alpine-linux \
@@ -64,7 +67,7 @@ RUN cd /tmp \
   && export PATH=/root/.local/bin:$PATH \
   ## See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
-    --flavour=perf+llvm+split_sections \
+    --flavour=${flavour:-perf+llvm+split_sections} \
     --docs=none
 
 FROM bootstrap AS bootstrap-cabal
