@@ -53,7 +53,7 @@ Topmost entry = Tag `latest`
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
   * Due to <https://github.com/haskell/cabal/issues/8923>
 * `linux/riscv64` image for GHC version 9.12.1 built with
-  `--flavour="quick+llvm`
+  `--flavour=quick+llvm`
   * Due to <https://gitlab.haskell.org/ghc/ghc/-/issues/25594>
 
 ## Experimental
