@@ -5,12 +5,7 @@ ARG STACK_VERSION
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
-FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
-## linux/riscv64 bootstrap image: binutils-gold n/a; numactl-dev pre-installed
-
-FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.10.1 AS bootstrap
 
 RUN case "$(uname -m)" in \
     x86_64) linker="gold" ;; \
@@ -42,32 +37,25 @@ ARG GHC_VERSION_BUILD
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
-COPY patches/${GHC_VERSION}.patch /tmp/
-
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
+    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 || \
     gpg --keyserver hkp://keyserver.ubuntu.com:80 \
-    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
+    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
-  ## Apply patch: Bump max LLVM version to 19 (not inclusive)
-  ## https://gitlab.haskell.org/ghc/ghc/-/merge_requests/12726
-  && mv "/tmp/$GHC_VERSION.patch" . \
-  && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
-  && case "$(uname -m)" in \
-    riscv64) numa="no" ;; \
-  esac \
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    flavour="quick+llvm"; \
+  fi \
   && ./boot.source \
   && ./configure \
     --build=$(uname -m)-alpine-linux \
     --host=$(uname -m)-alpine-linux \
     --target=$(uname -m)-alpine-linux \
-    --enable-numa=${numa:-auto} \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   ## so we can match the llvm vendor string alpine uses
@@ -79,7 +67,7 @@ RUN cd /tmp \
   && export PATH=/root/.local/bin:$PATH \
   ## See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
-    --flavour=perf+llvm+split_sections \
+    --flavour=${flavour:-perf+llvm+split_sections} \
     --docs=none
 
 FROM bootstrap AS bootstrap-cabal
@@ -179,11 +167,8 @@ FROM ghc-stage1 AS ghc-stage2
 COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
-RUN if [ "$(uname -m)" = "riscv64" ]; then \
-    apk add --no-cache numactl-dev; \
-  fi \
-  && cabal update \
-  && cabal install "cabal-install-$CABAL_VERSION"
+RUN cabal update \
+  && cabal install --allow-newer "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 AS test
 

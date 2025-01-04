@@ -1,6 +1,6 @@
 ARG GHC_VERSION=9.10.1
 ARG CABAL_VERSION=3.12.1.0
-ARG STACK_VERSION=3.1.1
+ARG STACK_VERSION=3.3.1
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
@@ -59,9 +59,9 @@ RUN cd /tmp \
   && mv "/tmp/$GHC_VERSION.patch" . \
   && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
-  && case "$(uname -m)" in \
-    riscv64) numa="no" ;; \
-  esac \
+  && if [ "$(uname -m)" = "riscv64" ]; then \
+    numa="no"; \
+  fi \
   && ./boot.source \
   && ./configure \
     --build=$(uname -m)-alpine-linux \
