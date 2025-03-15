@@ -41,9 +41,9 @@ RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
   && gpg --keyserver hkps://keyserver.ubuntu.com:443 \
-    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 || \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD || \
     gpg --keyserver hkp://keyserver.ubuntu.com:80 \
-    --receive-keys 88B57FCF7DB53B4DB3BFA4B1588764FBE22D19C4 \
+    --receive-keys FFEB7CE81E16A36B3E2DED6F2DE04D4E97DB64AD \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
@@ -168,7 +168,7 @@ COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
 RUN cabal update \
-  && cabal install --allow-newer "cabal-install-$CABAL_VERSION"
+  && cabal install "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 AS test
 
