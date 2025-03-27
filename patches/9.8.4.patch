@@ -1,6 +1,6 @@
 --- compiler/GHC/Driver/DynFlags.hs
 +++ compiler/GHC/Driver/DynFlags.hs.patched
-@@ -1248,7 +1248,6 @@
+@@ -1249,7 +1249,6 @@
  optLevelFlags -- see Note [Documenting optimisation flags]
    = [ ([0,1,2], Opt_DoLambdaEtaExpansion)
      , ([0,1,2], Opt_DoEtaReduction)       -- See Note [Eta-reduction in -O0]
@@ -40,7 +40,7 @@
          ,"-stack-alignment=" ++ (show align)) | align > 0 ]
 --- compiler/GHC/Driver/Session.hs
 +++ compiler/GHC/Driver/Session.hs.patched
-@@ -2400,7 +2400,6 @@
+@@ -2401,7 +2401,6 @@
    flagSpec "late-dmd-anal"                    Opt_LateDmdAnal,
    flagSpec "late-specialise"                  Opt_LateSpecialise,
    flagSpec "liberate-case"                    Opt_LiberateCase,
