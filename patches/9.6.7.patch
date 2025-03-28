@@ -1,16 +1,6 @@
---- compiler/GHC/Driver/DynFlags.hs
-+++ compiler/GHC/Driver/DynFlags.hs.patched
-@@ -1249,7 +1249,6 @@
- optLevelFlags -- see Note [Documenting optimisation flags]
-   = [ ([0,1,2], Opt_DoLambdaEtaExpansion)
-     , ([0,1,2], Opt_DoEtaReduction)       -- See Note [Eta-reduction in -O0]
--    , ([0,1,2], Opt_LlvmTBAA)
-     , ([0,1,2], Opt_ProfManualCcs )
-     , ([2], Opt_DictsStrict)
-
 --- compiler/GHC/Driver/Flags.hs
 +++ compiler/GHC/Driver/Flags.hs.patched
-@@ -285,7 +285,6 @@
+@@ -273,7 +273,6 @@
     | Opt_RegsGraph                      -- do graph coloring register allocation
     | Opt_RegsIterative                  -- do iterative coalescing graph coloring register allocation
     | Opt_PedanticBottoms                -- Be picky about how we treat bottom
@@ -18,7 +8,7 @@
     | Opt_LlvmFillUndefWithGarbage       -- Testing for undef bugs (hidden flag)
     | Opt_IrrefutableTuples
     | Opt_CmmSink
-@@ -525,7 +524,6 @@
+@@ -511,7 +510,6 @@
     , Opt_EnableRewriteRules
     , Opt_RegsGraph
     , Opt_RegsIterative
@@ -28,7 +18,7 @@
     , Opt_CmmElimCommonBlocks
 --- compiler/GHC/Driver/Pipeline/Execute.hs
 +++ compiler/GHC/Driver/Pipeline/Execute.hs.patched
-@@ -968,8 +968,7 @@
+@@ -989,8 +989,7 @@
              -> DynFlags
              -> [(String, String)]  -- ^ pairs of (opt, llc) arguments
  llvmOptions llvm_config dflags =
@@ -40,7 +30,7 @@
          ,"-stack-alignment=" ++ (show align)) | align > 0 ]
 --- compiler/GHC/Driver/Session.hs
 +++ compiler/GHC/Driver/Session.hs.patched
-@@ -2401,7 +2401,6 @@
+@@ -3431,7 +3431,6 @@
    flagSpec "late-dmd-anal"                    Opt_LateDmdAnal,
    flagSpec "late-specialise"                  Opt_LateSpecialise,
    flagSpec "liberate-case"                    Opt_LiberateCase,
@@ -48,9 +38,17 @@
    flagHiddenSpec "llvm-fill-undef-with-garbage" Opt_LlvmFillUndefWithGarbage,
    flagSpec "loopification"                    Opt_Loopification,
    flagSpec "block-layout-cfg"                 Opt_CfgBlocklayout,
+@@ -3992,7 +3991,6 @@
+ optLevelFlags -- see Note [Documenting optimisation flags]
+   = [ ([0,1,2], Opt_DoLambdaEtaExpansion)
+     , ([0,1,2], Opt_DoEtaReduction)       -- See Note [Eta-reduction in -O0]
+-    , ([0,1,2], Opt_LlvmTBAA)
+     , ([0,1,2], Opt_ProfManualCcs )
+     , ([2], Opt_DictsStrict)
+
 --- configure.ac
 +++ configure.ac.patched
-@@ -544,7 +544,7 @@
+@@ -556,7 +556,7 @@
  # versions of LLVM simultaneously, but that stopped working around
  # 3.5/3.6 release of LLVM.
  LlvmMinVersion=11  # inclusive
