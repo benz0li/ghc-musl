@@ -46,6 +46,15 @@ Topmost entry = Tag `latest`
 [^1]: unsupported build; *statically linked* binary  
 [^2]: w/o Haddock; due to `HADDOCK_DOCS=NO`
 
+## Broken releases
+
+* GHC 9.12.1
+  * Official statement: <https://discourse.haskell.org/t/psa-correctness-issue-in-ghc-9-12/11204>
+  * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/25653>
+* GHC 9.2.1
+  * Official statement: <https://discourse.haskell.org/t/psa-9-2-1-aarch64-miscompilation/3638>
+  * GitLab issues: See <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6934>
+
 ## Bugs
 
 \-
