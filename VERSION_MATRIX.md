@@ -4,14 +4,14 @@ Topmost entry = Tag `latest`
 
 | GHC        | Cabal    | Stack      | LLVM | Linux distro |
 |:-----------|:---------|:-----------|:---- |:-------------|
-| 9.12.2     | 3.14.1.1 | 3.3.1      | 18   | Alpine 3.21  |
+| 9.12.2     | 3.14.1.1 | 3.5.1      | 18   | Alpine 3.21  |
 | 9.12.1     | 3.14.1.0 | 3.3.1      | 18   | Alpine 3.21  |
-| 9.10.1     | 3.12.1.0 | 3.3.1      | 18   | Alpine 3.21  |
-| 9.8.4      | 3.10.3.0 | 3.3.1      | 16   | Alpine 3.21  |
+| 9.10.1     | 3.12.1.0 | 3.5.1      | 18   | Alpine 3.21  |
+| 9.8.4      | 3.10.3.0 | 3.5.1      | 16   | Alpine 3.21  |
 | 9.8.3      | 3.10.3.0 | 3.1.1      | 16   | Alpine 3.20  |
 | 9.8.2      | 3.10.3.0 | 3.1.1      | 16   | Alpine 3.20  |
 | 9.8.1      | 3.10.2.1 | 2.15.1     | 14   | Alpine 3.19  |
-| 9.6.7      | 3.10.3.0 | 3.3.1      | 16   | Alpine 3.21  |
+| 9.6.7      | 3.10.3.0 | 3.5.1      | 16   | Alpine 3.21  |
 | 9.6.6      | 3.10.3.0 | 3.3.1      | 16   | Alpine 3.21  |
 | 9.6.5      | 3.10.3.0 | 2.15.7     | 16   | Alpine 3.20  |
 | 9.6.4      | 3.10.3.0 | 2.15.5     | 14   | Alpine 3.19  |
@@ -45,6 +45,15 @@ Topmost entry = Tag `latest`
 
 [^1]: unsupported build; *statically linked* binary  
 [^2]: w/o Haddock; due to `HADDOCK_DOCS=NO`
+
+## Broken releases
+
+* GHC 9.12.1
+  * Official statement: <https://discourse.haskell.org/t/psa-correctness-issue-in-ghc-9-12/11204>
+  * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/25653>
+* GHC 9.2.1
+  * Official statement: <https://discourse.haskell.org/t/psa-9-2-1-aarch64-miscompilation/3638>
+  * GitLab issues: See <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6934>
 
 ## Bugs
 
