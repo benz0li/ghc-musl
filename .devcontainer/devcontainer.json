@@ -6,8 +6,8 @@
       "BUILD_ON_IMAGE": "glcr.b-data.ch/python/base",
       "PYTHON_VERSION": "latest",
       "USE_ZSH_FOR_ROOT": "unset-to-use-bash",
-      "SET_LANG": "en_US.UTF-8",
-      "SET_TZ": "Etc/UTC"
+      "LANG": "en_US.UTF-8",
+      "TZ": "Etc/UTC"
     }
   },
 
