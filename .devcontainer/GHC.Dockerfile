@@ -1,10 +1,10 @@
-ARG BUILD_ON_IMAGE=glcr.b-data.ch/ghc/ghc-musl
+ARG BUILD_ON_IMAGE=quay.io/benz0li/ghc-musl
 ARG GHC_VERSION=latest
 ARG HLS_VERSION
 ARG STACK_VERSION
 
 ARG HLS_GHC_VERSION=${HLS_VERSION:+$GHC_VERSION}
-ARG HLS_SFX=/${HLS_GHC_VERSION:-all}/hls:${HLS_VERSION:-none}
+ARG HLS_IMAGE_TAG=${HLS_VERSION:-none}-ghc${HLS_GHC_VERSION:-all}
 
 ARG STACK_VERSION_OVERRIDE=${STACK_VERSION}
 
@@ -22,9 +22,9 @@ RUN find /files -type d -exec chmod 755 {} \; \
   && find /files/etc/skel/.local/bin -type f -exec chmod 755 {} \; \
   && find /files/usr/local/bin -type f -exec chmod 755 {} \;
 
-FROM ${BUILD_ON_IMAGE}${HLS_SFX} AS hls
+FROM quay.io/benz0li/hlssi:${HLS_IMAGE_TAG} AS hlssi
 
-FROM glcr.b-data.ch/ndmitchell/hlsi:latest AS hlsi
+FROM quay.io/benz0li/hlsi:latest AS hlsi
 
 FROM docker.io/koalaman/shellcheck:stable AS sci
 
@@ -90,7 +90,7 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
 
 ## Copy binaries as late as possible to avoid cache busting
 ## Install HLS
-COPY --from=hls /usr/local /usr/local
+COPY --from=hlssi /usr/local /usr/local
 ## Install HLint
 COPY --from=hlsi /usr/local /usr/local
 ## Install ShellCheck
