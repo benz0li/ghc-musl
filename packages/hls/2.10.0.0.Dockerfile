@@ -14,6 +14,7 @@ RUN apk add --no-cache patchelf findutils \
   && . .github/scripts/env.sh \
   && . .github/scripts/common.sh \
   && sed -i.bak -e '/DELETE MARKER FOR CI/,/END DELETE/d' cabal.project \
+  && sed -i.bak -e '/executable-dynamic/d' cabal.project \
   && GHCS="$GHC_VERSION" \
   && export GHCS \
   && ARTIFACT="$(uname -m)-linux-alpine" \
