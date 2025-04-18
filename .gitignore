@@ -3,15 +3,12 @@
 !/.devcontainer/
 !/.github/
 !/bootstrap/
-!/packages/
-!/packages/hls/
 !/patches/
 !/prior/
 
 !/.github/FUNDING.yml
 !/bootstrap/*.Dockerfile
 !/bootstrap/*.patch
-!/packages/hls/*.Dockerfile
 !/patches/*.patch
 !/prior/*.Dockerfile
 
