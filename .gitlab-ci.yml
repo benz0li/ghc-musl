@@ -75,7 +75,7 @@ build-image:linux:
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
         docker build
-          -t $i:$CI_APP_TAG-linux-${ARCH//\/}
+          -t $i:$CI_APP_TAG-linux-${ARCH//\/} \
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
         if [[ "$TAG_LATEST" == "true" ]]; then
