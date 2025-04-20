@@ -61,11 +61,8 @@ To install docker, follow the instructions for your platform:
 
 ```bash
 docker build \
-  --build-arg GHC_VERSION=9.12.2 \
-  --build-arg CABAL_VERSION=3.14.1.1 \
-  --build-arg STACK_VERSION=3.5.1 \
   -t ghc-musl \
-  -f latest.Dockerfile .
+  -f dockerfiles/9.12.2.Dockerfile .
 ```
 
 *version*:
@@ -73,7 +70,7 @@ docker build \
 ```bash
 docker build \
   -t ghc-musl:MAJOR.MINOR.PATCH \
-  -f prior/MAJOR.MINOR.PATCH.Dockerfile .
+  -f dockerfiles/MAJOR.MINOR.PATCH.Dockerfile .
 ```
 
 For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.

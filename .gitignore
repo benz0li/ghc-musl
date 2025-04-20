@@ -4,13 +4,13 @@
 !/.github/
 !/bootstrap/
 !/patches/
-!/prior/
+!/dockerfiles/
 
 !/.github/FUNDING.yml
 !/bootstrap/*.Dockerfile
 !/bootstrap/*.patch
 !/patches/*.patch
-!/prior/*.Dockerfile
+!/dockerfiles/*.Dockerfile
 
 !/.editorconfig
 !/.gitattributes
@@ -19,7 +19,6 @@
 !/.hadolint.yml
 !/.markdownlint.yml
 !/CODE_OF_CONDUCT.md
-!/latest.Dockerfile
 !/LICENSE
 !/Main.hs
 !/README.md
