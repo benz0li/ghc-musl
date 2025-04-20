@@ -152,8 +152,8 @@ build-manifest:linux:
 
 trigger-hls-build:
   image: quay.io/curl/curl:latest
+  extends: .env
   stage: .post
-  needs: ["build-manifest:linux"]
   script:
     >
     curl
