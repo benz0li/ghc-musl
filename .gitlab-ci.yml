@@ -74,7 +74,7 @@ build-image:linux:
           -t $i:$CI_APP_TAG-linux-${ARCH//\/} \
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
-        docker build
+        docker build \
           -t $i:$CI_APP_TAG-linux-${ARCH//\/} \
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
