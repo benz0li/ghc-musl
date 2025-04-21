@@ -83,25 +83,25 @@ information.
 self built:
 
 ```bash
-docker run --rm -ti ghc-musl[:MAJOR.MINOR.PATCH]
+docker run --rm -ti ghc-musl:{latest,MAJOR.MINOR.PATCH}
 ```
 
 from [Quay](https://quay.io/repository/benz0li/ghc-musl):
 
 ```bash
-docker run --rm -ti quay.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti quay.io/benz0li/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 from [Docker Hub](https://hub.docker.com/r/benz0li/ghc-musl):
 
 ```bash
-docker run --rm -ti docker.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti docker.io/benz0li/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 from [GitLab (b-data GmbH)](https://gitlab.b-data.ch/ghc/ghc-musl/container_registry/381):
 
 ```bash
-docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
@@ -112,6 +112,10 @@ Alpine Linux (AArch64).
 :exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
 Stack (GHC versions < 9.8.2) to ensure that only the GHC available in the
 container is used.
+
+As of 2025‑04‑22, images with versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and later
+are also available with a GHC that links against the Haskell-native big-integer
+backend.
 
 ### Dev Containers
 
@@ -132,7 +136,7 @@ What makes this project different:
 1. Multi‑arch: `linux/amd64`, `linux/arm64/v8`
 1. Built using Hadrian[^3], from source, without docs
 1. Built using the LLVM backend
-    * flavour: `perf+llvm+split_sections`
+    * flavour: `perf+split_sections+llvm`
 
 [^3]: GHC versions ≥ 9.2.8.
 

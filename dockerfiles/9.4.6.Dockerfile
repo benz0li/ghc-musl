@@ -57,7 +57,7 @@ RUN cd /tmp \
   && cabal update \
   # See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
-    --flavour=perf+llvm+split_sections \
+    --flavour=perf+split_sections+llvm \
     --docs=none \
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install --allow-newer --constraint 'Cabal-syntax<3.9' "cabal-install-$CABAL_VERSION"
