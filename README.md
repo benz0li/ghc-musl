@@ -136,6 +136,13 @@ What makes this project different:
 
 [^3]: GHC versions ≥ 9.2.8.
 
+Interesting to read:
+
+* [lsupg Static Builds With GHC 9](https://www.extrema.is/blog/2023/02/04/lsupg-static-builds-with-ghc-9)
+by [@TravisCardwell](https://github.com/TravisCardwell)
+  * especially [Part 2](https://www.extrema.is/blog/2024/04/20/lsupg-static-builds-with-ghc-9-part-2)
+    and [Part 3](https://www.extrema.is/blog/2024/04/22/lsupg-static-builds-with-ghc-9-part-3)
+
 ## Contributing
 
 PRs accepted. Please submit to the
