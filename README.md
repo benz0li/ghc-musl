@@ -61,11 +61,8 @@ To install docker, follow the instructions for your platform:
 
 ```bash
 docker build \
-  --build-arg GHC_VERSION=9.12.2 \
-  --build-arg CABAL_VERSION=3.14.1.1 \
-  --build-arg STACK_VERSION=3.5.1 \
   -t ghc-musl \
-  -f latest.Dockerfile .
+  -f dockerfiles/9.12.2.Dockerfile .
 ```
 
 *version*:
@@ -73,7 +70,7 @@ docker build \
 ```bash
 docker build \
   -t ghc-musl:MAJOR.MINOR.PATCH \
-  -f prior/MAJOR.MINOR.PATCH.Dockerfile .
+  -f dockerfiles/MAJOR.MINOR.PATCH.Dockerfile .
 ```
 
 For `MAJOR.MINOR.PATCH` GHC versions `8.8.4`, `8.10.1` and ≥ `8.10.4`.
@@ -138,6 +135,13 @@ What makes this project different:
     * flavour: `perf+llvm+split_sections`
 
 [^3]: GHC versions ≥ 9.2.8.
+
+Interesting to read:
+
+* [lsupg Static Builds With GHC 9](https://www.extrema.is/blog/2023/02/04/lsupg-static-builds-with-ghc-9)
+by [@TravisCardwell](https://github.com/TravisCardwell)
+  * especially [Part 2](https://www.extrema.is/blog/2024/04/20/lsupg-static-builds-with-ghc-9-part-2)
+    and [Part 3](https://www.extrema.is/blog/2024/04/22/lsupg-static-builds-with-ghc-9-part-3)
 
 ## Contributing
 

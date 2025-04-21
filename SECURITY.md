@@ -1,7 +1,10 @@
 ## Supported Versions
 
-Only the docker images with the latest version of GHC are supported with
-security updates.
+The docker images with the three latest major versions of GHC – plus the
+version I consider *recommended*[^1] – are supported with security updates.
+
+[^1]: See [Dev Containers > Version Matrix](.devcontainer/VERSION_MATRIX.md).
+Possibly newer than [the version recommended by GHCup](https://www.haskell.org/ghcup/install/#supported-tools).
 
 `linux/riscv64` docker images are currently built only once. Therefore,
 vulnerabilities for this `os/arch` will not be fixed.

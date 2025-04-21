@@ -7,9 +7,10 @@
 | latest<br>9.12.2<br>9.12<br>9 | 3.14.1.1  | ≥ 2.13.1  | latest<br>2.10.0.0             |
 | 9.10.1<br>9.10                | 3.12.1.0  | ≥ 2.13.1  | 2.10.0.0<br>2.9.0.1<br>2.9.0.0 |
 | 9.8.4<br>9.8                  | 3.10.3.0  | ≥ 2.13.1  | 2.10.0.0                       |
-| 9.6.7<br>9.6                  | 3.10.3.0  | ≥ 2.13.1  | 2.10.0.0                       |
+| 9.6.7[^2]<br>9.6              | 3.10.3.0  | ≥ 2.13.1  | 2.10.0.0                       |
 
-[^1]: built-in version; see [GHC musl > Version Matrix](../VERSION_MATRIX.md)
+[^1]: built-in version; see [GHC musl > Version Matrix](../VERSION_MATRIX.md)  
+[^2]: *recommended* version
 
 ## Prior
 
@@ -29,7 +30,7 @@
 
 ## Legacy
 
-| GHC   | Cabal[^1] | Stack[^2]             | HLS                           |
+| GHC   | Cabal[^1] | Stack[^3]             | HLS                           |
 |:------|:----------|:----------------------|:----------------------------- |
 | 9.6.2 | 3.10.1.0  | 2.11.1[^1]<br>2.9.3.1 | 2.2.0.0<br>2.1.0.0<br>2.0.0.1 |
 | 9.4.7 | 3.8.1.0   | 2.11.1[^1]<br>2.9.3.1 | 2.2.0.0<br>2.1.0.0<br>2.0.0.1 |
@@ -37,4 +38,4 @@
 | 9.4.5 | 3.8.1.0   | 2.11.1[^1]<br>2.9.3.1 | 2.1.0.0<br>2.0.0.1            |
 | 9.2.8 | 3.6.2.0   | 2.11.1[^1]<br>2.9.3.1 | 2.2.0.0<br>2.1.0.0<br>2.0.0.1 |
 
-[^2]: unsupported build; *statically linked* binary
+[^3]: unsupported build; *statically linked* binary
