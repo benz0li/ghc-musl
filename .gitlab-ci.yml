@@ -127,21 +127,21 @@ build-manifest:
         docker manifest push $i:$CI_APP_TAG${NATIVE_BIGNUM:+-int-native}
 
         if [[ "$TAG_VER_MAJ_MIN" == "true" ]]; then
-          docker manifest create $i:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+          docker manifest create $i:$VERSION_MAJ_MIN${NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
           if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-            docker manifest annotate --variant v8 $i:$VERSION_MAJ_MIN \
+            docker manifest annotate --variant v8 $i:$VERSION_MAJ_MIN${NATIVE_BIGNUM:+-int-native} \
               $i:$CI_APP_TAG${NATIVE_BIGNUM:+-int-native}-linux-arm64v8
           fi
-          docker manifest push $i:$VERSION_MAJ_MIN
+          docker manifest push $i:$VERSION_MAJ_MIN${NATIVE_BIGNUM:+-int-native}
         fi
 
         if [[ "$TAG_VER_MAJ" == "true" ]]; then
-          docker manifest create $i:$VERSION_MAJ $CI_MANIFEST_LIST
+          docker manifest create $i:$VERSION_MAJ${NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
           if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-            docker manifest annotate --variant v8 $i:$VERSION_MAJ \
+            docker manifest annotate --variant v8 $i:$VERSION_MAJ${NATIVE_BIGNUM:+-int-native} \
               $i:$CI_APP_TAG${NATIVE_BIGNUM:+-int-native}-linux-arm64v8
           fi
-          docker manifest push $i:$VERSION_MAJ
+          docker manifest push $i:$VERSION_MAJ${NATIVE_BIGNUM:+-int-native}
         fi
 
         if [[ "$TAG_LATEST" == "true" ]]; then
