@@ -113,9 +113,24 @@ Alpine Linux (AArch64).
 Stack (GHC versions < 9.8.2) to ensure that only the GHC available in the
 container is used.
 
-As of 2025‑04‑22, images with versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and later
-are also available with a GHC that links against the Haskell-native big-integer
-backend.
+### GMP licensing restrictions
+
+The regular <nobr>*GHC musl*</nobr> images produce binaries linked against the
+[GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org/), which
+is used by default by the
+[`integer-gmp`](https://hackage.haskell.org/package/integer-gmp) library to
+provide a big-integer implementation for Haskell.
+
+Unlike most Haskell code, which is licensed under the permissive BSD3 license,
+the GMP library is licensed under LGPL. This means resulting
+*statically linked* binaries [must be provided with source code or object files](http://www.gnu.org/licenses/gpl-faq.html#LGPLStaticVsDynamic).
+
+If that is not acceptable for your situation, use images with the `int-native`
+subtag. These images provide a GHC that links against the Haskell-native
+big-integer backend and produces *statically linked* binaries that and are not
+subject to GMP's licensing restrictions.  
+:information_source: Available for versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and
+later.
 
 ### Dev Containers
 
@@ -135,8 +150,9 @@ What makes this project different:
 
 1. Multi‑arch: `linux/amd64`, `linux/arm64/v8`
 1. Built using Hadrian[^3], from source, without docs
-1. Built using the LLVM backend
-    * flavour: `perf+split_sections+llvm`
+1. Built using the LLVM backend. Flavours:
+    * regular images: `perf+split_sections+llvm`
+    * `int-native` subtag: `perf+split_sections+llvm+native_bignum`
 
 [^3]: GHC versions ≥ 9.2.8.
 
