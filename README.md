@@ -158,8 +158,10 @@ What makes this project different:
 
 Interesting to read:
 
+* [Improving Haskell’s big numbers support](https://iohk.io/en/blog/posts/2020/07/28/improving-haskells-big-numbers-support)
+  by [@hsyl20](https://github.com/hsyl20)
 * [lsupg Static Builds With GHC 9](https://www.extrema.is/blog/2023/02/04/lsupg-static-builds-with-ghc-9)
-by [@TravisCardwell](https://github.com/TravisCardwell)
+  by [@TravisCardwell](https://github.com/TravisCardwell)
   * especially [Part 2](https://www.extrema.is/blog/2024/04/20/lsupg-static-builds-with-ghc-9-part-2)
     and [Part 3](https://www.extrema.is/blog/2024/04/22/lsupg-static-builds-with-ghc-9-part-3)
 
