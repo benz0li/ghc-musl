@@ -83,25 +83,25 @@ information.
 self built:
 
 ```bash
-docker run --rm -ti ghc-musl[:MAJOR.MINOR.PATCH]
+docker run --rm -ti ghc-musl:{latest,MAJOR.MINOR.PATCH}
 ```
 
 from [Quay](https://quay.io/repository/benz0li/ghc-musl):
 
 ```bash
-docker run --rm -ti quay.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti quay.io/benz0li/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 from [Docker Hub](https://hub.docker.com/r/benz0li/ghc-musl):
 
 ```bash
-docker run --rm -ti docker.io/benz0li/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti docker.io/benz0li/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 from [GitLab (b-data GmbH)](https://gitlab.b-data.ch/ghc/ghc-musl/container_registry/381):
 
 ```bash
-docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl[:MAJOR[.MINOR[.PATCH]]]
+docker run --rm -ti glcr.b-data.ch/ghc/ghc-musl:{latest,MAJOR[.MINOR[.PATCH]]}[-int-native]
 ```
 
 As of 2023‑08‑12, the images (versions 9.2.8, 9.4.6, 9.6.2 and later) also
@@ -112,6 +112,25 @@ Alpine Linux (AArch64).
 :exclamation: Use flags <nobr>`--no-install-ghc --system-ghc`</nobr> with
 Stack (GHC versions < 9.8.2) to ensure that only the GHC available in the
 container is used.
+
+### GMP licensing restrictions
+
+The regular <nobr>*GHC musl*</nobr> images produce binaries linked against the
+[GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org/), which
+is used by default by the
+[`integer-gmp`](https://hackage.haskell.org/package/integer-gmp) library to
+provide a big-integer implementation for Haskell.
+
+Unlike most Haskell code, which is licensed under the permissive BSD3 license,
+the GMP library is licensed under LGPL. This means resulting
+*statically linked* binaries [must be provided with source code or object files](http://www.gnu.org/licenses/gpl-faq.html#LGPLStaticVsDynamic).
+
+If that is not acceptable for your situation, use images with the `int-native`
+subtag. These images provide a GHC that links against the Haskell-native
+big-integer backend and produces *statically linked* binaries that and are not
+subject to GMP's licensing restrictions.  
+:information_source: Available for versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and
+later.
 
 ### Dev Containers
 
@@ -131,15 +150,18 @@ What makes this project different:
 
 1. Multi‑arch: `linux/amd64`, `linux/arm64/v8`
 1. Built using Hadrian[^3], from source, without docs
-1. Built using the LLVM backend
-    * flavour: `perf+llvm+split_sections`
+1. Built using the LLVM backend. Flavours:
+    * regular images: `perf+split_sections+llvm`
+    * `int-native` subtag: `perf+split_sections+llvm+native_bignum`
 
 [^3]: GHC versions ≥ 9.2.8.
 
 Interesting to read:
 
+* [Improving Haskell’s big numbers support](https://iohk.io/en/blog/posts/2020/07/28/improving-haskells-big-numbers-support)
+  by [@hsyl20](https://github.com/hsyl20)
 * [lsupg Static Builds With GHC 9](https://www.extrema.is/blog/2023/02/04/lsupg-static-builds-with-ghc-9)
-by [@TravisCardwell](https://github.com/TravisCardwell)
+  by [@TravisCardwell](https://github.com/TravisCardwell)
   * especially [Part 2](https://www.extrema.is/blog/2024/04/20/lsupg-static-builds-with-ghc-9-part-2)
     and [Part 3](https://www.extrema.is/blog/2024/04/22/lsupg-static-builds-with-ghc-9-part-3)
 

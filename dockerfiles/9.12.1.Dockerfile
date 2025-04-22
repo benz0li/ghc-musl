@@ -67,7 +67,7 @@ RUN cd /tmp \
   && export PATH=/root/.local/bin:$PATH \
   ## See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
-    --flavour=${flavour:-perf+llvm+split_sections} \
+    --flavour=${flavour:-perf+split_sections+llvm} \
     --docs=none
 
 FROM bootstrap AS bootstrap-cabal

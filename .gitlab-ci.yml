@@ -60,7 +60,13 @@
     - *before-script-build
   retry: 2
 
-build-image:linux:
+stages:
+  - build
+  - build:native_bignum
+  - test
+  - deploy
+
+build-image:
   extends: .build
   stage: build
   tags:
@@ -71,24 +77,26 @@ build-image:linux:
       for i in $CI_APP_REPO; do
         docker build \
           --target test \
-          -t $i:$CI_APP_TAG-linux-${ARCH//\/} \
+          --build-arg GHC_NATIVE_BIGNUM \
+          -t $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/} \
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
         docker build \
-          -t $i:$CI_APP_TAG-linux-${ARCH//\/} \
+          --build-arg GHC_NATIVE_BIGNUM \
+          -t $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/} \
           -f dockerfiles/$GHC_VERSION.Dockerfile .
 
         if [[ "$TAG_LATEST" == "true" ]]; then
-          docker tag $i:$CI_APP_TAG-linux-${ARCH//\/} \
-            $i:latest-linux-${ARCH//\/}
+          docker tag $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/} \
+            $i:latest${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/}
         fi
       done
     - |
       for i in $CI_APP_REPO; do
-        docker push $i:$CI_APP_TAG-linux-${ARCH//\/}
+        docker push $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/}
 
         if [[ "$TAG_LATEST" == "true" ]]; then
-          docker push $i:latest-linux-${ARCH//\/}
+          docker push $i:latest${GHC_NATIVE_BIGNUM:+-int-native}-linux-${ARCH//\/}
         fi
       done
   parallel:
@@ -99,50 +107,50 @@ build-image:linux:
       changes:
         - dockerfiles/$GHC_VERSION.Dockerfile
 
-build-manifest:linux:
+build-manifest:
   extends: .build
   stage: build
-  needs: ["build-image:linux"]
+  needs: ["build-image"]
   script:
     - |
       for i in $CI_APP_REPO; do
       unset CI_MANIFEST_LIST
         for j in $OS_ARCH; do
-          export CI_MANIFEST_LIST="$CI_MANIFEST_LIST $i:$CI_APP_TAG-$j"
+          export CI_MANIFEST_LIST="$CI_MANIFEST_LIST $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-$j"
         done
 
-        docker manifest create $i:$CI_APP_TAG $CI_MANIFEST_LIST
+        docker manifest create $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
         if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-          docker manifest annotate --variant v8 $i:$CI_APP_TAG \
-            $i:$CI_APP_TAG-linux-arm64v8
+          docker manifest annotate --variant v8 $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native} \
+            $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-arm64v8
         fi
-        docker manifest push $i:$CI_APP_TAG
+        docker manifest push $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}
 
         if [[ "$TAG_VER_MAJ_MIN" == "true" ]]; then
-          docker manifest create $i:$VERSION_MAJ_MIN $CI_MANIFEST_LIST
+          docker manifest create $i:$VERSION_MAJ_MIN${GHC_NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
           if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-            docker manifest annotate --variant v8 $i:$VERSION_MAJ_MIN \
-              $i:$CI_APP_TAG-linux-arm64v8
+            docker manifest annotate --variant v8 $i:$VERSION_MAJ_MIN${GHC_NATIVE_BIGNUM:+-int-native} \
+              $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-arm64v8
           fi
-          docker manifest push $i:$VERSION_MAJ_MIN
+          docker manifest push $i:$VERSION_MAJ_MIN${GHC_NATIVE_BIGNUM:+-int-native}
         fi
 
         if [[ "$TAG_VER_MAJ" == "true" ]]; then
-          docker manifest create $i:$VERSION_MAJ $CI_MANIFEST_LIST
+          docker manifest create $i:$VERSION_MAJ${GHC_NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
           if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-            docker manifest annotate --variant v8 $i:$VERSION_MAJ \
-              $i:$CI_APP_TAG-linux-arm64v8
+            docker manifest annotate --variant v8 $i:$VERSION_MAJ${GHC_NATIVE_BIGNUM:+-int-native} \
+              $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-arm64v8
           fi
-          docker manifest push $i:$VERSION_MAJ
+          docker manifest push $i:$VERSION_MAJ${GHC_NATIVE_BIGNUM:+-int-native}
         fi
 
         if [[ "$TAG_LATEST" == "true" ]]; then
-          docker manifest create $i:latest $CI_MANIFEST_LIST
+          docker manifest create $i:latest${GHC_NATIVE_BIGNUM:+-int-native} $CI_MANIFEST_LIST
           if echo $OS_ARCH | grep "linux-arm64v8" >/dev/null ; then
-            docker manifest annotate --variant v8 $i:latest \
-              $i:$CI_APP_TAG-linux-arm64v8
+            docker manifest annotate --variant v8 $i:latest${GHC_NATIVE_BIGNUM:+-int-native} \
+              $i:$CI_APP_TAG${GHC_NATIVE_BIGNUM:+-int-native}-linux-arm64v8
           fi
-          docker manifest push $i:latest
+          docker manifest push $i:latest${GHC_NATIVE_BIGNUM:+-int-native}
         fi
       done
   rules:
@@ -150,10 +158,24 @@ build-manifest:linux:
       changes:
         - dockerfiles/$GHC_VERSION.Dockerfile
 
+build-image:int-native:
+  extends: build-image
+  stage: build:native_bignum
+  variables:
+    GHC_NATIVE_BIGNUM: 1
+
+build-manifest:int-native:
+  extends: build-manifest
+  stage: build:native_bignum
+  needs: ["build-image:int-native"]
+  variables:
+    GHC_NATIVE_BIGNUM: 1
+
 trigger-hls-build:
   image: quay.io/curl/curl:latest
   extends: .env
   stage: .post
+  needs: ["build-manifest"]
   script:
     >
     curl
