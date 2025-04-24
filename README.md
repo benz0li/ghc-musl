@@ -31,7 +31,7 @@ Credit to
 
 who made it possible to add `linux/riscv64` images (GHC versions ≥ 9.10.1).
 
-[^2]: Porting GHC to Linux/riscv64
+[^2]: Porting GHC to Linux/RISC-V (64-bit)
 
 ## Table of Contents
 
