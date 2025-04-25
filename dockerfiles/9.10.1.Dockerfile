@@ -1,9 +1,11 @@
 ARG GHC_VERSION=9.10.1
 ARG CABAL_VERSION=3.12.1.0
 ARG STACK_VERSION=3.5.1
+ARG LLVM_VERSION=18
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
+ARG LLVM_VERSION_OVERRIDE=${LLVM_VERSION}
 
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-amd64 AS bootstrap-amd64
 FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-arm64v8 AS bootstrap-arm64
@@ -11,6 +13,8 @@ FROM glcr.b-data.ch/ghc/ghc-musl:9.8.2-linux-riscv64 AS bootstrap-riscv64
 ## linux/riscv64 bootstrap image: binutils-gold n/a; numactl-dev pre-installed
 
 FROM bootstrap-${TARGETARCH}${TARGETVARIANT} AS bootstrap
+
+ARG LLVM_VERSION_OVERRIDE
 
 RUN case "$(uname -m)" in \
     x86_64) linker="gold" ;; \
@@ -22,14 +26,15 @@ RUN case "$(uname -m)" in \
     automake \
     binutils${linker:+-}${linker} \
     build-base \
-    clang18 \
+    clang${LLVM_VERSION_OVERRIDE} \
     coreutils \
     cpio \
     curl \
     gnupg \
     linux-headers \
     libffi-dev \
-    llvm18 \
+    lld \
+    llvm${LLVM_VERSION_OVERRIDE} \
     ncurses-dev \
     perl \
     python3 \
@@ -68,6 +73,7 @@ RUN cd /tmp \
     --build=$(uname -m)-alpine-linux \
     --host=$(uname -m)-alpine-linux \
     --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.lld \
     --enable-numa=${numa:-auto} \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
@@ -109,10 +115,12 @@ LABEL org.opencontainers.image.licenses="$IMAGE_LICENSE" \
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 ARG STACK_VERSION
+ARG LLVM_VERSION
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD} \
-    STACK_VERSION=${STACK_VERSION}
+    STACK_VERSION=${STACK_VERSION} \
+    LLVM_VERSION=${LLVM_VERSION}
 
 RUN apk add --no-cache \
     bash \
@@ -120,7 +128,7 @@ RUN apk add --no-cache \
     bzip2 \
     bzip2-dev \
     bzip2-static \
-    clang18 \
+    clang${LLVM_VERSION} \
     curl \
     curl-static \
     dpkg \
@@ -130,7 +138,8 @@ RUN apk add --no-cache \
     libcurl \
     libffi \
     libffi-dev \
-    llvm18 \
+    lld${LLVM_VERSION} \
+    llvm${LLVM_VERSION} \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
