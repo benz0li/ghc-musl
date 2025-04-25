@@ -132,6 +132,11 @@ subject to GMP's licensing restrictions.
 :information_source: Available for versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and
 later.
 
+#### Default linker
+
+All images use `ld.bfd` (the GNU linker) by default. Regarding `ld.lld` (the
+LLVM linker) see issue <https://github.com/benz0li/ghc-musl/issues/13>.
+
 ### Dev Containers
 
 The default Dev Container is meant to work on this repository.
