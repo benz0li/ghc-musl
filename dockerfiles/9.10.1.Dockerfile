@@ -160,19 +160,13 @@ RUN apk add --no-cache \
 
 FROM ghc-base AS ghc-stage1
 
-ARG GHC_NATIVE_BIGNUM
-
 COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
 RUN cd /tmp \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
-  && if [ -n "$GHC_NATIVE_BIGNUM" ]; then \
-    ./configure; \
-  else \
-    ./configure --disable-ld-override; \
-  fi \
+  && ./configure \
   && make install \
   ## Install Stack
   && cd /tmp \
