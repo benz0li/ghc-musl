@@ -113,9 +113,9 @@ Alpine Linux (AArch64).
 Stack (GHC versions < 9.8.2) to ensure that only the GHC available in the
 container is used.
 
-### GMP licensing restrictions
+#### GMP licensing restrictions
 
-The regular <nobr>*GHC musl*</nobr> images produce binaries linked against the
+The regular images produce binaries linked against the
 [GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org/), which
 is used by default by the
 [`integer-gmp`](https://hackage.haskell.org/package/integer-gmp) library to
@@ -127,7 +127,7 @@ the GMP library is licensed under LGPL. This means resulting
 
 If that is not acceptable for your situation, use images with the `int-native`
 subtag. These images provide a GHC that links against the Haskell-native
-big-integer backend and produces *statically linked* binaries that and are not
+big-integer backend and produces *statically linked* binaries that are not
 subject to GMP's licensing restrictions.  
 :information_source: Available for versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and
 later.
