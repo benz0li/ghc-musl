@@ -34,6 +34,7 @@ RUN case "$(uname -m)" in \
 FROM bootstrap AS bootstrap-ghc
 
 ARG GHC_VERSION_BUILD
+ARG GHC_NATIVE_BIGNUM
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
@@ -49,7 +50,7 @@ RUN cd /tmp \
   && cd "ghc-$GHC_VERSION" \
   ## Configure and build
   && if [ "$(uname -m)" = "riscv64" ]; then \
-    flavour="quick+llvm"; \
+    flavour=quick+llvm${GHC_NATIVE_BIGNUM:++native_bignum}; \
   fi \
   && ./boot.source \
   && ./configure \
@@ -67,7 +68,7 @@ RUN cd /tmp \
   && export PATH=/root/.local/bin:$PATH \
   ## See https://unix.stackexchange.com/questions/519092/what-is-the-logic-of-using-nproc-1-in-make-command
   && hadrian/build binary-dist -j"$(($(nproc)+1))" \
-    --flavour=${flavour:-perf+llvm+split_sections} \
+    --flavour=${flavour:-perf+split_sections+llvm${GHC_NATIVE_BIGNUM:++native_bignum}} \
     --docs=none
 
 FROM bootstrap AS bootstrap-cabal

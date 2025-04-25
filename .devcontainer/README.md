@@ -51,8 +51,8 @@ The parent images are multi‑arch (`linux/amd64`, `linux/arm64/v8`)
 <nobr>*GHC musl*</nobr> images. They are based on Alpine Linux (that is
 [musl libc](https://musl.libc.org) and [BusyBox](https://www.busybox.net)).
 
-They contain *unofficial* binary distributions of GHC (that is, ones not
-released by the GHC developers). That is because:
+They contain *unofficial* and *untested* binary distributions of GHC (that is,
+ones not released by the GHC developers). That is because:
 
 1. the official GHC binary distributions for Alpine Linux/x86_64 have known
    bugs[^3] ~~; and~~
