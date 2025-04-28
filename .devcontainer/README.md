@@ -54,11 +54,10 @@ The parent images are multi‑arch (`linux/amd64`, `linux/arm64/v8`)
 They contain *unofficial* and *untested* binary distributions of GHC (that is,
 ones not released by the GHC developers). That is because:
 
-1. the official GHC binary distributions for Alpine Linux/x86_64 have known
-   bugs[^3] ~~; and~~
+1. the official GHC binary distributions for Alpine Linux/x86_64 have
+   [known](https://gitlab.haskell.org/ghc/ghc/-/issues/23043)
+   [bugs](https://gitlab.haskell.org/ghc/ghc/-/issues/25093) ~~; and~~
 1. ~~there are no official binary distributions for Alpine Linux/AArch64.~~
-
-[^3]: E.g. <https://gitlab.haskell.org/ghc/ghc/-/issues/25093>
 
 Stack's global configuration (`/etc/stack/config.yaml`) sets
 <nobr>`system-ghc: true`</nobr> and <nobr>`install-ghc: false`</nobr>. That
@@ -102,10 +101,10 @@ What makes these Dev Containers unique:
 
 Data in the following locations is persisted:
 
-1. The user's home directory (`/home/vscode`[^4])
+1. The user's home directory (`/home/vscode`[^3])
 1. The Dev Container's workspace (`/workspaces`)
 
-[^4]: Alternatively for the root user (`/root`). Use with Docker/Podman in
+[^3]: Alternatively for the root user (`/root`). Use with Docker/Podman in
 *rootless mode*.
 
 This is accomplished either via a *volume* or *bind mount* (or *loop device*
