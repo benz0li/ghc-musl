@@ -40,7 +40,7 @@
         "GitHub.vscode-pull-request-github",
         "GitLab.gitlab-workflow",
         "mhutchie.git-graph",
-        "ms-azuretools.vscode-docker",
+        "ms-azuretools.vscode-containers",
         "mutantdino.resourcemonitor",
         "redhat.vscode-yaml",
         "timonwong.shellcheck"
