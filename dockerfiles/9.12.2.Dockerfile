@@ -1,11 +1,11 @@
 ARG GHC_VERSION=9.12.2
-ARG CABAL_VERSION=3.14.1.1
+ARG CABAL_VERSION=3.14.2.0
 ARG STACK_VERSION=3.5.1
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.10.1 AS bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.10.2 AS bootstrap
 
 RUN case "$(uname -m)" in \
     x86_64) linker="gold" ;; \
