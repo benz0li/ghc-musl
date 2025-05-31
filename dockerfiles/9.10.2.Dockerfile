@@ -1,6 +1,7 @@
 ARG GHC_VERSION=9.10.2
 ARG CABAL_VERSION=3.12.1.0
 ARG STACK_VERSION=3.5.1
+ARG LLVM_VERSION=20
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
@@ -29,6 +30,7 @@ RUN case "$(uname -m)" in \
     gnupg \
     linux-headers \
     libffi-dev \
+    lld18 \
     llvm18 \
     ncurses-dev \
     perl \
@@ -68,6 +70,7 @@ RUN cd /tmp \
     --build=$(uname -m)-alpine-linux \
     --host=$(uname -m)-alpine-linux \
     --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.lld \
     --enable-numa=${numa:-auto} \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
@@ -94,7 +97,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.21 AS ghc-base
+FROM alpine:3.22 AS ghc-base
 
 ARG IMAGE_LICENSE="MIT"
 ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
@@ -109,10 +112,12 @@ LABEL org.opencontainers.image.licenses="$IMAGE_LICENSE" \
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 ARG STACK_VERSION
+ARG LLVM_VERSION
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD} \
-    STACK_VERSION=${STACK_VERSION}
+    STACK_VERSION=${STACK_VERSION} \
+    LLVM_VERSION=${LLVM_VERSION}
 
 RUN apk add --no-cache \
     bash \
@@ -120,17 +125,19 @@ RUN apk add --no-cache \
     bzip2 \
     bzip2-dev \
     bzip2-static \
-    clang18 \
+    clang${LLVM_VERSION} \
     curl \
     curl-static \
     dpkg \
     fakeroot \
     git \
     gmp-dev \
+    gmp-static \
     libcurl \
     libffi \
     libffi-dev \
-    llvm18 \
+    lld${LLVM_VERSION} \
+    llvm${LLVM_VERSION} \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
