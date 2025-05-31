@@ -30,7 +30,7 @@ RUN case "$(uname -m)" in \
     gnupg \
     linux-headers \
     libffi-dev \
-    lld18 \
+    lld \
     llvm18 \
     ncurses-dev \
     perl \
