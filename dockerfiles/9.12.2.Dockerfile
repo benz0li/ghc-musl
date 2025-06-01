@@ -1,6 +1,7 @@
 ARG GHC_VERSION=9.12.2
 ARG CABAL_VERSION=3.14.2.0
 ARG STACK_VERSION=3.5.1
+ARG LLVM_VERSION=20
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
@@ -17,14 +18,15 @@ RUN case "$(uname -m)" in \
     automake \
     binutils${linker:+-}${linker} \
     build-base \
-    clang18 \
+    clang20 \
     coreutils \
     cpio \
     curl \
     gnupg \
     linux-headers \
     libffi-dev \
-    llvm18 \
+    lld20 \
+    llvm20 \
     ncurses-dev \
     perl \
     python3 \
@@ -38,6 +40,8 @@ ARG GHC_NATIVE_BIGNUM
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD}
 
+COPY patches/${GHC_VERSION}.patch /tmp/
+
 RUN cd /tmp \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz \
   && curl -sSLO https://downloads.haskell.org/~ghc/"$GHC_VERSION"/ghc-"$GHC_VERSION"-src.tar.xz.sig \
@@ -48,6 +52,9 @@ RUN cd /tmp \
   && gpg --verify "ghc-$GHC_VERSION-src.tar.xz.sig" "ghc-$GHC_VERSION-src.tar.xz" \
   && tar -xJf "ghc-$GHC_VERSION-src.tar.xz" \
   && cd "ghc-$GHC_VERSION" \
+  ## Apply patch: Bump max LLVM version to 21 (not inclusive)
+  && mv "/tmp/$GHC_VERSION.patch" . \
+  && patch -p0 <"$GHC_VERSION.patch" \
   ## Configure and build
   && if [ "$(uname -m)" = "riscv64" ]; then \
     flavour=quick+llvm${GHC_NATIVE_BIGNUM:++native_bignum}; \
@@ -57,6 +64,7 @@ RUN cd /tmp \
     --build=$(uname -m)-alpine-linux \
     --host=$(uname -m)-alpine-linux \
     --target=$(uname -m)-alpine-linux \
+    --disable-ld-override LD=ld.lld \
   ## Use the LLVM backend
   ## Switch llvm-targets from unknown-linux-gnueabihf->alpine-linux
   ## so we can match the llvm vendor string alpine uses
@@ -82,7 +90,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.21 AS ghc-base
+FROM alpine:3.22 AS ghc-base
 
 ARG IMAGE_LICENSE="MIT"
 ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
@@ -97,10 +105,12 @@ LABEL org.opencontainers.image.licenses="$IMAGE_LICENSE" \
 ARG GHC_VERSION_BUILD
 ARG CABAL_VERSION_BUILD
 ARG STACK_VERSION
+ARG LLVM_VERSION
 
 ENV GHC_VERSION=${GHC_VERSION_BUILD} \
     CABAL_VERSION=${CABAL_VERSION_BUILD} \
-    STACK_VERSION=${STACK_VERSION}
+    STACK_VERSION=${STACK_VERSION} \
+    LLVM_VERSION=${LLVM_VERSION}
 
 RUN apk add --no-cache \
     bash \
@@ -108,17 +118,19 @@ RUN apk add --no-cache \
     bzip2 \
     bzip2-dev \
     bzip2-static \
-    clang18 \
+    clang${LLVM_VERSION} \
     curl \
     curl-static \
     dpkg \
     fakeroot \
     git \
     gmp-dev \
+    gmp-static \
     libcurl \
     libffi \
     libffi-dev \
-    llvm18 \
+    lld${LLVM_VERSION} \
+    llvm${LLVM_VERSION} \
     ncurses-dev \
     ncurses-static \
     openssl-dev \
@@ -139,13 +151,19 @@ RUN apk add --no-cache \
 
 FROM ghc-base AS ghc-stage1
 
+ARG GHC_NATIVE_BIGNUM
+
 COPY --from=bootstrap-ghc /tmp/ghc-"$GHC_VERSION"/_build/bindist/ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz /tmp/
 
 RUN cd /tmp \
   ## Install GHC
   && tar -xJf ghc-"$GHC_VERSION"-*-alpine-linux.tar.xz \
   && cd ghc-"$GHC_VERSION"-*-alpine-linux \
-  && ./configure \
+  && if [ -n "$GHC_NATIVE_BIGNUM" ]; then \
+    ./configure; \
+  else \
+    ./configure --disable-ld-override; \
+  fi \
   && make install \
   ## Install Stack
   && cd /tmp \
