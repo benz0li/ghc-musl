@@ -175,7 +175,7 @@ trigger-hls-build:
   image: quay.io/curl/curl:latest
   extends: .env
   stage: .post
-  needs: ["build-manifest"]
+  needs: ["build-manifest:int-native"]
   script:
     >
     curl
