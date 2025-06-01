@@ -134,8 +134,10 @@ later.
 
 #### Default linker
 
-All images use `ld.bfd` (the GNU linker) by default. Regarding `ld.lld` (the
-LLVM linker) see issue <https://github.com/benz0li/ghc-musl/issues/13>.
+For GHC versions 9.10.2, 9.12.2 and later, the images with the `int-native`
+subtag use `ld.lld` (the LLVM linker).
+
+All other images use `ld.bfd` (the GNU linker).
 
 ### Dev Containers
 
