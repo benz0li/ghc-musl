@@ -135,9 +135,9 @@ later.
 #### Default linker
 
 For GHC versions 9.10.2, 9.12.2 and later, the images with the `int-native`
-subtag use `ld.lld` (the LLVM linker) as the default linker.
+subtag use `ld.lld` (the LLVM linker) by default.
 
-All other images use `ld.bfd` (the GNU linker) as the default linker.
+All other images use `ld.bfd` (the GNU linker) by default.
 
 ### Dev Containers
 
