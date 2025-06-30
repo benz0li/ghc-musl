@@ -48,6 +48,7 @@
       ],
       "settings": {
         "gitlab.aiAssistedCodeSuggestions.enabled": false,
+        "gitlab.duo.enabledWithoutGitlabProject": false,
         "gitlab.duoChat.enabled": false,
         "gitlens.showWelcomeOnInstall": false,
         "gitlens.showWhatsNewAfterUpgrades": false,

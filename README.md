@@ -135,9 +135,9 @@ later.
 #### Default linker
 
 For GHC versions 9.10.2, 9.12.2 and later, the images with the `int-native`
-subtag use `ld.lld` (the LLVM linker).
+subtag use `ld.lld` (the LLVM linker) by default.
 
-All other images use `ld.bfd` (the GNU linker).
+All other images use `ld.bfd` (the GNU linker) by default.
 
 ### Dev Containers
 
@@ -165,6 +165,8 @@ What makes this project different:
 
 Interesting to read:
 
+* [Opinion piece on GHC backends](https://andreaspk.github.io/posts/2019-08-25-Opinion%20piece%20on%20GHC%20backends.html)
+  by [@AndreasPK](https://github.com/AndreasPK)
 * [Improving Haskell’s big numbers support](https://iohk.io/en/blog/posts/2020/07/28/improving-haskells-big-numbers-support)
   by [@hsyl20](https://github.com/hsyl20)
 * [lsupg Static Builds With GHC 9](https://www.extrema.is/blog/2023/02/04/lsupg-static-builds-with-ghc-9)
