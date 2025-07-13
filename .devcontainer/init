@@ -3,9 +3,10 @@
 # Copyright (c) 2023 Microsoft Corporation
 # Distributed under the terms of the MIT License.
 #
-# Modified by b-data for seamless use with Dev Containers.
-#
 # https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials
+# https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases?platform=windows
+#
+# Modified by b-data for seamless use with development containers.
 
 set -e
 
@@ -20,5 +21,12 @@ if [ "$(command -v ssh-agent)" ]; then
     fi
     eval "$(cat "$HOME/.ssh/ssh-agent")" > /dev/null
   fi
-  ssh-add 2> /dev/null
+  # Check the state of the currently running instance of the agent
+  # 0: running with key(s); 1: running w/o key(s); 2: not running
+  AGENT_RUN_STATE="$(ssh-add -l > /dev/null 2>&1; echo $?)"
+  # Only add key(s) if running w/o key(s)
+  if [ "$AGENT_RUN_STATE" = "1" ]; then
+    ssh-add 2> /dev/null
+  fi
+  # Means: Not adding key(s) to a forwarded agent with key(s)
 fi
