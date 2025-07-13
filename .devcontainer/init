@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Copyright (c) 2025 b-data GmbH.
-# Copyright (c) 2023 Microsoft Corporation.
+# Copyright (c) 2025 b-data GmbH
+# Copyright (c) 2023 Microsoft Corporation
 # Distributed under the terms of the MIT License.
 #
 # Modified by b-data for seamless use with Dev Containers.
