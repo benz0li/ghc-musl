@@ -11,6 +11,7 @@
     }
   },
 
+  "initializeCommand": [".devcontainer/init"],
   "onCreateCommand": "onCreateCommand.sh",
 
   "features": {

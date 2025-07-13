@@ -35,6 +35,8 @@
 !/Dockerfile
 !/GHC-legacy.Dockerfile
 !/GHC.Dockerfile
+!/init
+!/init.cmd
 !/LICENSE
 !/README.md
 !/VERSION_MATRIX.md

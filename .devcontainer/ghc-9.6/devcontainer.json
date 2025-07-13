@@ -14,6 +14,7 @@
     }
   },
 
+  "initializeCommand": [".devcontainer/init"],
   "onCreateCommand": "onCreateCommand.sh",
   "postCreateCommand": "cabal update",
   "postAttachCommand": "${HOME}/.local/bin/checkForUpdates.sh",
