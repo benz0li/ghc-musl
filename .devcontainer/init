@@ -10,7 +10,7 @@
 
 set -e
 
-if [ "$(command -v ssh-agent)" ]; then
+if [ -z "$CODESPACES" ] && [ "$(command -v ssh-agent)" ]; then
   if [ -z "$SSH_AUTH_SOCK" ]; then
     # Check for a currently running instance of the agent
     RUNNING_AGENT="$(pgrep -f 'ssh-agent -s' | wc -l | tr -d '[:space:]')"
