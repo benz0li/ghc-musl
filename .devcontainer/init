@@ -13,7 +13,7 @@ if [ "$(command -v ssh-agent)" ]; then
   if [ -z "$SSH_AUTH_SOCK" ]; then
     # Check for a currently running instance of the agent
     RUNNING_AGENT="$(pgrep -f 'ssh-agent -s' | wc -l | tr -d '[:space:]')"
-    if [ "$RUNNING_AGENT" = "0" ]; then
+    if [ "$RUNNING_AGENT" = "0" ] || [ ! -f "$HOME/.ssh/ssh-agent" ]; then
       mkdir -p -m 0700 "$HOME/.ssh"
       # Launch a new instance of the agent
       ssh-agent -s &> "$HOME/.ssh/ssh-agent"
