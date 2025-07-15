@@ -5,7 +5,7 @@
 #
 # https://docs.github.com/en/authentication/connecting-to-github-with-ssh/working-with-ssh-key-passphrases?platform=windows
 #
-# Modified by b-data for seamless integration with development containers on macOS.
+# Modified by b-data for seamless integration with development containers on Linux/macOS.
 
 set -e
 
