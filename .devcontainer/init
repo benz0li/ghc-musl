@@ -10,7 +10,9 @@
 
 set -e
 
+# Do not execute on GitHub Codespaces
 if [ -z "$CODESPACES" ] && [ "$(command -v ssh-agent)" ]; then
+  # Do not start the agent on a remote machine
   if [ -z "$SSH_CONNECTION" ] && [ -z "$SSH_AUTH_SOCK" ]; then
     # Check for a currently running instance of the agent
     RUNNING_AGENT="$(pgrep -f 'ssh-agent -s' -u "$USER" | wc -l | tr -d '[:space:]')"
