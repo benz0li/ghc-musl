@@ -34,7 +34,7 @@
         "alefragnani.project-manager",
         "christian-kohler.path-intellisense",
         "DavidAnson.vscode-markdownlint",
-        "eamodio.gitlens@11.7.0",
+        "/var/tmp/extensions/eamodio.gitlens-11.7.0.vsix",
         "editorconfig.editorconfig",
         "exiasr.hadolint",
         "GitHub.vscode-pull-request-github",
