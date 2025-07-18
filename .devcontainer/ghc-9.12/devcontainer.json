@@ -5,7 +5,7 @@
     "context": "..",
     "args": {
       "GHC_VERSION": "9.12",
-      "SUBTAG": "int-native",
+      // "SUBTAG": "int-native",
       "HLS_VERSION": "2.11.0.0",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "LANG": "C.UTF-8",
