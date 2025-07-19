@@ -146,7 +146,7 @@ All other images use `ld.bfd` (the GNU linker) by default.
 
 The default Dev Container is meant to work on this repository.
 
-Any other configuration is a custom GHC container based on
+The other configurations are custom GHC containers based on
 <nobr>*GHC musl*</nobr> images (`int-native` subtag).
 
 For further information, see [Dev Containers](.devcontainer).
