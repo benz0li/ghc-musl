@@ -132,6 +132,9 @@ subject to GMP's licensing restrictions.
 :information_source: Available for versions 9.6.7, 9.8.4, 9.10.1, 9.12.2 and
 later.
 
+The current Dev Containers of this project use images with the `int-native`
+subtag.
+
 #### Default linker
 
 For GHC versions 9.10.2, 9.12.2 and later, the images with the `int-native`
@@ -144,7 +147,7 @@ All other images use `ld.bfd` (the GNU linker) by default.
 The default Dev Container is meant to work on this repository.
 
 Any other configuration is a custom GHC container based on
-<nobr>*GHC musl*</nobr>.
+<nobr>*GHC musl*</nobr> images (`int-native` subtag).
 
 For further information, see [Dev Containers](.devcontainer).
 
