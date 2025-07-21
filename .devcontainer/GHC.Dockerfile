@@ -24,11 +24,11 @@ RUN find /files -type d -exec chmod 755 {} \; \
   && find /files/etc/skel/.local/bin -type f -exec chmod 755 {} \; \
   && find /files/usr/local/bin -type f -exec chmod 755 {} \;
 
-FROM ghcr.io/hadolint/hadolint:latest as hsi
-
 FROM quay.io/benz0li/hlssi:${HLS_IMAGE_TAG} AS hlssi
 
 FROM quay.io/benz0li/hlsi:latest AS hlsi
+
+FROM ghcr.io/hadolint/hadolint:latest as hsi
 
 FROM docker.io/koalaman/shellcheck:stable AS sci
 
@@ -84,12 +84,12 @@ RUN if [ -n "$USE_ZSH_FOR_ROOT" ]; then \
   && echo "LANG is set to $LANG"
 
 ## Copy binaries as late as possible to avoid cache busting
-## Install Haskell Dockerfile Linter
-COPY --from=hsi /bin/hadolint /usr/local/bin
 ## Install HLS
 COPY --from=hlssi /usr/local /usr/local
 ## Install HLint
 COPY --from=hlsi /usr/local /usr/local
+## Install Haskell Dockerfile Linter
+COPY --from=hsi /bin/hadolint /usr/local/bin
 ## Install ShellCheck
 COPY --from=sci --chown=root:root /bin/shellcheck /usr/local/bin
 
