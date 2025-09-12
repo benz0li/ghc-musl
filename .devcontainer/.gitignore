@@ -21,6 +21,10 @@
 !/scripts/usr/
 !/scripts/usr/local/
 !/scripts/usr/local/bin/
+!/vsix/
+!/vsix/var/
+!/vsix/var/tmp/
+!/vsix/var/tmp/extensions/
 
 !/assets/screenshots/manageHLS.png
 !/assets/screenshots/ghc.png
@@ -29,12 +33,15 @@
 !/ghc-*/devcontainer.json
 !/scripts/etc/skel/.local/bin/*.sh
 !/scripts/usr/local/bin/*.sh
+!/vsix/var/tmp/extensions/*.vsix
 
 !/.gitignore
 !/devcontainer.json
 !/Dockerfile
 !/GHC-legacy.Dockerfile
 !/GHC.Dockerfile
+!/init
+!/init.cmd
 !/LICENSE
 !/README.md
 !/VERSION_MATRIX.md

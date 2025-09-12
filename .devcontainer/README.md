@@ -48,8 +48,9 @@ extensions pre‑installed:
 ## Parent images
 
 The parent images are multi‑arch (`linux/amd64`, `linux/arm64/v8`)
-<nobr>*GHC musl*</nobr> images. They are based on Alpine Linux (that is
-[musl libc](https://musl.libc.org) and [BusyBox](https://www.busybox.net)).
+<nobr>*GHC musl*</nobr> images (`int-native` subtag). They are based on Alpine
+Linux (that is [musl libc](https://musl.libc.org) and
+[BusyBox](https://www.busybox.net)).
 
 They contain *unofficial* and *untested* binary distributions of GHC (that is,
 ones not released by the GHC developers). That is because:

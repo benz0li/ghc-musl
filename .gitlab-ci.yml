@@ -175,7 +175,7 @@ trigger-hls-build:
   image: quay.io/curl/curl:latest
   extends: .env
   stage: .post
-  needs: ["build-manifest:int-native"]
+  needs: ["build-manifest"]
   script:
     >
     curl
@@ -184,6 +184,7 @@ trigger-hls-build:
     -F token=$HLSSI_TRIGGER_TOKEN
     -F ref=main
     -F "variables[GHC_VERSION]=$GHC_VERSION"
+    -F "variables[GHC_NATIVE_BIGNUM]=$GHC_NATIVE_BIGNUM"
     -F "variables[HLS_VERSION]=$HLS_VERSION"
     -F "variables[TAG_VER_MAJ_MIN]=$TAG_VER_MAJ_MIN"
     -F "variables[TAG_VER_MAJ]=$TAG_VER_MAJ"
@@ -194,3 +195,10 @@ trigger-hls-build:
     - if: ($CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "freeze-version") && $BUILD_HLS == "true"
       changes:
         - dockerfiles/$GHC_VERSION.Dockerfile
+
+trigger-hls-build:int-native:
+  extends: trigger-hls-build
+  stage: .post
+  needs: ["build-manifest:int-native"]
+  variables:
+    GHC_NATIVE_BIGNUM: 1

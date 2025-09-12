@@ -7,13 +7,14 @@
       "GHC_VERSION": "9.6",
       "SUBTAG": "int-native",
       "HLS_VERSION": "2.11.0.0",
-      "STACK_VERSION": "3.1.1",
+      "STACK_VERSION": "3.3.1",
       "USE_ZSH_FOR_ROOT": "unset-to-use-ash",
       "LANG": "C.UTF-8",
       "TZ": ""
     }
   },
 
+  "initializeCommand": [".devcontainer/init"],
   "onCreateCommand": "onCreateCommand.sh",
   "postCreateCommand": "cabal update",
   "postAttachCommand": "${HOME}/.local/bin/checkForUpdates.sh",
@@ -34,7 +35,7 @@
         "alefragnani.project-manager",
         "christian-kohler.path-intellisense",
         "DavidAnson.vscode-markdownlint",
-        "eamodio.gitlens@11.7.0",
+        "/var/tmp/extensions/eamodio.gitlens-11.7.0.vsix",
         "editorconfig.editorconfig",
         "exiasr.hadolint",
         "GitHub.vscode-pull-request-github",
