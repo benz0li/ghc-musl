@@ -1,12 +1,12 @@
 .env:
   variables:
-    GHC_VERSION: "9.10.2"
-    TAG_VER_MAJ_MIN: "false"
+    GHC_VERSION: "9.10.3"
+    TAG_VER_MAJ_MIN: "true"
     TAG_VER_MAJ: "false"
     TAG_LATEST: "false"
     HLS_VERSION: "2.11.0.0"
     TAG_HLS_LATEST: "false"
-    BUILD_HLS: "false"
+    BUILD_HLS: "true"
 
 .before-script-build: &before-script-build
   - |
