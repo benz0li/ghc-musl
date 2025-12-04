@@ -6,7 +6,7 @@ ARG LLVM_VERSION=20
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.10.2 AS bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.10.3 AS bootstrap
 
 RUN case "$(uname -m)" in \
     x86_64) linker="gold" ;; \
