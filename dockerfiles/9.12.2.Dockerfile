@@ -6,7 +6,7 @@ ARG LLVM_VERSION=20
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
 
-FROM glcr.b-data.ch/ghc/ghc-musl:9.10.3 AS bootstrap
+FROM glcr.b-data.ch/ghc/ghc-musl:9.10.2 AS bootstrap
 
 RUN case "$(uname -m)" in \
     x86_64) linker="gold" ;; \
@@ -90,7 +90,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.22 AS ghc-base
+FROM alpine:3.23 AS ghc-base
 
 ARG IMAGE_LICENSE="MIT"
 ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
