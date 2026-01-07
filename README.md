@@ -62,7 +62,7 @@ To install docker, follow the instructions for your platform:
 ```bash
 docker build \
   -t ghc-musl \
-  -f dockerfiles/9.12.2.Dockerfile .
+  -f dockerfiles/9.14.1.Dockerfile .
 ```
 
 *version*:
