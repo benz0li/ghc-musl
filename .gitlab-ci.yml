@@ -6,7 +6,7 @@
     TAG_LATEST: "false"
     HLS_VERSION: "2.12.0.0"
     TAG_HLS_LATEST: "false"
-    BUILD_HLS: "true"
+    BUILD_HLS: "false"
 
 .before-script-build: &before-script-build
   - |
