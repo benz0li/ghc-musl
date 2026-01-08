@@ -52,6 +52,9 @@ Topmost entry = Tag `latest`
 
 ## Broken releases
 
+* GHC 9.12.3
+  * Official statement: <https://discourse.haskell.org/t/psa-correctness-issue-in-ghc-9-12/11204>
+  * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/26711>
 * GHC 9.12.1
   * Official statement: <https://discourse.haskell.org/t/psa-correctness-issue-in-ghc-9-12/11204>
   * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/25653>
