@@ -5,6 +5,7 @@ Topmost entry = Tag `latest`
 | GHC        | Cabal    | Stack      | LLVM | Linux distro |
 |:-----------|:---------|:-----------|:---- |:-------------|
 | 9.14.1     | 3.16.1.0 | 3.9.1      | 20   | Alpine 3.23  |
+| 9.12.3     | 3.14.2.0 | 3.9.1      | 20   | Alpine 3.23  |
 | 9.12.2     | 3.14.2.0 | 3.7.1      | 20   | Alpine 3.23  |
 | 9.12.1     | 3.14.1.0 | 3.3.1      | 18   | Alpine 3.21  |
 | 9.10.3     | 3.12.1.0 | 3.9.1      | 20   | Alpine 3.23  |
@@ -66,7 +67,7 @@ Topmost entry = Tag `latest`
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
   * Due to <https://github.com/haskell/cabal/issues/8923>
-* `linux/riscv64` image for GHC version 9.12.1 built with
+* `linux/riscv64` images for GHC versions 9.12.{1,2} and 9.14.1 built with
   `--flavour=quick+llvm`
   * Due to <https://gitlab.haskell.org/ghc/ghc/-/issues/25594>
 

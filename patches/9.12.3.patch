@@ -1,0 +1,11 @@
+--- configure.ac	2025-12-26 00:00:52.000000000 +0100
++++ configure.ac.patched	2026-01-02 07:11:09.746231308 +0100
+@@ -536,7 +536,7 @@
+ # versions of LLVM simultaneously, but that stopped working around
+ # 3.5/3.6 release of LLVM.
+ LlvmMinVersion=13  # inclusive
+-LlvmMaxVersion=20  # not inclusive
++LlvmMaxVersion=21  # not inclusive
+ AC_SUBST([LlvmMinVersion])
+ AC_SUBST([LlvmMaxVersion])
+ 
