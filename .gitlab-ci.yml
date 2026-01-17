@@ -4,7 +4,7 @@
     TAG_VER_MAJ_MIN: "true"
     TAG_VER_MAJ: "true"
     TAG_LATEST: "true"
-    HLS_VERSION: "2.12.0.0"
+    HLS_VERSION: "2.13.0.0"
     TAG_HLS_LATEST: "true"
     BUILD_HLS: "false"
 
