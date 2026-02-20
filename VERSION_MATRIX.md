@@ -5,17 +5,17 @@ Topmost entry = Tag `latest`
 | GHC        | Cabal    | Stack      | LLVM | Linux distro |
 |:-----------|:---------|:-----------|:---- |:-------------|
 | 9.14.1     | 3.16.1.0 | 3.9.1      | 20   | Alpine 3.23  |
-| 9.12.3     | 3.14.2.0 | 3.9.1      | 20   | Alpine 3.23  |
+| 9.12.3     | 3.14.2.0 | 3.9.3      | 20   | Alpine 3.23  |
 | 9.12.2     | 3.14.2.0 | 3.7.1      | 20   | Alpine 3.23  |
 | 9.12.1     | 3.14.1.0 | 3.3.1      | 18   | Alpine 3.21  |
-| 9.10.3     | 3.12.1.0 | 3.9.1      | 20   | Alpine 3.23  |
+| 9.10.3     | 3.12.1.0 | 3.9.3      | 20   | Alpine 3.23  |
 | 9.10.2     | 3.12.1.0 | 3.7.1      | 20   | Alpine 3.22  |
 | 9.10.1     | 3.12.1.0 | 3.5.1      | 18   | Alpine 3.21  |
-| 9.8.4      | 3.10.3.0 | 3.9.1      | 16   | Alpine 3.23  |
+| 9.8.4      | 3.10.3.0 | 3.9.3      | 16   | Alpine 3.23  |
 | 9.8.3      | 3.10.3.0 | 3.1.1      | 16   | Alpine 3.20  |
 | 9.8.2      | 3.10.3.0 | 3.1.1      | 16   | Alpine 3.20  |
 | 9.8.1      | 3.10.2.1 | 2.15.1     | 14   | Alpine 3.19  |
-| 9.6.7      | 3.10.3.0 | 3.9.1      | 16   | Alpine 3.23  |
+| 9.6.7      | 3.10.3.0 | 3.9.3      | 16   | Alpine 3.23  |
 | 9.6.6      | 3.10.3.0 | 3.3.1      | 16   | Alpine 3.21  |
 | 9.6.5      | 3.10.3.0 | 2.15.7     | 16   | Alpine 3.20  |
 | 9.6.4      | 3.10.3.0 | 2.15.5     | 14   | Alpine 3.19  |
@@ -52,6 +52,9 @@ Topmost entry = Tag `latest`
 
 ## Broken releases
 
+* GHC 9.12.3
+  * Official statement: <https://discourse.haskell.org/t/critical-code-generation-bug-with-ghc-9-12-3/13505>
+  * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/26711>
 * GHC 9.12.1
   * Official statement: <https://discourse.haskell.org/t/psa-correctness-issue-in-ghc-9-12/11204>
   * GitLab issue: <https://gitlab.haskell.org/ghc/ghc/-/issues/25653>
@@ -67,7 +70,7 @@ Topmost entry = Tag `latest`
 
 * Images based on Alpine 3.{17,18}: Package pkgconf downgraded to v1.8.1
   * Due to <https://github.com/haskell/cabal/issues/8923>
-* `linux/riscv64` images for GHC versions 9.12.{1,2} and 9.14.1 built with
+* `linux/riscv64` images for GHC versions 9.12.{1,2,3} and 9.14.1 built with
   `--flavour=quick+llvm`
   * Due to <https://gitlab.haskell.org/ghc/ghc/-/issues/25594>
 

@@ -168,7 +168,7 @@ COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
 RUN cabal update \
-  && cabal install --allow-newer "cabal-install-$CABAL_VERSION"
+  && cabal install --allow-newer --constraint 'Cabal-syntax<3.15' "cabal-install-$CABAL_VERSION"
 
 FROM ghc-stage1 AS test
 
