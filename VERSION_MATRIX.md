@@ -77,7 +77,4 @@ Topmost entry = Tag `latest`
 
 ## Experimental
 
-`linux/riscv64` images for GHC versions ≥ 9.10.1, e.g.
-`quay.io/benz0li/ghc-musl:{latest,GHC_VERSION}-linux-riscv64`.  
-:information_source: Whenever a new version of GHC is released, the previous
-`linux/riscv64` image is added to the manifest.
+Linux/RISC-V (64-bit, `linux/riscv64`) images for GHC versions ≥ 9.10.1.
