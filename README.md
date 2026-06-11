@@ -33,6 +33,13 @@ who made it possible to add `linux/riscv64` images (GHC versions ≥ 9.10.1).
 
 [^2]: Porting GHC to Linux/RISC-V (64-bit)
 
+Credit to
+
+* [@wojiushixiaobai](https://github.com/wojiushixiaobai) for
+  [GHC musl](https://github.com/loong64/ghc-musl)
+
+and for publishing `linux/loong64` images.
+
 ## Table of Contents
 
 * [Prerequisites](#prerequisites)
