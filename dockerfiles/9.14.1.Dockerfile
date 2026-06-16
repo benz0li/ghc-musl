@@ -1,7 +1,7 @@
 ARG GHC_VERSION=9.14.1
 ARG CABAL_VERSION=3.16.1.0
 ARG STACK_VERSION=3.9.3
-ARG LLVM_VERSION=20
+ARG LLVM_VERSION=22
 
 ARG GHC_VERSION_BUILD=${GHC_VERSION}
 ARG CABAL_VERSION_BUILD=${CABAL_VERSION}
@@ -85,7 +85,7 @@ RUN cabal update \
   ## See https://gitlab.haskell.org/ghc/ghc/-/wikis/commentary/libraries/version-history
   && cabal install "cabal-install-$CABAL_VERSION"
 
-FROM alpine:3.23 AS ghc-base
+FROM alpine:3.24 AS ghc-base
 
 ARG IMAGE_LICENSE="MIT"
 ARG IMAGE_SOURCE="https://gitlab.b-data.ch/ghc/ghc-musl"
