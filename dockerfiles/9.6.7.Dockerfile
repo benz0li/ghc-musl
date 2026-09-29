@@ -24,7 +24,10 @@ RUN apk upgrade --no-cache \
     perl \
     python3 \
     xz \
-    zlib-dev
+    zlib-dev \
+  && cd /usr/local/bin \
+  && curl -sSL https://downloads.haskell.org/~cabal/cabal-install-3.12.1.0/cabal-install-3.12.1.0-"$(uname -m)"-linux-alpine3_18.tar.xz \
+    | tar -xJf - --no-same-owner
 
 FROM bootstrap AS bootstrap-ghc
 
@@ -152,7 +155,7 @@ RUN cd /tmp \
 FROM ghc-stage1 AS ghc-stage2
 
 ## Install Cabal (the tool) built with the GHC bootstrap version
-COPY --from=bootstrap-cabal /root/.cabal/bin/cabal /usr/local/bin/cabal
+COPY --from=bootstrap-cabal /root/.local/bin/cabal /usr/local/bin/cabal
 
 ## Rebuild Cabal (the tool) with the GHC target version
 RUN cabal update \
