@@ -4,7 +4,7 @@ Topmost entry = Tag `latest`
 
 | GHC        | Cabal    | Stack      | LLVM | Linux distro |
 |:-----------|:---------|:-----------|:---- |:-------------|
-| 9.14.1     | 3.16.1.0 | 3.9.3      | 22   | Alpine 3.24  |
+| 9.14.1     | 3.16.1.0 | 3.11.1     | 22   | Alpine 3.24  |
 | 9.12.4     | 3.14.2.0 | 3.11.1     | 20   | Alpine 3.24  |
 | 9.12.3     | 3.14.2.0 | 3.9.3      | 20   | Alpine 3.23  |
 | 9.12.2     | 3.14.2.0 | 3.7.1      | 20   | Alpine 3.23  |
@@ -23,6 +23,17 @@ Topmost entry = Tag `latest`
 | 9.6.3      | 3.10.1.0 | 2.13.1     | 14   | Alpine 3.19  |
 | 9.6.2      | 3.10.1.0 | 2.11.1[^1] | 14   | Alpine 3.18  |
 | 9.6.1      | 3.10.1.0 | n/a        | 14   | Alpine 3.18  |
+
+[^1]: unsupported build; *statically linked* binary  
+
+## Obsolete releases
+
+The built-in version of `cabal-install` is no longer supported:
+
+* <https://github.com/haskell-infra/hackage-root-keys/issues/32#issuecomment-5857679521>
+
+| GHC        | Cabal    | Stack      | LLVM | Linux distro |
+|:-----------|:---------|:-----------|:---- |:-------------|
 | 9.4.8      | 3.8.1.0  | 2.15.7     | 14   | Alpine 3.19  |
 | 9.4.7      | 3.8.1.0  | 2.13.1     | 14   | Alpine 3.18  |
 | 9.4.6      | 3.8.1.0  | 2.11.1[^1] | 14   | Alpine 3.18  |
@@ -48,7 +59,6 @@ Topmost entry = Tag `latest`
 | 8.10.1[^2] | 3.2.0.0  | n/a        | 10   | Alpine 3.13  |
 | 8.8.4[^2]  | 3.2.0.0  | n/a        | 10   | Alpine 3.12  |
 
-[^1]: unsupported build; *statically linked* binary  
 [^2]: w/o Haddock; due to `HADDOCK_DOCS=NO`
 
 ## Broken releases

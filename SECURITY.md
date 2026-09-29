@@ -5,7 +5,7 @@ MAJOR.MINOR versions of GHC – plus the MAJOR.MINOR version I consider
 *recommended*[^1] – are supported with security updates.
 
 [^1]: See [Dev Containers > Version Matrix](.devcontainer/VERSION_MATRIX.md).
-Possibly newer than [the version recommended by GHCup](https://www.haskell.org/ghcup/install/#supported-tools).
+Possibly newer than [the version recommended by GHCup](https://www.haskell.org/ghcup/install/support/#supported-tools).
 
 ## Reporting a Vulnerability
 
